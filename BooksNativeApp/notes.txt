@@ -1,0 +1,5 @@
+Parcel:
+	A data structure designed for sharing data between processes.
+There are up to 6 different classes for reading and writing primitive data types
+to parcels.
+	There's also a plethora of methods for writing arrays of primitives to parcels.

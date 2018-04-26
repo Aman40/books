@@ -1,0 +1,1 @@
+Insert into Users(UserID, UserPassword, JoinDate, NameAlias, Sex, DoB, Email, Prefecture, About, Student, School) values('U18d102cfa12c4', 'A random string','2018-03-06 20:51:19','aman', 'M', '1992-11-23','fuck', 'fuck', 'fuckit', 'fuck', 'fuck');

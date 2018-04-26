@@ -1,0 +1,12 @@
+A description of the architecture of the SPA
+Required modules/components
+-Sign up
+-Sign in
+-Terms and conditions/About
+-Search results
+-Display account information
+-Edit account information
+-Add books
+-Edit book details
+-Book details
+-Allow search by location
