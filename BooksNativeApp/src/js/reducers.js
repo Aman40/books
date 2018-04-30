@@ -2,55 +2,38 @@ import * as booksActions from './books/books_actions'
 
 export function books(
 	state={
-		startedFetching: false,
-		finishedFetching: false,
-		error: {
-			hasError: false,
-			errorString: null,
-		},
+		isFetching: false, //Started fetching?
+		successFetching: false, //Ended successfully
+		fetchErrorString: null,
 		offSet: 0, //From the start
 		count: 50, //Fetch 50 at a time
-		booksArr: [{}],
+		booksArr: [],
 	},action
 ) {
 	switch (action.type) {
-		case booksActions.FETCH_BOOKS:
-			let newState = {...state};
-			let xhr = new XMLHTTPRequest();
-			xhr.responseType = "document";
-			xhr.onReadyStateChange = ()=>{
-				if(this.state===4 && this.status===200) {
-
-					let xmlDoc = this.responseXML;
-					let srv_res_status = parseInt(xmlDoc.getElementsByTagName('srv_res_status'));
-
-					if(srv_res_status===0) {
-						//Success. We have some books. Fetch them into booksArr then change the offSet
-						newState.offset += 50;
-					} else if(srv_res_status===1) {
-						//No results
-					} else {
-						newState.error.hasError = true;
-					}
-				} else {
-					//An error occured.
-					newState.error.hasError = true;
-				}
-			};
-
-			try {
-				xhr.open('POST','http://localhost:8000/books/fetch', true);
-				xhr.send();
-				newState.startedFetching = true;
+		case booksActions.IS_FETCHING_BOOKS:
+			return {
+				...state,
+				isFetching: true,
 			}
-			catch(error) {
-				newState.error.hasError = true;
-				newState.errorString = "Connection or Internal database error";
-				newState.startedFetching = false;
-			}
+			break;
+		case booksActions.SUCCESS_FETCHING_BOOKS:
+			newState = {...state};
 			return newState;
+			break;
+		case booksActions.ERROR_FETCHING:
+			console.log("Error was dispatched");
+			return {
+				...state,
+				isFetching: false,
+				fetchErrorString: action.payload,
+			};
 			break;
 		default:
 			return state;
 	}
 }
+//NOTES: Async functions should always dispatch 3 types of actions.
+//1. When the action starts and the result is pending
+//2. When the action ends successfully
+//3. When the action ends in failure/an error.
