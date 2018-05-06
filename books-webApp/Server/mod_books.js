@@ -317,6 +317,7 @@ router.use('/find', function (req, res, next) {
 });
 
 router.use('/fetch', (req,res)=>{
+	//Fetches only logged in user's books
     res.write("<?xml version='1.0' encoding='UTF-8' ?>");
     res.write(`<cookie>${res.getHeader('Set-Cookie')}</cookie>`); //DEV
     //Fetch 25 - 50 books at a time depending on how many the user specifies with
@@ -359,7 +360,7 @@ router.use('/fetch', (req,res)=>{
             "BookImgs.ImgID AS ImgID FROM (SELECT * FROM (SELECT * FROM `Books` " +
             "WHERE `UserID`='"+req.session.uid+"') AS TempTable ORDER BY `BookSerial` " +
             "DESC LIMIT "+fetch_max+") AS Transient LEFT JOIN " +
-            "BookImgs ON Transient.BookID=BookImgs.BookID";
+            "BookImgs ON Transient.BookID=BookImgs.BookID ORDER BY Transient.BookSerial";
         con.query(sql, (err, result)=>{
             if(err) {
                 //Errors unrelated to the user
@@ -468,7 +469,7 @@ router.use('/images/delete', (req, res)=>{
     res.write(`<cookie>${res.getHeader('Set-Cookie')}</cookie>`); //DEV
     //Use
     let fields = JSON.parse(url.parse(req.url, true).query.id_arr);
-    console.log("Fields: "+fields);
+    console.log("Deleting Fields: "+fields);
 
     const con = mysql.createConnection({
         host: "localhost",
@@ -504,10 +505,83 @@ router.use('/images/delete', (req, res)=>{
         }
     });
 });
+
+router.use('/all', (req, res, next)=>{
+	//Fetches all the books, not specific to any user. In future, this will be tailored according to location of the client.
+	res.write("<?xml version='1.0' encoding='UTF-8' ?>");
+    res.write(`<cookie>${res.getHeader('Set-Cookie')}</cookie>`); //DEV
+    //Fetch 25 - 50 books at a time depending on how many the user specifies with
+    //The "show" filter
+    const con = mysql.createConnection({
+        host: "localhost",
+        user: "aman",
+        password: "password",
+        database: "books"
+    });
+	con.connect((err)=>{
+        if(err) {
+            console.log("Couldn't connect to the db");
+            //Return appropriate error to user. TODO LATER
+        }
+
+        const fetch_max = 25; //Others will be 50, 75, 100, all specified by the client.
+		const sql = "SELECT Transient.BookID AS BookID," +
+            "Transient.UserID AS UserID," +
+            "Transient.Title AS Title," +
+            "Transient.Edition AS Edition," +
+            "Transient.Authors AS Authors," +
+            "Transient.Description AS Description," +
+            "Transient.Language as Language,"+
+            "Transient.Cover AS Cover," +
+            "Transient.PageNo AS PageNo," +
+            "Transient.Publisher AS Publisher," +
+            "Transient.Published AS Published," +
+            "Transient.ISBN as ISBN," +
+            "Transient.New AS `New`," +
+            "Transient.Condition AS `Condition`," +
+            "Transient.Location AS `Location`," +
+            "Transient.Price AS `Price`," +
+            "Transient.Deliverable AS Deliverable," +
+            "Transient.DateAdded AS DateAdded," +
+            "Transient.OfferExpiry AS OfferExpiry," +
+            "Transient.BookSerial AS BookSerial," +
+            "BookImgs.ImageURI AS ImageURI," +
+            "BookImgs.ImgID AS ImgID FROM (SELECT * FROM `Books`  ORDER BY `BookSerial` " +
+            "DESC LIMIT "+fetch_max+") AS Transient LEFT JOIN " +
+            "BookImgs ON Transient.BookID=BookImgs.BookID ORDER BY `BookSerial`";
+
+        con.query(sql, (err, result)=>{
+            if(err) {
+                //Errors unrelated to the user
+                console.log(err.msg);
+                res.write("<srv_res_status>4</srv_res_status>");
+                res.write(`<err>${err.name}</err>`);
+                res.end(`<err>${err.message}</err>`); //Perhaps attempted SQL injection?
+                return;
+            }
+            if(result.length===0) {
+                //The entire db is empty!
+                res.write("<srv_res_status>3</srv_res_status>");
+                res.end("<msg>No results found</msg>");
+                return;
+            } else {
+                let Books = [];
+                let _tmpBook = {};
+                _tmpBook.images = [];
+                let curr__book = result.pop();
+                res.write(`<bks_info>${JSON.stringify(refactor_book_results(Books, result, curr__book, _tmpBook))}</bks_info>`);
+                res.write("<msg>Got your books, boss! Dev</msg>");
+                res.end("<srv_res_status>0</srv_res_status>");
+            }
+        });
+    });
+});
+
 function checkSession(req, res, next){
+	//DEV:
     console.log("Sent cookie: "+res.getHeader('Set-Cookie'))
     if(req.session.uid) {
-        next(); //The user is logged in
+        next(); //The user is logged in or not. If not, they shouldn't be here. Prompt them to log in.
     } else {
         //Return an appropriate response to let the user know that their session is expired
         /*res.writeHead(200, {'Content-Type':'text/html', 'Access-Control-Allow-Origin': 'http://localhost:3000'});*/
@@ -529,6 +603,7 @@ function AsyncUploadManager(total_file_count){
     this.totalFileCount = total_file_count;
     this.filesCompleted = 0;
     this.em.on('completed', (restArgs)=>{
+		console.log("Finished Uploading");
         //Called each time a file is successfully added for addition or deleted for deletion
         //Both the query and file system completed successfully
         let res=restArgs[0];
@@ -582,9 +657,11 @@ function genUid(char) {
 }
 
 function refactor_book_results(Books, result, curr_book, _tmpBook) {
-//Pop the first book prior, into curr_book
-//Books is the array of objects to return [{}{}{}{}]
-//result is an array of Book objects, some similar, only differeing on ImgID and ImgURI
+
+	//Pop the first book prior, into curr_book
+	//Books is the array of objects to return [{}{}{}{}], each object a single
+	//book with a property "images" containing book's images as an object/array.
+	//result is an array of Book objects, some similar, only differeing on ImgID and ImgURI
 
     let nxt_book = result.pop();
 

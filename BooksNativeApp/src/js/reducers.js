@@ -8,6 +8,7 @@ export function books(
 		offSet: 0, //From the start
 		count: 50, //Fetch 50 at a time
 		booksArr: [],
+		clickedOn: 0,
 	},action
 ) {
 	switch (action.type) {
@@ -18,8 +19,12 @@ export function books(
 			}
 			break;
 		case booksActions.SUCCESS_FETCHING_BOOKS:
-			newState = {...state};
-			return newState;
+			return {
+				...state,
+				booksArr: action.payload,
+				successFetching: true,
+				isFetching: false
+			};
 			break;
 		case booksActions.ERROR_FETCHING:
 			console.log("Error was dispatched");
@@ -29,6 +34,11 @@ export function books(
 				fetchErrorString: action.payload,
 			};
 			break;
+		case booksActions.CLICKED_ITEM:
+			return {
+				...state,
+				clickedOn: action.payload,
+			}
 		default:
 			return state;
 	}

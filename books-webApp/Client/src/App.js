@@ -1006,7 +1006,7 @@ class Books extends Component {
                     >
                         <div className={"bc-top"}>
                             <div className={"bc-t-top col-12"}>
-                                <img src={this.state.books_result[i].images?
+                                <img src={this.state.books_result[i].images.length?
                                     this.state.books_result[i].images[0].ImgURI:
                                     "http://localhost:8000/images/placeholder.jpg"}
                                      className={"book-img"} />
@@ -1750,7 +1750,7 @@ class Contact extends Component {
                 <h2 className={"text-center"}>CONTACT</h2>
                 <div className={"row"}>
                     <div className={"col-sm-5"}>
-                        <p>Contact us and we'll get back to you within 24 hours.</p>
+                        <p>Contact us and well get back to you within 24 hours.</p>
                         <p><span className={"glyphicon glyphicon-map-marker"}></span> Minoh, Osaka - Japan</p>
                         <p><span className={"glyphicon glyphicon-phone"}></span> +81 8038033438</p>
                         <p><span className={"glyphicon glyphicon-envelope"}></span> amaniham40@gmail.com</p>
