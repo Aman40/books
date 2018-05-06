@@ -1855,7 +1855,10 @@ class BookDetails extends Component {
         //Create {display:none} canvases into the id="tmp-canvas" <div/> besides thumbnail <img>s
         let fileReader = new FileReader();
         let that = this;
+		let filesLeft = fileList.length;
+
         fileReader.onload = (e)=>{
+			//Check if there are any files left, read them AsDataURL
             console.log("Done loading");
             let img = (
                     <img
@@ -1868,6 +1871,14 @@ class BookDetails extends Component {
             let hidnImg = document.createElement('img');
             //hidnImg.style = 'width: "100%"; height: "auto"; display: "none"'
             hidnImg.onload = (ev)=>{
+				if(filesLeft!==0) {
+					//This way, the upload process is essentially asynchronous but shoganai
+					console.log("Files"+fileList[filesLeft-1].name);
+			        fileReader.readAsDataURL(fileList[filesLeft-1]);
+					filesLeft = filesLeft-1;
+				}
+
+				console.log("Loaded image: "+ev.target.width);
                 //Create a hidden canvas
                 let canvas = document.createElement('canvas');
                 canvas.width = ev.target.width;
@@ -1892,10 +1903,10 @@ class BookDetails extends Component {
             that.setState({thumbnails:thumbnails_copy});
         }
 
-        for(let i = 0;i<fileList.length;i++) {
-            console.log("Files"+fileList[0].name);
-            fileReader.readAsDataURL(fileList[i]);
-        }
+        console.log("Files"+fileList[filesLeft-1].name);
+        fileReader.readAsDataURL(fileList[filesLeft-1]);
+		filesLeft = filesLeft-1;
+
     }
     toggleIdForDel = (id)=>{
         let arr_cp = [];
@@ -2359,3 +2370,8 @@ export default App;
 //And remember to send the cookie with each AJAX request
 //In the home "dashboard", display a section of the books closest to the client from their location
 //More such classes by: "might be interested",
+
+/*
+ISSUES:
+
+*/

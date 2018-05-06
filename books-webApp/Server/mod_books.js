@@ -421,7 +421,8 @@ router.use('/images/upload', (req, res, next)=>{
                 return;
             }
 
-            let am = new AsyncUploadManager(Object.getOwnPropertyNames(files).length);
+            let am = new AsyncUploadManager(Object.getOwnPropertyNames(files).length); // TODO: This seems dangerous. Find a better way
+
             for(let name in files) {
                 //Maintaining the same connection, upload the file details one by one,
                 //Moving the file after each successful addition of info to db
@@ -432,7 +433,7 @@ router.use('/images/upload', (req, res, next)=>{
                 fileData.bookID = fields.bookID;
                 fileData.imgURI = "http://localhost:8000/images/"+fileData.imgID+".jpeg";
                 fileData.oldPath = files[name].path;
-                fileData.newPath = "/usr/lib/cgi-bin/images/"+fileData.imgID+".jpeg";
+                fileData.newPath = "/var/www/html/books/books-webApp/Server/images/"+fileData.imgID+".jpeg";
                 let form_fields = [[
                     fileData.imgID,
                     fileData.bookID,
@@ -440,19 +441,26 @@ router.use('/images/upload', (req, res, next)=>{
                 ]]
 
                 fs.rename(fileData.oldPath, fileData.newPath, (err)=>{
-                    //Emit an event if completion events
-                    //Catch the event for when the last file is done
-                    conn.query(sql, [form_fields], (err, result)=>{
-                        if(err) {
-                            am.emit('error', err, res, "add_img");
-                        } else {
-                            //VULNERABILITY: Without the userID attatched to the BookImgs table,
-                            //Any user can potentially add images for any other user's books
-                            //Provided they know it's BookID
-                            //Anyway, no errors in the SQL, move the file
-                            am.emit('completed', res, fileData.newPath);
-                        }
-                    });
+					if(err) {
+						console.log("An error occured: "+err);
+						am.emit('error', err, res, "add_img");
+					} else {
+						//Emit an event if completion events
+	                    //Catch the event for when the last file is done
+	                    conn.query(sql, [form_fields], (err, result)=>{
+	                        if(err) { //Mysql error
+								console.log(err);
+	                            am.emit('error', err, res, "add_img");
+	                        }
+							else {
+	                            //VULNERABILITY: Without the userID attatched to the BookImgs table,
+	                            //Any user can potentially add images for any other user's books
+	                            //Provided they know it's BookID
+	                            //Anyway, no errors in the SQL, move the file
+	                            am.emit('completed', res, fileData.newPath);
+	                        }
+	                    });
+					}
                 });
             }
         });
@@ -603,12 +611,14 @@ function AsyncUploadManager(total_file_count){
     this.totalFileCount = total_file_count;
     this.filesCompleted = 0;
     this.em.on('completed', (restArgs)=>{
-		console.log("Finished Uploading");
         //Called each time a file is successfully added for addition or deleted for deletion
         //Both the query and file system completed successfully
         let res=restArgs[0];
         let filename=restArgs[1];
         this.filesCompleted++;
+
+		console.log(`Moved ${this.filesCompleted} files out of ${this.totalFileCount} files`);
+
         this.completedFileList.push(filename);
         if(this.filesCompleted===this.totalFileCount) {
             //Check if all the expected files have been completed before returning a response
@@ -640,6 +650,7 @@ function AsyncUploadManager(total_file_count){
 
     this.emit = (event, ...restArgs)=>{
         //'error', err, res OR 'completed', res, newpath
+		//Using restArgs here to deal with both adding and deleting which require a different number of arguments
         this.em.emit(event, restArgs);
     }
 }
