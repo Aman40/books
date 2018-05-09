@@ -5,7 +5,8 @@ import BooksView from './books/books_view'
 import React, {Component} from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import PastPapersHome from './past-papers/pp_mainstack';
+import PastPaperStack from './past-papers/pp_mainstack';
+import AccountStack from './account/ac_stacknav'
 
 export default MainTabNav = TabNavigator(
 	{
@@ -23,7 +24,7 @@ export default MainTabNav = TabNavigator(
 			}
 		},
 		Temp: {
-			screen: PastPapersHome,
+			screen: PastPaperStack,
 			navigationOptions: {
 				title: "Past Papers",
 				tabBarIcon: ({focused, tintColor})=>{
@@ -33,6 +34,19 @@ export default MainTabNav = TabNavigator(
 						color={tintColor}
 					/>);
 				},
+			}
+		},
+		Account: {
+			screen: AccountStack,
+			navigationOptions: {
+				title: "Account",
+				tabBarIcon: ({focused, tintColor})=>{
+					return (<Ionicons
+						name={"ios-person-outline"}
+						size={25}
+						color={tintColor}
+					/>);
+				}
 			}
 		}
 	},

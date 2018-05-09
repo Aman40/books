@@ -6,6 +6,7 @@
 
 const has = require('has');
 const Components = require('../util/Components');
+const docsUrl = require('../util/docsUrl');
 
 // ------------------------------------------------------------------------------
 // Rule Definition
@@ -16,7 +17,8 @@ module.exports = {
     docs: {
       description: 'Prevent missing displayName in a React component definition',
       category: 'Best Practices',
-      recommended: true
+      recommended: true,
+      url: docsUrl('display-name')
     },
 
     schema: [{
@@ -31,7 +33,6 @@ module.exports = {
   },
 
   create: Components.detect((context, components, utils) => {
-    const sourceCode = context.getSourceCode();
     const config = context.options[0] || {};
     const ignoreTranspilerName = config.ignoreTranspilerName || false;
 
@@ -44,17 +45,8 @@ module.exports = {
      */
     function isDisplayNameDeclaration(node) {
       switch (node.type) {
-        // Special case for class properties
-        // (babel-eslint does not expose property name so we have to rely on tokens)
         case 'ClassProperty':
-          const tokens = sourceCode.getFirstTokens(node, 2);
-          if (
-            tokens[0].value === 'displayName' ||
-            (tokens[1] && tokens[1].value === 'displayName')
-          ) {
-            return true;
-          }
-          return false;
+          return node.key && node.key.name === 'displayName';
         case 'Identifier':
           return node.name === 'displayName';
         case 'Literal':

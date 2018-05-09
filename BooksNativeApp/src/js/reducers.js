@@ -1,4 +1,5 @@
-import * as booksActions from './books/books_actions'
+import * as booksActions from "./books/books_actions";
+import * as accountActions from "./account/ac_actions";
 
 export function books(
 	state={
@@ -12,35 +13,72 @@ export function books(
 	},action
 ) {
 	switch (action.type) {
-		case booksActions.IS_FETCHING_BOOKS:
-			return {
-				...state,
-				isFetching: true,
-			}
-			break;
-		case booksActions.SUCCESS_FETCHING_BOOKS:
-			return {
-				...state,
-				booksArr: action.payload,
-				successFetching: true,
-				isFetching: false
-			};
-			break;
-		case booksActions.ERROR_FETCHING:
-			console.log("Error was dispatched");
-			return {
-				...state,
-				isFetching: false,
-				fetchErrorString: action.payload,
-			};
-			break;
-		case booksActions.CLICKED_ITEM:
-			return {
-				...state,
-				clickedOn: action.payload,
-			}
-		default:
-			return state;
+	case booksActions.IS_FETCHING_BOOKS:
+		return {
+			...state,
+			isFetching: true,
+		};
+	case booksActions.SUCCESS_FETCHING_BOOKS:
+		return {
+			...state,
+			booksArr: action.payload,
+			successFetching: true,
+			isFetching: false
+		};
+	case booksActions.ERROR_FETCHING:
+		return {
+			...state,
+			isFetching: false,
+			fetchErrorString: action.payload,
+		};
+	case booksActions.CLICKED_ITEM:
+		return {
+			...state,
+			clickedOn: action.payload,
+		};
+	default:
+		return state;
+	}
+}
+
+export function session(state={
+	loginWait: false,
+	loginSuccess: false,
+	loginErrorMsg: "",
+	isLoggedIn: false,
+	userData: "",
+}, action) {
+	switch (action.type) {
+	case accountActions.IS_LOGGING_IN:
+		return {
+			...state,
+			loginWait: true,
+			loginSuccess: false,
+			loginErrorMsg: "",
+			isLoggedIn: false,
+			userData: "",
+		};
+	case accountActions.LOGIN_SUCCESS:
+		return {
+			...state,
+			loginWait: false,
+			loginSuccess: true,
+			loginErrorMsg: "",
+			isLoggedIn: true,
+			userData: action.payload,
+		};
+	case accountActions.LOGIN_ERROR:
+		return {
+			...state,
+			loginWait: false,
+			loginSuccess: false,
+			loginErrorMsg: action.payload,
+			isLoggedIn: false,
+			userData: "",
+		};
+	default:
+		return state;
+
 	}
 }
 //NOTES: Async functions should always dispatch 3 types of actions.

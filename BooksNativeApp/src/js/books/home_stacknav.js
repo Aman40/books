@@ -11,7 +11,7 @@ export default BookDetailsStack = StackNavigator(
 		Home: {
 			screen: ConnectedBooksView,
 			navigationOptions: {
-				title: "Home",
+				title: "Add Search Bar",
 			}
 		},
 		BookDetails: {

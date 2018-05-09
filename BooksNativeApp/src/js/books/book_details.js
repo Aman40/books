@@ -1,8 +1,12 @@
-import React, {Component} from 'react'
-import {connect, Provider} from 'react-redux'
-import store from '../store'
-import {StyleSheet} from 'react-native';
-
+/*jshint esversion: 6 */
+import React, {Component} from "react";
+import {connect, Provider} from "react-redux";
+import store from "../store";
+import {
+	StyleSheet,
+	View,
+	Text,
+} from "react-native";
 class _BookDetails extends Component {
 	constructor(props) {
 		super(props);
@@ -15,13 +19,13 @@ class _BookDetails extends Component {
 					So far, so good!
 				</Text>
 			</View>
-		)
+		);
 	}
 }
 const styles = StyleSheet.create({
 	wrapper: {
 		flex: 1,
-		width: '100%',
+		width: "100%",
 		padding: 5,
 	}
 });
@@ -30,18 +34,20 @@ const styles = StyleSheet.create({
 function mapStateToProps(state) {
 	return {
 		book: state.books.booksArr[state.books.clickedOn],
-	}
+	};
 }
 function mapDispatchToProps(dispatch) {
 	return ({
 		check: ()=>{
 			console.log("It's dispatching!");
+			dispatch({
+				type: "TESTING",
+				payload: "This is temporary"
+			});
 		}
-	})
+	});
 }
 const _ConnectedBookDetails = connect(mapStateToProps, mapDispatchToProps)(_BookDetails);
-
-
 
 export default class ConnectedBookDetails extends Component {
 	render() {
@@ -51,9 +57,9 @@ export default class ConnectedBookDetails extends Component {
 			>
 				<_ConnectedBookDetails
 					navigation={this.props.navigation}
-				 />
+				/>
 			</Provider>
-		)
+		);
 	}
 }
 //Props from the store are passed directly to _ConnectedBookDetails by Provider from the store. Those from navigator have to be passed manually

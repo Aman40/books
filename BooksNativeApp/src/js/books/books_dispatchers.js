@@ -1,6 +1,9 @@
-import * as booksActions from './books_actions';
-let DOMParser = require('xmldom').DOMParser;
-let xmlParser = require('react-xml-parser');
+/*jshint esversion: 6 */
+import * as booksActions from "./books_actions";
+let DOMParser = require("xmldom").DOMParser;
+import univ_const from "/var/www/html/books/BooksNativeApp/univ_const.json";
+const host = univ_const.server_url;
+
 export function fetchBooks(dispatch) {
 	let xhr = new XMLHttpRequest();
 	xhr.responseType = "text";
@@ -10,13 +13,13 @@ export function fetchBooks(dispatch) {
 			let Parser = new DOMParser();
 			let xmlDoc = Parser.parseFromString(this.responseText);
 
-			let srv_res_status = parseInt(xmlDoc.getElementsByTagName('srv_res_status')[0].childNodes[0].nodeValue);
+			let srv_res_status = parseInt(xmlDoc.getElementsByTagName("srv_res_status")[0].childNodes[0].nodeValue);
 			console.log("Server status: "+srv_res_status);
 
 			if(srv_res_status===0) {
 				//Success. We have some books. Fetch them into booksArr then change the offSet
 				//Extract the books as an object.
-				let booksArr = JSON.parse(xmlDoc.getElementsByTagName('bks_info')[0].childNodes[0].nodeValue);
+				let booksArr = JSON.parse(xmlDoc.getElementsByTagName("bks_info")[0].childNodes[0].nodeValue);
 
 				dispatch({
 					type: booksActions.SUCCESS_FETCHING_BOOKS,
@@ -37,10 +40,10 @@ export function fetchBooks(dispatch) {
 		} else {
 			//An error occured.
 			if(this.readyState===4) {
-				console.log("Error fetching.")
+				console.log("Error fetching.");
 				dispatch({
 					type: booksActions.ERROR_FETCHING,
-					payload: "Possible internal server error.",
+					payload: `Possible internal server error. Status: ${this.status}`,
 				});
 			}
 		}
@@ -48,7 +51,7 @@ export function fetchBooks(dispatch) {
 
 	try {
 		console.log("Trying...");
-		xhr.open('POST','http://10.4.140.115:8000/books/all', true);
+		xhr.open("POST",`${host}/books/all`, true);
 		xhr.send();
 		dispatch({
 			type: booksActions.IS_FETCHING_BOOKS,
@@ -69,5 +72,5 @@ export function showItemDetails(dispatch, payload) {
 	dispatch({
 		type: booksActions.CLICKED_ITEM,
 		payload,
-	})
+	});
 }
