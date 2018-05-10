@@ -2,341 +2,337 @@
 //These will be routed to /add, /find, delete and /edit_inventory
 //Queries done on the home page search bar will also be routed here
 //Likewise, the functions for /find and /edit_inventory will be housed here until they are too big
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const mysql = require('mysql');
-const uuid = require('uuid/v4');
-const { check, validationResult } = require('express-validator/check');
-const url = require('url');
-const util = require('util');
-const formidable = require('formidable');
-const fs = require('fs');
-const events = require('events');
+const mysql = require("mysql");
+const uuid = require("uuid/v4");
+const { check, validationResult } = require("express-validator/check");
+const url = require("url");
+const formidable = require("formidable");
+const fs = require("fs");
+const events = require("events");
 
-router.use('/', (req, res, next)=>{
-    next();
-})
-router.post('/alter', checkSession);
+router.post("/alter", checkSession);
 
-router.post('/alter', [ /*Validate form*/
-    check("title")
-        .not()
-        .isEmpty()
-        .withMessage("ER_NO_TITLE"),
-    check("authors")
-        .not()
-        .isEmpty()
-        .withMessage("ER_AUTH_LEN")
-        .trim()
-        .escape(),
-    check("description")
-        .optional({nullable: true, checkFalsy: true})
-        .isLength({max: 255})
-        .withMessage("ER_DES_LEN") //Description too long
-        .trim()
-        .escape(),
-    check("published")
-        .not()
-        .isEmpty()
-        .withMessage("ER_NO_PUBYR"),
-    check("language")
-        .not()
-        .isEmpty()
-        .withMessage("ER_NO_LANG"),
-    check("edition")
-        .optional({nullable: true, checkFalsy: true})
-        .isNumeric()
-        .withMessage("ER_ILLEGAL_OP"),
-    check("cover")
-        .not()
-        .isEmpty()
-        .withMessage("ER_NO_COVER")
-        .isIn(["paper_back", "hard_back"])
-        .withMessage("ER_ILLEGAL_OP"),
-    check("page_no")
-        .not()
-        .isEmpty()
-        .withMessage("ER_NO_PAGES"),
-    check("publisher")
-        .not()
-        .isEmpty()
-        .withMessage("ER_NO_PUB")
-        .isLength({max: 255})
-        .withMessage("ER_PUB_LEN")
-        .trim()
-        .escape(),
-    check("isbn")
-        .not()
-        .isEmpty()
-        .withMessage("ER_NO_ISBN")
-        .isLength({min: 10,max: 13})
-        .trim()
-        .escape(),
-    check("condition")
-        .optional({nullable: true, checkFalsy: true})
-        .isLength({max: 255})
-        .withMessage("ER_CON_LEN") //Description too long
-        .trim()
-        .escape(),
-    check("location")
-        .optional({nullable: true, checkFalsy: true})
-        .isLength({max: 255})
-        .withMessage("ER_LOC_LEN")
-        .trim()
-        .escape(),
-    check("price")
-        .not()
-        .isEmpty()
-        .withMessage("ER_NO_PRICE")
-        .isNumeric()
-        .withMessage("ER_ILLEGAL_OP")
-        .isLength({max: 10})
-        .withMessage("ER_PRICE_LEN"),
-    check("deliverable")
-        .not()
-        .isEmpty()
-        .withMessage("ER_NO_DELIV")
-        .isIn(["true", "false"])
-        .withMessage("ER_ILLEGAL_OP"),
-    check("offer_expiry")
-        .not()
-        .isEmpty()
-        .withMessage("ER_NO_EXP")
+router.post("/alter", [ /*Validate form*/
+	check("title")
+		.not()
+		.isEmpty()
+		.withMessage("ER_NO_TITLE"),
+	check("authors")
+		.not()
+		.isEmpty()
+		.withMessage("ER_AUTH_LEN")
+		.trim()
+		.escape(),
+	check("description")
+		.optional({nullable: true, checkFalsy: true})
+		.isLength({max: 255})
+		.withMessage("ER_DES_LEN") //Description too long
+		.trim()
+		.escape(),
+	check("published")
+		.not()
+		.isEmpty()
+		.withMessage("ER_NO_PUBYR"),
+	check("language")
+		.not()
+		.isEmpty()
+		.withMessage("ER_NO_LANG"),
+	check("edition")
+		.optional({nullable: true, checkFalsy: true})
+		.isNumeric()
+		.withMessage("ER_ILLEGAL_OP"),
+	check("cover")
+		.not()
+		.isEmpty()
+		.withMessage("ER_NO_COVER")
+		.isIn(["paper_back", "hard_back"])
+		.withMessage("ER_ILLEGAL_OP"),
+	check("page_no")
+		.not()
+		.isEmpty()
+		.withMessage("ER_NO_PAGES"),
+	check("publisher")
+		.not()
+		.isEmpty()
+		.withMessage("ER_NO_PUB")
+		.isLength({max: 255})
+		.withMessage("ER_PUB_LEN")
+		.trim()
+		.escape(),
+	check("isbn")
+		.not()
+		.isEmpty()
+		.withMessage("ER_NO_ISBN")
+		.isLength({min: 10,max: 13})
+		.trim()
+		.escape(),
+	check("condition")
+		.optional({nullable: true, checkFalsy: true})
+		.isLength({max: 255})
+		.withMessage("ER_CON_LEN") //Description too long
+		.trim()
+		.escape(),
+	check("location")
+		.optional({nullable: true, checkFalsy: true})
+		.isLength({max: 255})
+		.withMessage("ER_LOC_LEN")
+		.trim()
+		.escape(),
+	check("price")
+		.not()
+		.isEmpty()
+		.withMessage("ER_NO_PRICE")
+		.isNumeric()
+		.withMessage("ER_ILLEGAL_OP")
+		.isLength({max: 10})
+		.withMessage("ER_PRICE_LEN"),
+	check("deliverable")
+		.not()
+		.isEmpty()
+		.withMessage("ER_NO_DELIV")
+		.isIn(["true", "false"])
+		.withMessage("ER_ILLEGAL_OP"),
+	check("offer_expiry")
+		.not()
+		.isEmpty()
+		.withMessage("ER_NO_EXP")
 ], (req, res, next)=>{
 
-    /*res.writeHead(200, {'Content-Type':'text/html', 'Access-Control-Allow-Origin': 'http://localhost:3000'});*/
-    res.write("<?xml version='1.0' encoding='UTF-8' ?>");
-    res.statusCode = 200;
-    res.write(`<cookie>${res.getHeader('Set-Cookie')}</cookie>`); //DEV
+	/*res.writeHead(200, {'Content-Type':'text/html', 'Access-Control-Allow-Origin': 'http://localhost:3000'});*/
+	res.write("<?xml version='1.0' encoding='UTF-8' ?>");
+	res.statusCode = 200;
+	res.write(`<cookie>${res.getHeader("Set-Cookie")}</cookie>`); //DEV
 
-    //Check the validation result here
-    let result = validationResult(req);
-    if(result.isEmpty()) {
-        next();
-    } else {
-        //Format the errors and echo them back to the client
-        //The query ends here
-        //Return an array of validation results/errors. Only the first error
-        let error_array = result.array({onlyFirstError: true});
+	//Check the validation result here
+	let result = validationResult(req);
+	if(result.isEmpty()) {
+		next();
+	} else {
+		//Format the errors and echo them back to the client
+		//The query ends here
+		//Return an array of validation results/errors. Only the first error
+		let error_array = result.array({onlyFirstError: true});
 
-        res.write(`<err_arr>${JSON.stringify(error_array)}</err_arr>`);
-        res.write("<msg>There was a problem with the form entries</msg>");
+		res.write(`<err_arr>${JSON.stringify(error_array)}</err_arr>`);
+		res.write("<msg>There was a problem with the form entries</msg>");
 
-        res.end("<srv_res_status>8</srv_res_status>");
-    }
+		res.end("<srv_res_status>8</srv_res_status>");
+	}
 });
 
-router.post('/alter/add', function (req, res) {
-  res.write("<?xml version='1.0' encoding='UTF-8' ?>");
-  res.write(`<cookie>${res.getHeader('Set-Cookie')}</cookie>`); //DEV
-    let fields = url.parse(req.url, true).query;
-    //Insert data into db and return
-    const con = mysql.createConnection({
-        host: "localhost",
-        user: "aman",
-        password: "password",
-        database: "books"
-    });
-    con.connect((err)=>{
-        if(err) throw err; //Replace with a solution that won't crash the app
-        let sql = "INSERT INTO Books(`UserID`,`BookID`, `Title`, `Edition`, `Authors`, `Language`," +
+router.post("/alter/add", function (req, res) {
+	res.write("<?xml version='1.0' encoding='UTF-8' ?>");
+	res.write(`<cookie>${res.getHeader("Set-Cookie")}</cookie>`); //DEV
+	let fields = url.parse(req.url, true).query;
+	//Insert data into db and return
+	const con = mysql.createConnection({
+		host: "localhost",
+		user: "aman",
+		password: "password",
+		database: "books"
+	});
+	con.connect((err)=>{
+		if(err) throw err; //Replace with a solution that won't crash the app
+		let sql = "INSERT INTO Books(`UserID`,`BookID`, `Title`, `Edition`, `Authors`, `Language`," +
             " `Description`," +
             "`Cover`, `PageNo`, `Publisher`, `Published`, `ISBN`, `New`, `Condition`," +
             "`Location`, `Price`, `Deliverable`, `DateAdded`, `OfferExpiry`) VALUES ?";
 
-        let book_id = genUid("B");
+		let book_id = genUid("B");
 
-        //Modify data for mysql. E.g true/false => 1/0
-        if(!fields.edition) fields.edition=1;
-        fields.is_new = fields.is_new?1:0;
-        fields.deliverable = fields.deliverable?1:0;
+		//Modify data for mysql. E.g true/false => 1/0
+		if(!fields.edition) fields.edition=1;
+		fields.is_new = fields.is_new?1:0;
+		fields.deliverable = fields.deliverable?1:0;
 
-        let form_fields = [[
-            req.session.uid,
-            book_id,
-            fields.title,
-            fields.edition,
-            fields.authors,
-            fields.language,
-            fields.description,
-            fields.cover,
-            fields.page_no,
-            fields.publisher,
-            fields.published,
-            fields.isbn,
-            fields.is_new,
-            fields.condition,
-            fields.location,
-            fields.price,
-            fields.deliverable,
-            fields.curr_date,
-            fields.offer_expiry
-        ]];
+		let form_fields = [[
+			req.session.uid,
+			book_id,
+			fields.title,
+			fields.edition,
+			fields.authors,
+			fields.language,
+			fields.description,
+			fields.cover,
+			fields.page_no,
+			fields.publisher,
+			fields.published,
+			fields.isbn,
+			fields.is_new,
+			fields.condition,
+			fields.location,
+			fields.price,
+			fields.deliverable,
+			fields.curr_date,
+			fields.offer_expiry
+		]];
 
-        con.query(sql, [form_fields], (err, result)=>{
-            if(err) {
-                console.log(err);
+		con.query(sql, [form_fields], (err, result)=>{
+			if(err) {
+				console.log(err);
 
-                if(err.code==="ER_INVALID_CHARACTER_STRING") {
-                    //Invalid characters used in the form. Send back code. Translate on client side
-                    res.write("<srv_res_status>2</srv_res_status>");
-                    res.end("<msg>Invalid characters in the form</msg>");
-                    return;
-                } else {
-                    //Errors unrelated to the user
-                    res.write("<srv_res_status>4</srv_res_status>");
-                    res.end("<msg>A problem with the query occurred</msg>"); //Perhaps attempted SQL injection?
-                    return;
-                }
-            }
-            //Return the book data. Don't wanna probe the db again. Mendokusai.
+				if(err.code==="ER_INVALID_CHARACTER_STRING") {
+					//Invalid characters used in the form. Send back code. Translate on client side
+					res.write("<srv_res_status>2</srv_res_status>");
+					res.end("<msg>Invalid characters in the form</msg>");
+					return;
+				} else {
+					//Errors unrelated to the user
+					res.write("<srv_res_status>4</srv_res_status>");
+					res.end("<msg>A problem with the query occurred</msg>"); //Perhaps attempted SQL injection?
+					return;
+				}
+			}
+			//Return the book data. Don't wanna probe the db again. Mendokusai.
 
-            let book_data = {
-                book_id: fields.book_id,
-                title: fields.title,
-                edition: fields.edition,
-                authors: fields.authors,
-                description: fields.description,
-                cover:  fields.cover,
-                page_no: fields.page_no,
-                publisher: fields.publisher,
-                isbn: fields.isbn,
-                is_new: fields.is_new,
-                condition: fields.condition,
-                location: fields.location,
-                price: fields.price,
-                deliverable: fields.deliverable,
-                date_added: fields.curr_date,
-                offer_expiry: fields.offer_expiry
-            };
+			let book_data = {
+				book_id: fields.book_id,
+				title: fields.title,
+				edition: fields.edition,
+				authors: fields.authors,
+				description: fields.description,
+				cover:  fields.cover,
+				page_no: fields.page_no,
+				publisher: fields.publisher,
+				isbn: fields.isbn,
+				is_new: fields.is_new,
+				condition: fields.condition,
+				location: fields.location,
+				price: fields.price,
+				deliverable: fields.deliverable,
+				date_added: fields.curr_date,
+				offer_expiry: fields.offer_expiry
+			};
 
-            //Return JSON string of names and values to be parsed into an obj
-            res.write(`<books>${JSON.stringify(book_data)}</books>`);
-            res.write("<msg>Successfully added the book!</msg>");
-            res.end("<srv_res_status>0</srv_res_status>");
-        });
-    });
+			//Return JSON string of names and values to be parsed into an obj
+			res.write(`<books>${JSON.stringify(book_data)}</books>`);
+			res.write("<msg>Successfully added the book!</msg>");
+			res.end("<srv_res_status>0</srv_res_status>");
+		});
+	});
 });
 
-router.post('/alter/edit', function (req, res) {
-  res.write("<?xml version='1.0' encoding='UTF-8' ?>");
-  res.write(`<cookie>${res.getHeader('Set-Cookie')}</cookie>`); //DEV
+router.post("/alter/edit", function (req, res) {
+	res.write("<?xml version='1.0' encoding='UTF-8' ?>");
+	res.write(`<cookie>${res.getHeader("Set-Cookie")}</cookie>`); //DEV
 
-    let fields = url.parse(req.url, true).query;
-    //Insert data into db and return
-    const con = mysql.createConnection({
-        host: "localhost",
-        user: "aman",
-        password: "password",
-        database: "books"
-    });
-    con.connect((err)=>{
-        if(err) throw err; //Replace with a solution that won't crash the app
-        //Modify data for mysql. E.g true/false => 1/0
-        if(!fields.edition) fields.edition=1;
-        fields.is_new = fields.is_new==="true"?1:0;
-        fields.deliverable = fields.deliverable==="true"?1:0;
+	let fields = url.parse(req.url, true).query;
+	//Insert data into db and return
+	const con = mysql.createConnection({
+		host: "localhost",
+		user: "aman",
+		password: "password",
+		database: "books"
+	});
+	con.connect((err)=>{
+		if(err) throw err; //Replace with a solution that won't crash the app
+		//Modify data for mysql. E.g true/false => 1/0
+		if(!fields.edition) fields.edition=1;
+		fields.is_new = fields.is_new==="true"?1:0;
+		fields.deliverable = fields.deliverable==="true"?1:0;
 
-        let book_id = fields.book_id
+		let book_id = fields.book_id;
 
-        let sql = "UPDATE Books SET `Title`=?, `Edition`=?, `Authors`=?, `Language`=?, `Description`=?," +
+		let sql = "UPDATE Books SET `Title`=?, `Edition`=?, `Authors`=?, `Language`=?, `Description`=?," +
             "`Cover`=?, `PageNo`=?, `Publisher`=?, `Published`=?, `ISBN`=?, `New`=?, `Condition`=?," +
             "`Location`=?, `Price`=?, `Deliverable`=?, `DateAdded`=?, `OfferExpiry`=? WHERE `UserID`=? AND `BookID`=?";
 
-            let form_fields = [
-                fields.title,
-                fields.edition,
-                fields.authors,
-                fields.language,
-                fields.description,
-                fields.cover,
-                fields.page_no,
-                fields.publisher,
-                fields.published,
-                fields.isbn,
-                fields.is_new,
-                fields.condition,
-                fields.location,
-                fields.price,
-                fields.deliverable,
-                fields.curr_date,
-                fields.offer_expiry,
-                req.session.uid,
-                book_id
-            ];
+		let form_fields = [
+			fields.title,
+			fields.edition,
+			fields.authors,
+			fields.language,
+			fields.description,
+			fields.cover,
+			fields.page_no,
+			fields.publisher,
+			fields.published,
+			fields.isbn,
+			fields.is_new,
+			fields.condition,
+			fields.location,
+			fields.price,
+			fields.deliverable,
+			fields.curr_date,
+			fields.offer_expiry,
+			req.session.uid,
+			book_id
+		];
 
-        con.query(sql, form_fields, (err, result)=>{
-            if(err) {
-                console.log(err);
-                console.log(con.query);
+		con.query(sql, form_fields, (err, result)=>{
+			if(err) {
+				console.log(err);
+				console.log(con.query);
 
-                if(err.code==="ER_INVALID_CHARACTER_STRING") {
-                    //Invalid characters used in the form. Send back code. Translate on client side
-                    res.write("<srv_res_status>2</srv_res_status>");
-                    res.end("<msg>Invalid characters in the form</msg>");
-                    return;
-                } else {
-                    //Errors unrelated to the user
-                    res.write("<srv_res_status>4</srv_res_status>");
-                    res.end("<msg>A problem with the query occurred</msg>"); //Perhaps attempted SQL injection?
-                    return;
-                }
-            }
-            console.log(req.session.uid);
-            console.log(book_id);
-            //Return the book data. Don't wanna probe the db again. Mendokusai.
-            let book_data = {
-                book_id: fields.book_id,
-                title: fields.title,
-                edition: fields.edition,
-                authors: fields.authors,
-                description: fields.description,
-                cover:  fields.cover,
-                page_no: fields.page_no,
-                publisher: fields.publisher,
-                isbn: fields.isbn,
-                is_new: fields.is_new,
-                condition: fields.condition,
-                location: fields.location,
-                price: fields.price,
-                deliverable: fields.deliverable,
-                date_added: fields.curr_date,
-                offer_expiry: fields.offer_expiry
-            };
+				if(err.code==="ER_INVALID_CHARACTER_STRING") {
+					//Invalid characters used in the form. Send back code. Translate on client side
+					res.write("<srv_res_status>2</srv_res_status>");
+					res.end("<msg>Invalid characters in the form</msg>");
+					return;
+				} else {
+					//Errors unrelated to the user
+					res.write("<srv_res_status>4</srv_res_status>");
+					res.end("<msg>A problem with the query occurred</msg>"); //Perhaps attempted SQL injection?
+					return;
+				}
+			}
+			console.log(req.session.uid);
+			console.log(book_id);
+			//Return the book data. Don't wanna probe the db again. Mendokusai.
+			let book_data = {
+				book_id: fields.book_id,
+				title: fields.title,
+				edition: fields.edition,
+				authors: fields.authors,
+				description: fields.description,
+				cover:  fields.cover,
+				page_no: fields.page_no,
+				publisher: fields.publisher,
+				isbn: fields.isbn,
+				is_new: fields.is_new,
+				condition: fields.condition,
+				location: fields.location,
+				price: fields.price,
+				deliverable: fields.deliverable,
+				date_added: fields.curr_date,
+				offer_expiry: fields.offer_expiry
+			};
 
-            //Return JSON string of names and values to be parsed into an obj
-            res.write(`<books>${JSON.stringify(book_data)}</books>`);
-            res.write("<msg>Successfully added the book!</msg>");
-            res.end("<srv_res_status>0</srv_res_status>");
-        });
-    });
+			//Return JSON string of names and values to be parsed into an obj
+			res.write(`<books>${JSON.stringify(book_data)}</books>`);
+			res.write("<msg>Successfully added the book!</msg>");
+			res.end("<srv_res_status>0</srv_res_status>");
+		});
+	});
 });
 
-router.use('/find', function (req, res, next) {
-    res.send("<h1>What exactly is finding??</h1>");
+router.use("/find", function (req, res, next) {
+	res.send("<h1>What exactly is finding??</h1>");
 });
 
-router.use('/fetch', (req,res)=>{
+router.use("/fetch", (req,res)=>{
 	//Fetches only logged in user's books
-    res.write("<?xml version='1.0' encoding='UTF-8' ?>");
-    res.write(`<cookie>${res.getHeader('Set-Cookie')}</cookie>`); //DEV
-    //Fetch 25 - 50 books at a time depending on how many the user specifies with
-    //The "show" filter
-    const con = mysql.createConnection({
-        host: "localhost",
-        user: "aman",
-        password: "password",
-        database: "books"
-    });
+	res.write("<?xml version='1.0' encoding='UTF-8' ?>");
+	res.write(`<cookie>${res.getHeader("Set-Cookie")}</cookie>`); //DEV
+	//Fetch 25 - 50 books at a time depending on how many the user specifies with
+	//The "show" filter
+	const con = mysql.createConnection({
+		host: "localhost",
+		user: "aman",
+		password: "password",
+		database: "books"
+	});
 
-    con.connect((err)=>{
-        if(err) {
-            console.log("Couldn't connect to the db");
-            //Return appropriate error to user. TODO LATER
-        }
+	con.connect((err)=>{
+		if(err) {
+			console.log("Couldn't connect to the db");
+			//Return appropriate error to user. TODO LATER
+		}
 
-        const fetch_max = 25; //Others will be 50, 75, 100, all specified by the client.
-        const sql = "SELECT Transient.BookID AS BookID," +
+		const fetch_max = 25; //Others will be 50, 75, 100, all specified by the client.
+		const sql = "SELECT Transient.BookID AS BookID," +
             "Transient.UserID AS UserID," +
             "Transient.Title AS Title," +
             "Transient.Edition AS Edition," +
@@ -361,178 +357,178 @@ router.use('/fetch', (req,res)=>{
             "WHERE `UserID`='"+req.session.uid+"') AS TempTable ORDER BY `BookSerial` " +
             "DESC LIMIT "+fetch_max+") AS Transient LEFT JOIN " +
             "BookImgs ON Transient.BookID=BookImgs.BookID ORDER BY Transient.BookSerial";
-        con.query(sql, (err, result)=>{
-            if(err) {
-                //Errors unrelated to the user
-                console.log(err.msg);
-                res.write("<srv_res_status>4</srv_res_status>");
-                res.write(`<err>${err.name}</err>`);
-                res.end(`<err>${err.message}</err>`); //Perhaps attempted SQL injection?
-                return;
-            }
-            if(result.length===0) {
-                //User has no books to show :(
-                res.write("<srv_res_status>3</srv_res_status>");
-                res.end("<msg>No results found</msg>");
-                return;
-            } else {
-                let Books = [];
-                let _tmpBook = {};
-                _tmpBook.images = [];
-                let curr__book = result.pop();
-                res.write(`<bks_info>${JSON.stringify(refactor_book_results(Books, result, curr__book, _tmpBook))}</bks_info>`);
-                res.write("<msg>Got your books, boss! Dev</msg>");
-                res.end("<srv_res_status>0</srv_res_status>");
-            }
-        });
-    });
+		con.query(sql, (err, result)=>{
+			if(err) {
+				//Errors unrelated to the user
+				console.log(err.msg);
+				res.write("<srv_res_status>4</srv_res_status>");
+				res.write(`<err>${err.name}</err>`);
+				res.end(`<err>${err.message}</err>`); //Perhaps attempted SQL injection?
+				return;
+			}
+			if(result.length===0) {
+				//User has no books to show :(
+				res.write("<srv_res_status>3</srv_res_status>");
+				res.end("<msg>No results found</msg>");
+				return;
+			} else {
+				let Books = [];
+				let _tmpBook = {};
+				_tmpBook.images = [];
+				let curr__book = result.pop();
+				res.write(`<bks_info>${JSON.stringify(refactor_book_results(Books, result, curr__book, _tmpBook))}</bks_info>`);
+				res.write("<msg>Got your books, boss! Dev</msg>");
+				res.end("<srv_res_status>0</srv_res_status>");
+			}
+		});
+	});
 });
 
-router.use('/images/upload', (req, res, next)=>{
-    res.write("<?xml version='1.0' encoding='UTF-8' ?>");
-    res.statusCode = 200;
-    res.write(`<cookie>${res.getHeader('Set-Cookie')}</cookie>`); //DEV
-    //Use
+router.use("/images/upload", (req, res, next)=>{
+	res.write("<?xml version='1.0' encoding='UTF-8' ?>");
+	res.statusCode = 200;
+	res.write(`<cookie>${res.getHeader("Set-Cookie")}</cookie>`); //DEV
+	//Use
 
-    let form = new formidable.IncomingForm();
-    form.keepExtensions = true;
-    form.maxFileSize = 25 * 1024 * 1024; //Allow up to a combined 25 MB
-    form.multiples = true;
+	let form = new formidable.IncomingForm();
+	form.keepExtensions = true;
+	form.maxFileSize = 25 * 1024 * 1024; //Allow up to a combined 25 MB
+	form.multiples = true;
 
-    const conn = mysql.createConnection({
-        host: "localhost",
-        user: "aman",
-        password: "password",
-        database: "books"
-    });
-    conn.connect((err)=>{
-        if(err) {
-            console.log(err.name);
-            console.log(err.message);``
-            res.end("<srv_res_status>6</srv_res_status>");
-            return;
-        }
+	const conn = mysql.createConnection({
+		host: "localhost",
+		user: "aman",
+		password: "password",
+		database: "books"
+	});
+	conn.connect((err)=>{
+		if(err) {
+			console.log(err.name);
+			console.log(err.message);"";
+			res.end("<srv_res_status>6</srv_res_status>");
+			return;
+		}
 
-        form.parse(req, (err, fields, files)=>{
-            if(err) {
-                console.log(err.name);
-                console.log(err.message);
-                res.end("<srv_res_status>6</srv_res_status>");
-                return;
-            }
+		form.parse(req, (err, fields, files)=>{
+			if(err) {
+				console.log(err.name);
+				console.log(err.message);
+				res.end("<srv_res_status>6</srv_res_status>");
+				return;
+			}
 
-            let am = new AsyncUploadManager(Object.getOwnPropertyNames(files).length); // TODO: This seems dangerous. Find a better way
+			let am = new AsyncUploadManager(Object.getOwnPropertyNames(files).length); // TODO: This seems dangerous. Find a better way
 
-            for(let name in files) {
-                //Maintaining the same connection, upload the file details one by one,
-                //Moving the file after each successful addition of info to db
-                let sql = "INSERT INTO BookImgs(`ImgID`, `BookID`, `ImageURI`)" +
+			for(let name in files) {
+				//Maintaining the same connection, upload the file details one by one,
+				//Moving the file after each successful addition of info to db
+				let sql = "INSERT INTO BookImgs(`ImgID`, `BookID`, `ImageURI`)" +
                     "VALUES ?";
-                let fileData = {};
-                fileData.imgID = genUid("I");
-                fileData.bookID = fields.bookID;
-                fileData.imgURI = "http://localhost:8000/images/"+fileData.imgID+".jpeg";
-                fileData.oldPath = files[name].path;
-                fileData.newPath = "/var/www/html/books/books-webApp/Server/images/"+fileData.imgID+".jpeg";
-                let form_fields = [[
-                    fileData.imgID,
-                    fileData.bookID,
-                    fileData.imgURI
-                ]]
+				let fileData = {};
+				fileData.imgID = genUid("I");
+				fileData.bookID = fields.bookID;
+				fileData.imgURI = "http://localhost:8000/images/"+fileData.imgID+".jpeg";
+				fileData.oldPath = files[name].path;
+				fileData.newPath = "/var/www/html/books/books-webApp/Server/images/"+fileData.imgID+".jpeg";
+				let form_fields = [[
+					fileData.imgID,
+					fileData.bookID,
+					fileData.imgURI
+				]];
 
-                fs.rename(fileData.oldPath, fileData.newPath, (err)=>{
+				fs.rename(fileData.oldPath, fileData.newPath, (err)=>{
 					if(err) {
 						console.log("An error occured: "+err);
-						am.emit('error', err, res, "add_img");
+						am.emit("error", err, res, "add_img");
 					} else {
 						//Emit an event if completion events
-	                    //Catch the event for when the last file is done
-	                    conn.query(sql, [form_fields], (err, result)=>{
-	                        if(err) { //Mysql error
+						//Catch the event for when the last file is done
+						conn.query(sql, [form_fields], (err, result)=>{
+							if(err) { //Mysql error
 								console.log(err);
-	                            am.emit('error', err, res, "add_img");
-	                        }
+								am.emit("error", err, res, "add_img");
+							}
 							else {
-	                            //VULNERABILITY: Without the userID attatched to the BookImgs table,
-	                            //Any user can potentially add images for any other user's books
-	                            //Provided they know it's BookID
-	                            //Anyway, no errors in the SQL, move the file
-	                            am.emit('completed', res, fileData.newPath);
-	                        }
-	                    });
+								//VULNERABILITY: Without the userID attatched to the BookImgs table,
+								//Any user can potentially add images for any other user's books
+								//Provided they know it's BookID
+								//Anyway, no errors in the SQL, move the file
+								am.emit("completed", res, fileData.newPath);
+							}
+						});
 					}
-                });
-            }
-        });
-    });
+				});
+			}
+		});
+	});
 });
 
-router.use('/images/delete', (req, res)=>{
-    //1. Get the list of images
-    //2. create a connection to the db
-    //3. Looping through the images, delete each then
-    //4. run the delete query first then unlink from the disk
-    res.write("<?xml version='1.0' encoding='UTF-8' ?>");
-    res.statusCode = 200;
-    res.write(`<cookie>${res.getHeader('Set-Cookie')}</cookie>`); //DEV
-    //Use
-    let fields = JSON.parse(url.parse(req.url, true).query.id_arr);
-    console.log("Deleting Fields: "+fields);
+router.use("/images/delete", (req, res)=>{
+	//1. Get the list of images
+	//2. create a connection to the db
+	//3. Looping through the images, delete each then
+	//4. run the delete query first then unlink from the disk
+	res.write("<?xml version='1.0' encoding='UTF-8' ?>");
+	res.statusCode = 200;
+	res.write(`<cookie>${res.getHeader("Set-Cookie")}</cookie>`); //DEV
+	//Use
+	let fields = JSON.parse(url.parse(req.url, true).query.id_arr);
+	console.log("Deleting Fields: "+fields);
 
-    const con = mysql.createConnection({
-        host: "localhost",
-        user: "aman",
-        password: "password",
-        database: "books"
-    });
+	const con = mysql.createConnection({
+		host: "localhost",
+		user: "aman",
+		password: "password",
+		database: "books"
+	});
 
-    con.connect((err)=>{
-        if(err) {
-            console.log(err.name);
-            console.log(err.message);``
-            res.end("<srv_res_status>6</srv_res_status>");
-            return;
-        }
-        //Start async manger
-        let am = new AsyncUploadManager(fields.length); //Annonce expected number of files.
+	con.connect((err)=>{
+		if(err) {
+			console.log(err.name);
+			console.log(err.message);"";
+			res.end("<srv_res_status>6</srv_res_status>");
+			return;
+		}
+		//Start async manger
+		let am = new AsyncUploadManager(fields.length); //Annonce expected number of files.
 
-        for(let i =0; i<fields.length;i++) {
-            //TODO:
-            // Vulnerability: Attacker could change id for an image to "*" hence dropping
-            //all images in db. Try it.
-            // Defence: For each of the images, check the length = 13 characters. //LATER
-            //Also append BookID so only said user's images are deleted
-            let sql = "DELETE FROM BookImgs WHERE ImgID='"+fields[i]+"'";
-            con.query(sql, (err, result)=>{
-                if(err) {
-                    am.emit('error', err, res, "del_img");
-                }  else {
-                    am.emit('completed', res, fields[i]);
-                }
-            });
-        }
-    });
+		for(let i =0; i<fields.length;i++) {
+			//TODO:
+			// Vulnerability: Attacker could change id for an image to "*" hence dropping
+			//all images in db. Try it.
+			// Defence: For each of the images, check the length = 13 characters. //LATER
+			//Also append BookID so only said user's images are deleted
+			let sql = "DELETE FROM BookImgs WHERE ImgID='"+fields[i]+"'";
+			con.query(sql, (err, result)=>{
+				if(err) {
+					am.emit("error", err, res, "del_img");
+				}  else {
+					am.emit("completed", res, fields[i]);
+				}
+			});
+		}
+	});
 });
 
-router.use('/all', (req, res, next)=>{
+router.use("/all", (req, res, next)=>{
 	//Fetches all the books, not specific to any user. In future, this will be tailored according to location of the client.
 	res.write("<?xml version='1.0' encoding='UTF-8' ?>");
-    res.write(`<cookie>${res.getHeader('Set-Cookie')}</cookie>`); //DEV
-    //Fetch 25 - 50 books at a time depending on how many the user specifies with
-    //The "show" filter
-    const con = mysql.createConnection({
-        host: "localhost",
-        user: "aman",
-        password: "password",
-        database: "books"
-    });
+	res.write(`<cookie>${res.getHeader("Set-Cookie")}</cookie>`); //DEV
+	//Fetch 25 - 50 books at a time depending on how many the user specifies with
+	//The "show" filter
+	const con = mysql.createConnection({
+		host: "localhost",
+		user: "aman",
+		password: "password",
+		database: "books"
+	});
 	con.connect((err)=>{
-        if(err) {
-            console.log("Couldn't connect to the db");
-            //Return appropriate error to user. TODO LATER
-        }
+		if(err) {
+			console.log("Couldn't connect to the db");
+			//Return appropriate error to user. TODO LATER
+		}
 
-        const fetch_max = 25; //Others will be 50, 75, 100, all specified by the client.
+		const fetch_max = 25; //Others will be 50, 75, 100, all specified by the client.
 		const sql = "SELECT Transient.BookID AS BookID," +
             "Transient.UserID AS UserID," +
             "Transient.Title AS Title," +
@@ -558,113 +554,113 @@ router.use('/all', (req, res, next)=>{
             "DESC LIMIT "+fetch_max+") AS Transient LEFT JOIN " +
             "BookImgs ON Transient.BookID=BookImgs.BookID ORDER BY `BookSerial`";
 
-        con.query(sql, (err, result)=>{
-            if(err) {
-                //Errors unrelated to the user
-                console.log(err.msg);
-                res.write("<srv_res_status>4</srv_res_status>");
-                res.write(`<err>${err.name}</err>`);
-                res.end(`<err>${err.message}</err>`); //Perhaps attempted SQL injection?
-                return;
-            }
-            if(result.length===0) {
-                //The entire db is empty!
-                res.write("<srv_res_status>3</srv_res_status>");
-                res.end("<msg>No results found</msg>");
-                return;
-            } else {
-                let Books = [];
-                let _tmpBook = {};
-                _tmpBook.images = [];
-                let curr__book = result.pop();
-                res.write(`<bks_info>${JSON.stringify(refactor_book_results(Books, result, curr__book, _tmpBook))}</bks_info>`);
-                res.write("<msg>Got your books, boss! Dev</msg>");
-                res.end("<srv_res_status>0</srv_res_status>");
-            }
-        });
-    });
+		con.query(sql, (err, result)=>{
+			if(err) {
+				//Errors unrelated to the user
+				console.log(err.msg);
+				res.write("<srv_res_status>4</srv_res_status>");
+				res.write(`<err>${err.name}</err>`);
+				res.end(`<err>${err.message}</err>`); //Perhaps attempted SQL injection?
+				return;
+			}
+			if(result.length===0) {
+				//The entire db is empty!
+				res.write("<srv_res_status>3</srv_res_status>");
+				res.end("<msg>No results found</msg>");
+				return;
+			} else {
+				let Books = [];
+				let _tmpBook = {};
+				_tmpBook.images = [];
+				let curr__book = result.pop();
+				res.write(`<bks_info>${JSON.stringify(refactor_book_results(Books, result, curr__book, _tmpBook))}</bks_info>`);
+				res.write("<msg>Got your books, boss! Dev</msg>");
+				res.end("<srv_res_status>0</srv_res_status>");
+			}
+		});
+	});
 });
 
 function checkSession(req, res, next){
 	//DEV:
-    console.log("Sent cookie: "+res.getHeader('Set-Cookie'))
-    if(req.session.uid) {
-        next(); //The user is logged in or not. If not, they shouldn't be here. Prompt them to log in.
-    } else {
-        //Return an appropriate response to let the user know that their session is expired
-        /*res.writeHead(200, {'Content-Type':'text/html', 'Access-Control-Allow-Origin': 'http://localhost:3000'});*/
-        res.write("<?xml version='1.0' encoding='UTF-8' ?>");
-        res.write(`<cookie>${res.getHeader('Set-Cookie')}</cookie>`); //DEV
-        res.write("<msg>Please log in again.</msg>");
-        res.statusCode = 200;
-        res.statusText = "OK";
-        res.end("<srv_res_status>9</srv_res_status>");
-    }
+	console.log("Sent cookie: "+res.getHeader("Set-Cookie"));
+	if(req.session.uid) {
+		next(); //The user is logged in or not. If not, they shouldn't be here. Prompt them to log in.
+	} else {
+		//Return an appropriate response to let the user know that their session is expired
+		/*res.writeHead(200, {'Content-Type':'text/html', 'Access-Control-Allow-Origin': 'http://localhost:3000'});*/
+		res.write("<?xml version='1.0' encoding='UTF-8' ?>");
+		res.write(`<cookie>${res.getHeader("Set-Cookie")}</cookie>`); //DEV
+		res.write("<msg>Please log in again.</msg>");
+		res.statusCode = 200;
+		res.statusText = "OK";
+		res.end("<srv_res_status>9</srv_res_status>");
+	}
 }
 function AsyncUploadManager(total_file_count){
-    //Works with deleting multiple images as well
-    //Add a timeout of 5 seconds (proportional to file total size in future) to abort
-    //Maintain a list of moved files to be removed as a rollback scheme should any
-    //of the queries fail.
-    this.completedFileList = []
-    this.em = new events.EventEmitter();
-    this.totalFileCount = total_file_count;
-    this.filesCompleted = 0;
-    this.em.on('completed', (restArgs)=>{
-        //Called each time a file is successfully added for addition or deleted for deletion
-        //Both the query and file system completed successfully
-        let res=restArgs[0];
-        let filename=restArgs[1];
-        this.filesCompleted++;
+	//Works with deleting multiple images as well
+	//Add a timeout of 5 seconds (proportional to file total size in future) to abort
+	//Maintain a list of moved files to be removed as a rollback scheme should any
+	//of the queries fail.
+	this.completedFileList = [];
+	this.em = new events.EventEmitter();
+	this.totalFileCount = total_file_count;
+	this.filesCompleted = 0;
+	this.em.on("completed", (restArgs)=>{
+		//Called each time a file is successfully added for addition or deleted for deletion
+		//Both the query and file system completed successfully
+		let res=restArgs[0];
+		let filename=restArgs[1];
+		this.filesCompleted++;
 
 		console.log(`Moved ${this.filesCompleted} files out of ${this.totalFileCount} files`);
 
-        this.completedFileList.push(filename);
-        if(this.filesCompleted===this.totalFileCount) {
-            //Check if all the expected files have been completed before returning a response
-            //That's the whole purpose of this object
-            //End the request
-            res.write("<msg>Successfully added or deleted the Images!</msg>");
-            res.end("<srv_res_status>0</srv_res_status>");
-        }
-    });
-    this.em.on('error', (restArgs)=>{
-        //The operation ended halfway only after moving the file. The query wasn't performed
-        //Mysql error
-        let err = restArgs[0];
-        let res = restArgs[1];
-        let ctx = restArgs[2];
-        console.log("An error occurred: "+restArgs[0]);
-        //Rollback all the files that have been moved so far
-        for(let i = 0; i<this.completedFileList.length;i++) {
-            if(ctx==="add_img") {
-                console.log("Query failed after moving file: "+this.completedFileList[i]);
-            } else if(ctx==="del_img") {
-                console.log("Query failed after deleting reference to file: "+this.completedFileList[i]);
-            }
-        }
-        res.write("<srv_res_status>4</srv_res_status>");
-        res.end("<msg>A problem with the query occurred</msg>"); //Perhaps attempted SQL injection?
-        //Abort the file uploads and rollback whatever!
-    })
+		this.completedFileList.push(filename);
+		if(this.filesCompleted===this.totalFileCount) {
+			//Check if all the expected files have been completed before returning a response
+			//That's the whole purpose of this object
+			//End the request
+			res.write("<msg>Successfully added or deleted the Images!</msg>");
+			res.end("<srv_res_status>0</srv_res_status>");
+		}
+	});
+	this.em.on("error", (restArgs)=>{
+		//The operation ended halfway only after moving the file. The query wasn't performed
+		//Mysql error
+		let err = restArgs[0];
+		let res = restArgs[1];
+		let ctx = restArgs[2];
+		console.log("An error occurred: "+restArgs[0]);
+		//Rollback all the files that have been moved so far
+		for(let i = 0; i<this.completedFileList.length;i++) {
+			if(ctx==="add_img") {
+				console.log("Query failed after moving file: "+this.completedFileList[i]);
+			} else if(ctx==="del_img") {
+				console.log("Query failed after deleting reference to file: "+this.completedFileList[i]);
+			}
+		}
+		res.write("<srv_res_status>4</srv_res_status>");
+		res.end("<msg>A problem with the query occurred</msg>"); //Perhaps attempted SQL injection?
+		//Abort the file uploads and rollback whatever!
+	});
 
-    this.emit = (event, ...restArgs)=>{
-        //'error', err, res OR 'completed', res, newpath
+	this.emit = (event, ...restArgs)=>{
+		//'error', err, res OR 'completed', res, newpath
 		//Using restArgs here to deal with both adding and deleting which require a different number of arguments
-        this.em.emit(event, restArgs);
-    }
+		this.em.emit(event, restArgs);
+	};
 }
 
 function genUid(char) {
-    //This is meant to function as the php uid(index) function, generating a 14 character uid starting with the
-    //provided index. If I get more of such I'll create a separate module
-    let str = uuid(); //Gives a 36 character string with hyphenes.
-    str = str.split('-'); //Gives an array
-    let _tmp = "";
-    for(let i = 0; i<str.length; i++) { //Concatenate it back into a string
-        _tmp+=str[i];
-    }
-    return char+_tmp.toString().slice(0,13); //Get 13 characters, concat the first char = 14 characters;
+	//This is meant to function as the php uid(index) function, generating a 14 character uid starting with the
+	//provided index. If I get more of such I'll create a separate module
+	let str = uuid(); //Gives a 36 character string with hyphenes.
+	str = str.split("-"); //Gives an array
+	let _tmp = "";
+	for(let i = 0; i<str.length; i++) { //Concatenate it back into a string
+		_tmp+=str[i];
+	}
+	return char+_tmp.toString().slice(0,13); //Get 13 characters, concat the first char = 14 characters;
 }
 
 function refactor_book_results(Books, result, curr_book, _tmpBook) {
@@ -674,69 +670,69 @@ function refactor_book_results(Books, result, curr_book, _tmpBook) {
 	//book with a property "images" containing book's images as an object/array.
 	//result is an array of Book objects, some similar, only differeing on ImgID and ImgURI
 
-    let nxt_book = result.pop();
+	let nxt_book = result.pop();
 
-    if(!nxt_book) {
-        //Last item. Insert the current image and remaining data and close it up
-        //If there's no image, insert nothing.
-        if(curr_book.ImgID) {
-            let _tmpImg = {};
-            _tmpImg.ImgID = curr_book.ImgID;
-            _tmpImg.BookID = curr_book.BookID;
-            _tmpImg.ImgURI = curr_book.ImageURI;
-            _tmpBook.images.push(_tmpImg); //Push the image
-        }
+	if(!nxt_book) {
+		//Last item. Insert the current image and remaining data and close it up
+		//If there's no image, insert nothing.
+		if(curr_book.ImgID) {
+			let _tmpImg = {};
+			_tmpImg.ImgID = curr_book.ImgID;
+			_tmpImg.BookID = curr_book.BookID;
+			_tmpImg.ImgURI = curr_book.ImageURI;
+			_tmpBook.images.push(_tmpImg); //Push the image
+		}
 
-        let keys = Object.keys(curr_book);
-        for(let i=0;i<keys.length;i++) {
-            //Copy the properties, all except imgid
-            if(keys[i]!=="ImgID") {
-                _tmpBook[keys[i]] = curr_book[keys[i]];
-            }
-        }
-        //push the book to the Books array and return Books;
-        Books.push(_tmpBook);
-        return Books;
-    } else {
-        //not last item. Check if it's the same item
-        if(curr_book.BookID===nxt_book.BookID) {
-            //Same book. push() the image to. Only 3 properties. no need to for loop through keys
-            if(curr_book.ImgID) {
-                let _tmpImg = {};
-                _tmpImg.ImgID = curr_book.ImgID;
-                _tmpImg.BookID = curr_book.BookID;
-                _tmpImg.ImgURI = curr_book.ImageURI;
-                _tmpBook.images.push(_tmpImg); //Push the image
-            }
-            //Redefine curr_book and recurse
-            curr_book = nxt_book;
-            return refactor_book_results(Books, result, curr_book, _tmpBook);
-        } else {
-            //Last image of book. Push the current  image and remaining data into Books and reiterate
-            if(curr_book.ImgID) {
-                let _tmpImg = {};
-                _tmpImg.ImgID = curr_book.ImgID;
-                _tmpImg.BookID = curr_book.BookID;
-                _tmpImg.ImgURI = curr_book.ImageURI;
-                _tmpBook.images.push(_tmpImg); //Push the image
-            }
+		let keys = Object.keys(curr_book);
+		for(let i=0;i<keys.length;i++) {
+			//Copy the properties, all except imgid
+			if(keys[i]!=="ImgID") {
+				_tmpBook[keys[i]] = curr_book[keys[i]];
+			}
+		}
+		//push the book to the Books array and return Books;
+		Books.push(_tmpBook);
+		return Books;
+	} else {
+		//not last item. Check if it's the same item
+		if(curr_book.BookID===nxt_book.BookID) {
+			//Same book. push() the image to. Only 3 properties. no need to for loop through keys
+			if(curr_book.ImgID) {
+				let _tmpImg = {};
+				_tmpImg.ImgID = curr_book.ImgID;
+				_tmpImg.BookID = curr_book.BookID;
+				_tmpImg.ImgURI = curr_book.ImageURI;
+				_tmpBook.images.push(_tmpImg); //Push the image
+			}
+			//Redefine curr_book and recurse
+			curr_book = nxt_book;
+			return refactor_book_results(Books, result, curr_book, _tmpBook);
+		} else {
+			//Last image of book. Push the current  image and remaining data into Books and reiterate
+			if(curr_book.ImgID) {
+				let _tmpImg = {};
+				_tmpImg.ImgID = curr_book.ImgID;
+				_tmpImg.BookID = curr_book.BookID;
+				_tmpImg.ImgURI = curr_book.ImageURI;
+				_tmpBook.images.push(_tmpImg); //Push the image
+			}
 
-            let keys = Object.keys(curr_book);
-            for(let i=0;i<keys.length;i++) {
-                //Copy the properties, all except imgid. We already handled that
-                if(keys[i]!=="ImgID") {
-                    _tmpBook[keys[i]] = curr_book[keys[i]];
-                }
-            }
-            //push the book to the Books array and return reiterate afresh.
-            Books.push(_tmpBook);
-            _tmpBook = {};
-            _tmpBook.images = [];
-            //Redefine curr_book and recurse
-            curr_book = nxt_book;
-            return refactor_book_results(Books, result, curr_book, _tmpBook);
-        }
-    }
+			let keys = Object.keys(curr_book);
+			for(let i=0;i<keys.length;i++) {
+				//Copy the properties, all except imgid. We already handled that
+				if(keys[i]!=="ImgID") {
+					_tmpBook[keys[i]] = curr_book[keys[i]];
+				}
+			}
+			//push the book to the Books array and return reiterate afresh.
+			Books.push(_tmpBook);
+			_tmpBook = {};
+			_tmpBook.images = [];
+			//Redefine curr_book and recurse
+			curr_book = nxt_book;
+			return refactor_book_results(Books, result, curr_book, _tmpBook);
+		}
+	}
 }
 module.exports = router;
 //DESCRIPTION OF EXIT CODES/RETURN STATUSES srv_res_status

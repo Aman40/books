@@ -80450,7 +80450,8 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	exports.default = store = (0, _redux.createStore)((0, _redux.combineReducers)({
-		books: reducers.books
+		books: reducers.books,
+		session: reducers.session
 	}));
 },644,[645,630],"src/js/store.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
@@ -81850,8 +81851,8 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			key: "render",
 			value: function render() {
 				var selected_component = "";
-				console.log(typeof this.props.session);
-				console.log(Object.getOwnPropertyNames(this.props).toString());
+				console.log("isLoggedIn? " + this.props.isLoggedIn);
+				console.log(Object.getOwnPropertyNames(this.props.session).toString());
 
 				if (this.props.isLoggedIn) {
 					selected_component = _react3.default.createElement(_ac_tabnav2.default, {
@@ -82317,7 +82318,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 },653,[646,655,641],"src/js/account/ac_dispatchers.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
     module.exports = {
-        "server_url": "http://192.168.43.221:8000"
+        "server_url": "http://192.168.0.14:8000"
     };
 },655,[],"univ_const.json");
 __d(function (global, _require, module, exports, _dependencyMap) {

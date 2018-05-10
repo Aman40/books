@@ -61,8 +61,8 @@ import AccountTabNav from "./ac_tabnav";
 class _Switch extends Component {
 	render() {
 		let selected_component = "";
-		console.log(typeof(this.props.session));
-		console.log(Object.getOwnPropertyNames(this.props).toString());
+		console.log(`isLoggedIn? ${this.props.isLoggedIn}`);
+		console.log(Object.getOwnPropertyNames(this.props.session).toString());
 		if(this.props.isLoggedIn) {
 			selected_component = <AccountTabNav navigation={this.props.navigation} />;
 		} else {

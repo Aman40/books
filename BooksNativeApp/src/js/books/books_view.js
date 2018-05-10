@@ -60,6 +60,7 @@ export default class BooksView extends Component {
 			//Error is implied
 			innerText = "An error occurred: "+this.props.books.fetchErrorString;
 		}
+		
 		return (
 			<View style={styles.container}>
 				<Text>

@@ -40,9 +40,6 @@ class _SignIn extends Component {
 		*/
 		return (
 			<View style={styles.wrapper}>
-				<Text>
-					{`${this.state.email} ${this.state.password}`}
-				</Text>
 				<Text
 					style={styles.inputPromptText}
 				>
