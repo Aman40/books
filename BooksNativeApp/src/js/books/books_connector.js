@@ -4,10 +4,13 @@ import * as dispatchers from "./books_dispatchers";
 import store from "../store";
 import {Provider} from "react-redux";
 import React, {Component} from "react";
+import {createSession} from "../account/ac_dispatchers";
+
 
 function mapStateToProps(state) {
 	return {
-		books: state.books
+		books: state.books,
+		session: state.session,
 	};
 }
 
@@ -18,6 +21,9 @@ function mapDispatchToProps(dispatch) {
 		},
 		showItemDetails: (payload)=>{
 			dispatchers.showItemDetails(dispatch, payload);
+		},
+		createSession: (context)=>{
+			createSession(context, dispatch);
 		}
 	};
 }

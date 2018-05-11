@@ -11,17 +11,38 @@ import {
 	Image,
 } from "react-native";
 import univ_const from "/var/www/html/books/BooksNativeApp/univ_const.json";
+import * as accountDispatchers from "../account/ac_dispatchers";
+
+//Call create session with context {type: "START_UP", }
+//Under what if statement and boolean from the store??(state.props.session)
+//Careful not to run into an infinite loop
+//Automatically prompt manual login??
+//If no session and no creds, don't prompt login. Navigate to init. User might not
+//have signed up. Only prompt login if session check was triggered by srv_res_status 9
 const host = univ_const.server_url;
 export default class BooksView extends Component {
 	componentDidMount=()=>{
 		//Fetch book data from db. Dispatch action
+		
+		if(!this.props.session.isLoggedIn) {
+			//If not logged, in, check for stored credentials and login automatically.
+			let context = {
+				type: accountDispatchers.START_UP,
+				payload: null,
+			};
+			setTimeout(()=>{
+				this.props.createSession(context);
+			},5000);
+			
+		} 
 		this.props.fetchBooks();
 	}
 	componentWillUnmount=()=>{
 		//Release resources.
 	}
 	render() {
-		console.log(Object.getOwnPropertyNames(this.props));
+		console.log("After mounting, props: "+objectToString(this.props.session));
+
 		let innerText = "Initializing. Please wait...";
 		let books = [];
 		//Get the books or error if none.
@@ -60,7 +81,7 @@ export default class BooksView extends Component {
 			//Error is implied
 			innerText = "An error occurred: "+this.props.books.fetchErrorString;
 		}
-		
+
 		return (
 			<View style={styles.container}>
 				<Text>
@@ -166,4 +187,19 @@ class BookView extends Component {
 			</TouchableOpacity>
 		);
 	}
+}
+function objectToString(Obj) {
+	/*return value: [string] "property1=<type1>value1, property2=<type2>value2[, ..."
+		* The req.session.cookie object doesn't have a toString() method
+		* So I'm making my own generic one. It doesn't make prior assumptions
+		* about the properties of the object. It, however, only returns a
+		* string of enum()-able properties and their values
+	* */
+	if(!Obj) return "Not an object: Null or undefined.";
+	let arr = Object.getOwnPropertyNames(Obj); //Get all the properties
+	let returnString = "";
+	for(let i=0;i<arr.length-1; i++) {
+		returnString+=`${arr[i]}<${typeof(Obj[arr[i]])}> => ${Obj[arr[i]]}, `;
+	}
+	return returnString+=`${arr[arr.length-1]}=${Obj[arr[arr.length-1]]}`; //The comma at the end
 }

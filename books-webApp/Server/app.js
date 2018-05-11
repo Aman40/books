@@ -112,6 +112,7 @@ function logout(req, res) {
 function send_session_data(req, res){
 	//When user accesses the root of the server, return the session data.
 	//Could be used to check whether or not the user is logged in.
+	res.write("<?xml version='1.0' encoding='UTF-8' ?>");
 	req.session.save((err)=>{
 		if(err) throw err;
 		if(req.session.uid) {

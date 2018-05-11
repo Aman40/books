@@ -33,11 +33,14 @@ class _SignIn extends Component {
 		});
 	}
 	render() {
-		/*Check if user is logged in. If logged in either:
-		1. connecting the navigator to the store 
-		or:
-
+		/*
+			Navigate to the home screen upon completion of the login. 
+			Use the login: successful flag (isLoggedIn)
 		*/
+		if(this.props.session.isLoggedIn) {
+			//Navigate to the referrer view.
+			this.props.navigation.navigate("AccountHome");
+		}
 		return (
 			<View style={styles.wrapper}>
 				<Text

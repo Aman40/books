@@ -42,6 +42,7 @@ export function books(
 }
 
 export function session(state={
+	promptLogin: false,
 	loginWait: false,
 	loginSuccess: false,
 	loginErrorMsg: "",
@@ -52,18 +53,19 @@ export function session(state={
 	case accountActions.IS_LOGGING_IN:
 		return {
 			...state,
+			promptLogin: false,
 			loginWait: true,
 			loginSuccess: false,
-			loginErrorMsg: "",
 			isLoggedIn: false,
 			userData: "",
+			refererView: action.payload,
 		};
 	case accountActions.LOGIN_SUCCESS:
+		console.log("We are logged in yo!");
 		return {
 			...state,
 			loginWait: false,
 			loginSuccess: true,
-			loginErrorMsg: "",
 			isLoggedIn: true,
 			userData: action.payload,
 		};
