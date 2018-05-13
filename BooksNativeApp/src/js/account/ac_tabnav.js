@@ -13,6 +13,7 @@ import MyProfile from "./my_profile";
 
 export /*To ac_stacknav.js*/ default class AccountTabNav extends Component { 
 	render() {
+		//TODO: Finish this.
 		return (
 			<View style={styles.wrapper}>
 				<Text style={styles.text}>

@@ -30,10 +30,7 @@ export default class BooksView extends Component {
 				type: accountDispatchers.START_UP,
 				payload: null,
 			};
-			setTimeout(()=>{
-				this.props.createSession(context);
-			},5000);
-			
+			this.props.createSession(context);
 		} 
 		this.props.fetchBooks();
 	}

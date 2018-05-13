@@ -61,9 +61,9 @@ import AccountTabNav from "./ac_tabnav";
 class _Switch extends Component {
 	render() {
 		let selected_component = "";
-		console.log(`isLoggedIn? ${this.props.isLoggedIn}`);
+		console.log(`isLoggedIn? ${this.props.session.isLoggedIn}`);
 		console.log(Object.getOwnPropertyNames(this.props.session).toString());
-		if(this.props.isLoggedIn) {
+		if(this.props.session.isLoggedIn) {
 			selected_component = <AccountTabNav navigation={this.props.navigation} />;
 		} else {
 			selected_component = <SignUpIn navigation={this.props.navigation} />;
@@ -106,13 +106,15 @@ class Switch extends Component {
 
 export default AccountStack = StackNavigator(
 	{
-		AccountHome: {
+		AccountHome: { 
+			//This is a "switch". If user is logged in, the account view is loaded
+			//Else, the signin/up view is loaded. It works. DON'T touch it.
 			screen: Switch,
 			navigationOptions: {
 				title: "Account"
 			}
 		},
-		SignIn: {
+		SignIn: { 
 			screen: SignIn,
 			navigationOptions: {
 				title: "Sign In",
@@ -151,3 +153,4 @@ const styles = StyleSheet.create({
 		width: 100,
 	}
 });
+//Now only need to work on AccountTabNav.

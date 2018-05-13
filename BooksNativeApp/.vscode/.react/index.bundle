@@ -61421,9 +61421,8 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						type: accountDispatchers.START_UP,
 						payload: null
 					};
-					setTimeout(function () {
-						_this.props.createSession(context);
-					}, 5000);
+
+					_this.props.createSession(context);
 				}
 
 				_this.props.fetchBooks();
@@ -61463,7 +61462,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								book: _this2.props.books.booksArr[i],
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 66
+									lineNumber: 63
 								}
 							}));
 						};
@@ -61485,7 +61484,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						style: styles.container,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 86
+							lineNumber: 83
 						}
 					},
 					_react3.default.createElement(
@@ -61493,7 +61492,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						{
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 87
+								lineNumber: 84
 							}
 						},
 						innerText
@@ -61503,7 +61502,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						{
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 90
+								lineNumber: 87
 							}
 						},
 						books
@@ -61581,7 +61580,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						style: styles.bk_wrapper,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 150
+							lineNumber: 147
 						}
 					},
 					_react3.default.createElement(
@@ -61590,7 +61589,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							style: styles.bk_imageWrapper,
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 154
+								lineNumber: 151
 							}
 						},
 						_react3.default.createElement(_reactNative.Image, {
@@ -61602,7 +61601,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							},
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 155
+								lineNumber: 152
 							}
 						})
 					),
@@ -61612,7 +61611,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							style: styles.bk_contentWrapper,
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 162
+								lineNumber: 159
 							}
 						},
 						_react3.default.createElement(
@@ -61621,7 +61620,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								style: styles.bk_contentRow,
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 163
+									lineNumber: 160
 								}
 							},
 							_react3.default.createElement(
@@ -61630,7 +61629,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.bk_title,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 164
+										lineNumber: 161
 									}
 								},
 								this.props.book.Title
@@ -61641,7 +61640,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.bk_contentValue,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 167
+										lineNumber: 164
 									}
 								},
 								this.props.book.Authors
@@ -61652,7 +61651,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.bk_contentValue,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 170
+										lineNumber: 167
 									}
 								},
 								this.props.book.Language
@@ -61663,7 +61662,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.bk_contentValue,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 173
+										lineNumber: 170
 									}
 								},
 								this.props.book.Publisher
@@ -61674,7 +61673,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.bk_contentValue,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 176
+										lineNumber: 173
 									}
 								},
 								this.props.book.Published
@@ -61685,7 +61684,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.bk_contentValue,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 179
+										lineNumber: 176
 									}
 								},
 								"Price: " + this.props.book.Price + " Yen"
@@ -61696,7 +61695,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.bk_contentValue,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 182
+										lineNumber: 179
 									}
 								},
 								"Pages: " + this.props.book.PageNo
@@ -81914,10 +81913,10 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			key: "render",
 			value: function render() {
 				var selected_component = "";
-				console.log("isLoggedIn? " + this.props.isLoggedIn);
+				console.log("isLoggedIn? " + this.props.session.isLoggedIn);
 				console.log(Object.getOwnPropertyNames(this.props.session).toString());
 
-				if (this.props.isLoggedIn) {
+				if (this.props.session.isLoggedIn) {
 					selected_component = _react3.default.createElement(_ac_tabnav2.default, {
 						navigation: this.props.navigation,
 						__source: {
@@ -82456,16 +82455,19 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 				var xmlDoc = Parser.parseFromString(this.responseText);
 				var srv_res_status = parseInt(xmlDoc.getElementsByTagName("srv_res_status")[0].childNodes[0].nodeValue);
 				console.log("Server status: " + srv_res_status);
+				var usrDataObj = JSON.parse(xmlDoc.getElementsByTagName("usr_info")[0].childNodes[0].nodeValue);
 
 				if (srv_res_status === 0) {
 					var user_data = {
-						alias: xmlDoc.getElementsByTagName("alias")[0].childNodes[0].nodeValue,
-						uid: xmlDoc.getElementsByTagName("uid")[0].childNodes[0].nodeValue,
-						dob: xmlDoc.getElementsByTagName("dob")[0].childNodes[0].nodeValue,
-						pref: xmlDoc.getElementsByTagName("pref")[0].childNodes[0].nodeValue,
-						email: xmlDoc.getElementsByTagName("email")[0].childNodes[0].nodeValue,
-						about: xmlDoc.getElementsByTagName("about")[0].childNodes[0].nodeValue,
-						student: xmlDoc.getElementsByTagName("student")[0].childNodes[0].nodeValue
+						alias: usrDataObj["alias"],
+						uid: usrDataObj["uid"],
+						sex: usrDataObj["sex"],
+						dob: usrDataObj["dob"],
+						pref: usrDataObj["pref"],
+						email: usrDataObj["email"],
+						about: usrDataObj["about"],
+						student: usrDataObj["student"],
+						school: usrDataObj["school"]
 					};
 					console.log(user_data);
 					callback(user_data);
@@ -82501,7 +82503,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 },653,[646,655,12,641],"src/js/account/ac_dispatchers.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
     module.exports = {
-        "server_url": "http://192.168.0.14:8000"
+        "server_url": "http://10.4.141.72:8000"
     };
 },655,[],"univ_const.json");
 __d(function (global, _require, module, exports, _dependencyMap) {

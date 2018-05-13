@@ -191,15 +191,19 @@ function _login(dispatch, credentials, callback) {
 
 			let srv_res_status = parseInt(xmlDoc.getElementsByTagName("srv_res_status")[0].childNodes[0].nodeValue);
 			console.log("Server status: "+srv_res_status);
+			let usrDataObj = JSON.parse(xmlDoc.getElementsByTagName("usr_info")[0].childNodes[0].nodeValue);
+
 			if(srv_res_status===0) {
 				let user_data = { //set user_data
-					alias: xmlDoc.getElementsByTagName("alias")[0].childNodes[0].nodeValue,
-					uid: xmlDoc.getElementsByTagName("uid")[0].childNodes[0].nodeValue,
-					dob: xmlDoc.getElementsByTagName("dob")[0].childNodes[0].nodeValue,
-					pref: xmlDoc.getElementsByTagName("pref")[0].childNodes[0].nodeValue,
-					email: xmlDoc.getElementsByTagName("email")[0].childNodes[0].nodeValue,
-					about: xmlDoc.getElementsByTagName("about")[0].childNodes[0].nodeValue,
-					student: xmlDoc.getElementsByTagName("student")[0].childNodes[0].nodeValue,
+					alias: usrDataObj["alias"],
+					uid: usrDataObj["uid"],
+					sex: usrDataObj["sex"],
+					dob: usrDataObj["dob"],
+					pref: usrDataObj["pref"],
+					email: usrDataObj["email"],
+					about: usrDataObj["about"],
+					student: usrDataObj["student"],
+					school: usrDataObj["school"],
 				};
 				console.log(user_data);
 				callback(user_data);

@@ -134,11 +134,13 @@ function send_session_data(req, res){
 			res.statusCode = 200;
 			res.write(`<usr_info>${JSON.stringify(usr_data)}</usr_info>`);
 			res.write(`<cookie>${res.getHeader("Set-Cookie")}</cookie>`);
+			console.log("Sent cookie: "+res.getHeader("Set-Cookie"));
 			res.end("<srv_res_status>0</srv_res_status>");
 		} else {
 			res.write("<msg>Just provide overhead.</msg>");
 			res.write(`<cookie>${res.getHeader("Set-Cookie")}</cookie>`);
 			res.statusCode = 200;
+			console.log("Sent cookie: "+res.getHeader("Set-Cookie"));
 			res.end("<srv_res_status>1</srv_res_status>"); //OK
 		}
 	});
