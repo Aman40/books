@@ -7,6 +7,8 @@ import {
 } from "react-native";
 import {StackNavigator} from "react-navigation";
 import SignIn from "./view_signin";
+import store from "../store";
+import AccountTabNav from "./ac_tabnav";
 
 
 class SignUpIn extends Component {
@@ -56,55 +58,30 @@ class SignUpIn extends Component {
 }
 //Define the switch. If the user is logged in, it returns the <Account/> component.
 //Else, it returns the signup/signin promper view
-import AccountTabNav from "./ac_tabnav";
 
-class _Switch extends Component {
-	render() {
-		let selected_component = "";
-		console.log(`isLoggedIn? ${this.props.session.isLoggedIn}`);
-		console.log(Object.getOwnPropertyNames(this.props.session).toString());
-		if(this.props.session.isLoggedIn) {
-			selected_component = <AccountTabNav navigation={this.props.navigation} />;
-		} else {
-			selected_component = <SignUpIn navigation={this.props.navigation} />;
-		}
-		return selected_component;
-	}
-}
-//Connect the switch to the store
-import store from "../store";
-import {connect, Provider} from "react-redux";
-
-function mapStateToProps(state) {
-	console.log(Object.getOwnPropertyNames(state).toString());
-	return {
-		session: state.session,
-	};
-}
-function mapDispatchToProps(dispatch) {
-	return {dispatch};
-}
-
-let ConnectedSwitch = connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(_Switch);
-
+//let Switch = SignUpIn;
+//let isLoggedIn = store.getState().session.isLoggedIn;
 class Switch extends Component {
+	componentDidMount = ()=>{
+		let that = this;
+		store.subscribe(()=>{
+			console.log("STORE CHANGED!");
+			if(store.getState().session.isLoggedIn) {
+				that.render();
+			}
+		});
+	}
 	render() {
-		return (
-			<Provider
-				store={store}
-			>
-				<ConnectedSwitch
-					navigation={this.props.navigation}
-				/>
-			</Provider>
-		);
+		let isLoggedIn = store.getState().session.isLoggedIn;
+		if(isLoggedIn) {
+			return <AccountTabNav/>;
+		} else {
+			return SignUpIn;
+		}
 	}
 }
 
-export default AccountStack = StackNavigator(
+let AccountStack = StackNavigator(
 	{
 		AccountHome: { 
 			//This is a "switch". If user is logged in, the account view is loaded
@@ -125,6 +102,8 @@ export default AccountStack = StackNavigator(
 		initialRouteName: ""
 	}
 );
+export default AccountStack;
+
 const styles = StyleSheet.create({
 	wrapper: {
 		flex: 1,

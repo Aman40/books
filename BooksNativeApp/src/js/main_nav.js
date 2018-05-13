@@ -1,14 +1,12 @@
-import BookDetailsStack from './books/home_stacknav'
+import BookDetailsStack from "./books/home_stacknav";
 import {TabNavigator,
-TabBarBottom} from 'react-navigation';
-import BooksView from './books/books_view'
-import React, {Component} from 'react'
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import PastPaperStack from './past-papers/pp_mainstack';
-import AccountStack from './account/ac_stacknav'
+	TabBarBottom} from "react-navigation";
+import React from "react";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import PastPaperStack from "./past-papers/pp_mainstack";
+import AccountStack from "./account/ac_stacknav";
 
-export default MainTabNav = TabNavigator(
+let MainTabNav = TabNavigator(
 	{
 		Home: {
 			screen: BookDetailsStack, //Soon, a stack navigator instead.
@@ -16,10 +14,10 @@ export default MainTabNav = TabNavigator(
 				title: "Books",
 				tabBarIcon: ({focused, tintColor})=>{
 					return (<Ionicons
-								name="ios-book-outline"
-								size={25}
-								color={tintColor}
-							/>)
+						name="ios-book-outline"
+						size={25}
+						color={tintColor}
+					/>);
 				}
 			}
 		},
@@ -52,11 +50,13 @@ export default MainTabNav = TabNavigator(
 	},
 	{
 		tabBarOptions: {
-			activeTintColor: 'blue',
-			inactiveTintColor: 'gray'
+			activeTintColor: "blue",
+			inactiveTintColor: "gray"
 		},
 		tabBarComponent: TabBarBottom,
-		tabBarPosition: 'bottom',
+		tabBarPosition: "bottom",
 		animationEnabled: false,
 		swipeEnabled: false,
 	});
+
+export default MainTabNav;

@@ -1,43 +1,55 @@
 import {
-	View,
-	Text,
-	StyleSheet
-} from "react-native";
-import React, {Component} from "react";
-import {
-	Tabnavigator
+	TabNavigator,
+	TabBarBottom,
 } from "react-navigation";
 import MyBooks from "./my_books";
 import MyPastPapers from "./my_pastpapers";
 import MyProfile from "./my_profile";
+import React from "react";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
-export /*To ac_stacknav.js*/ default class AccountTabNav extends Component { 
-	render() {
-		//TODO: Finish this.
-		return (
-			<View style={styles.wrapper}>
-				<Text style={styles.text}>
-                    Hello, this will be the stack navigation.
-					If you are seeing this, it means you are logged in.
-                    Youll be able to select between:
-                    1. MyBooks
-                    2. MyPastPapers
-                    3. MyProfile
-				</Text>
-			</View>
-		);
-	}
-}
-
-const styles = StyleSheet.create(
+let AccountTabNav = TabNavigator(
 	{
-		wrapper: {
-			flex: 1,
-			justifyContent: "center",
-			alignItems: "center",
+		MyBooks: {
+			screen: MyBooks,
+			tabBarIcon: ({focused, tintColor})=>{
+				return (<Ionicons
+					name={"ios-person-outline"}
+					size={25}
+					color={tintColor}
+				/>);
+			}
 		},
-		text: {
-			color: "gray"
+		MyPastPapers: {
+			screen: MyPastPapers,
+			tabBarIcon: ({focused, tintColor})=>{
+				return (<Ionicons
+					name={"ios-person-outline"}
+					size={25}
+					color={tintColor}
+				/>);
+			}
+		},
+		MyProfile: {
+			screen: MyProfile,
+			tabBarIcon: ({focused, tintColor})=>{
+				return (<Ionicons
+					name={"ios-person-outline"}
+					size={25}
+					color={tintColor}
+				/>);
+			}
 		}
+	},
+	{
+		tabBarOptions: {
+			activeTintColor: "blue",
+			inactiveTintColor: "grey",
+		},
+		tabBarComponent: TabBarBottom,
+		tabBarPosition: "top",
+		animationEnabled: true,
+		swipeEnabled: true,
 	}
 );
+export /*to ac_stacknav*/  default AccountTabNav;

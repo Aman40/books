@@ -61254,92 +61254,88 @@ __d(function (global, _require2, module, exports, _dependencyMap) {
   module.exports = __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.takeSnapshot;
 },490,[42],"takeSnapshot");
 __d(function (global, _require, module, exports, _dependencyMap) {
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
 
-  var _react2 = _require(_dependencyMap[0], "react");
+	var _react2 = _require(_dependencyMap[0], "react");
 
-  var _react3 = _interopRequireDefault(_react2);
+	var _react3 = _interopRequireDefault(_react2);
 
-  var _index = _require(_dependencyMap[1], "./node_modules/react-transform-hmr/lib/index.js");
+	var _index = _require(_dependencyMap[1], "./node_modules/react-transform-hmr/lib/index.js");
 
-  var _index2 = _interopRequireDefault(_index);
+	var _index2 = _interopRequireDefault(_index);
 
-  var _jsxFileName = "/var/www/html/books/BooksNativeApp/App.js";
+	var _jsxFileName = "/var/www/html/books/BooksNativeApp/App.js";
 
-  var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-  var _reactNative = _require(_dependencyMap[2], "react-native");
+	var _main_nav = _require(_dependencyMap[2], "./src/js/main_nav");
 
-  var _books_view = _require(_dependencyMap[3], "./src/js/books/books_view");
+	var _main_nav2 = _interopRequireDefault(_main_nav);
 
-  var _books_view2 = _interopRequireDefault(_books_view);
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-  var _main_nav = _require(_dependencyMap[4], "./src/js/main_nav");
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  var _main_nav2 = _interopRequireDefault(_main_nav);
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	var _components = {
+		App: {
+			displayName: "App"
+		}
+	};
 
-  function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	var _node_modulesReactTransformHmrLibIndexJs2 = (0, _index2.default)({
+		filename: "/var/www/html/books/BooksNativeApp/App.js",
+		components: _components,
+		locals: [module],
+		imports: [_react3.default]
+	});
 
-  function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	function _wrapComponent(id) {
+		return function (Component) {
+			return _node_modulesReactTransformHmrLibIndexJs2(Component, id);
+		};
+	}
 
-  var _components = {
-    App: {
-      displayName: "App"
-    }
-  };
+	var App = _wrapComponent("App")(function (_Component) {
+		_inherits(App, _Component);
 
-  var _node_modulesReactTransformHmrLibIndexJs2 = (0, _index2.default)({
-    filename: "/var/www/html/books/BooksNativeApp/App.js",
-    components: _components,
-    locals: [module],
-    imports: [_react3.default]
-  });
+		function App() {
+			var _ref;
 
-  function _wrapComponent(id) {
-    return function (Component) {
-      return _node_modulesReactTransformHmrLibIndexJs2(Component, id);
-    };
-  }
+			var _temp, _this, _ret;
 
-  var instructions = _reactNative.Platform.select({
-    ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-    android: 'Double tap R on your keyboard to reload,\n' + 'Shake or press menu button for dev menu'
-  });
+			_classCallCheck(this, App);
 
-  var App = _wrapComponent("App")(function (_Component) {
-    _inherits(App, _Component);
+			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+				args[_key] = arguments[_key];
+			}
 
-    function App() {
-      _classCallCheck(this, App);
+			return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = App.__proto__ || Object.getPrototypeOf(App)).call.apply(_ref, [this].concat(args))), _this), _this.componentDidMount = function () {}, _temp), _possibleConstructorReturn(_this, _ret);
+		}
 
-      return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
-    }
+		_createClass(App, [{
+			key: "render",
+			value: function render() {
+				console.log("Rendered!");
+				return _react3.default.createElement(_main_nav2.default, {
+					__source: {
+						fileName: _jsxFileName,
+						lineNumber: 14
+					}
+				});
+			}
+		}]);
 
-    _createClass(App, [{
-      key: "render",
-      value: function render() {
-        return _react3.default.createElement(_main_nav2.default, {
-          __source: {
-            fileName: _jsxFileName,
-            lineNumber: 27
-          }
-        });
-      }
-    }]);
+		return App;
+	}(_react2.Component));
 
-    return App;
-  }(_react2.Component));
-
-  exports.default = App;
-
-  var styles = _reactNative.StyleSheet.create({});
-},491,[118,179,12,492,493],"App.js");
+	exports.default = App;
+},491,[118,179,493],"App.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -61434,21 +61430,17 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			value: function render() {
 				var _this2 = this;
 
-				console.log("After mounting, props: " + objectToString(this.props.session));
 				var innerText = "Initializing. Please wait...";
 				var books = [];
 
 				if (this.props.books.isFetching) {
 					innerText = "Fetching Books. Please wait...";
-					console.log(innerText);
 				}
 
 				if (this.props.books.successFetching) {
 					innerText = "hasFinished Fetching...";
-					console.log(innerText);
 
 					if (this.props.books.booksArr.length > 0) {
-						console.log("There are " + this.props.books.booksArr.length + " books.");
 						innerText = this.props.books.booksArr.length + " books by were found.";
 
 						var _loop = function _loop(i) {
@@ -61462,7 +61454,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								book: _this2.props.books.booksArr[i],
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 63
+									lineNumber: 61
 								}
 							}));
 						};
@@ -61472,7 +61464,6 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						}
 					} else {
 						innerText = "No books were found. Perhaps if you started working on the server side function responsible...";
-						console.log(innerText);
 					}
 				} else {
 					innerText = "An error occurred: " + this.props.books.fetchErrorString;
@@ -61484,7 +61475,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						style: styles.container,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 83
+							lineNumber: 80
 						}
 					},
 					_react3.default.createElement(
@@ -61492,7 +61483,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						{
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 84
+								lineNumber: 81
 							}
 						},
 						innerText
@@ -61502,7 +61493,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						{
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 87
+								lineNumber: 84
 							}
 						},
 						books
@@ -61580,7 +61571,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						style: styles.bk_wrapper,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 147
+							lineNumber: 144
 						}
 					},
 					_react3.default.createElement(
@@ -61589,7 +61580,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							style: styles.bk_imageWrapper,
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 151
+								lineNumber: 148
 							}
 						},
 						_react3.default.createElement(_reactNative.Image, {
@@ -61601,7 +61592,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							},
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 152
+								lineNumber: 149
 							}
 						})
 					),
@@ -61611,7 +61602,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							style: styles.bk_contentWrapper,
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 159
+								lineNumber: 156
 							}
 						},
 						_react3.default.createElement(
@@ -61620,7 +61611,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								style: styles.bk_contentRow,
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 160
+									lineNumber: 157
 								}
 							},
 							_react3.default.createElement(
@@ -61629,7 +61620,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.bk_title,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 161
+										lineNumber: 158
 									}
 								},
 								this.props.book.Title
@@ -61640,7 +61631,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.bk_contentValue,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 164
+										lineNumber: 161
 									}
 								},
 								this.props.book.Authors
@@ -61651,7 +61642,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.bk_contentValue,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 167
+										lineNumber: 164
 									}
 								},
 								this.props.book.Language
@@ -61662,7 +61653,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.bk_contentValue,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 170
+										lineNumber: 167
 									}
 								},
 								this.props.book.Publisher
@@ -61673,7 +61664,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.bk_contentValue,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 173
+										lineNumber: 170
 									}
 								},
 								this.props.book.Published
@@ -61684,7 +61675,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.bk_contentValue,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 176
+										lineNumber: 173
 									}
 								},
 								"Price: " + this.props.book.Price + " Yen"
@@ -61695,7 +61686,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.bk_contentValue,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 179
+										lineNumber: 176
 									}
 								},
 								"Pages: " + this.props.book.PageNo
@@ -61708,18 +61699,6 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
 		return BookView;
 	}(_react2.Component));
-
-	function objectToString(Obj) {
-		if (!Obj) return "Not an object: Null or undefined.";
-		var arr = Object.getOwnPropertyNames(Obj);
-		var returnString = "";
-
-		for (var i = 0; i < arr.length - 1; i++) {
-			returnString += arr[i] + "<" + typeof Obj[arr[i]] + "> => " + Obj[arr[i]] + ", ";
-		}
-
-		return returnString += arr[arr.length - 1] + "=" + Obj[arr[arr.length - 1]];
-	}
 },492,[118,179,12,655,653],"src/js/books/books_view.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
@@ -61733,33 +61712,25 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
 	var _reactNavigation = _require(_dependencyMap[1], "react-navigation");
 
-	var _books_view = _require(_dependencyMap[2], "./books/books_view");
-
-	var _books_view2 = _interopRequireDefault(_books_view);
-
-	var _react = _require(_dependencyMap[3], "react");
+	var _react = _require(_dependencyMap[2], "react");
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Ionicons = _require(_dependencyMap[4], "react-native-vector-icons/Ionicons");
+	var _Ionicons = _require(_dependencyMap[3], "react-native-vector-icons/Ionicons");
 
 	var _Ionicons2 = _interopRequireDefault(_Ionicons);
 
-	var _FontAwesome = _require(_dependencyMap[5], "react-native-vector-icons/FontAwesome");
-
-	var _FontAwesome2 = _interopRequireDefault(_FontAwesome);
-
-	var _pp_mainstack = _require(_dependencyMap[6], "./past-papers/pp_mainstack");
+	var _pp_mainstack = _require(_dependencyMap[4], "./past-papers/pp_mainstack");
 
 	var _pp_mainstack2 = _interopRequireDefault(_pp_mainstack);
 
-	var _ac_stacknav = _require(_dependencyMap[7], "./account/ac_stacknav");
+	var _ac_stacknav = _require(_dependencyMap[5], "./account/ac_stacknav");
 
 	var _ac_stacknav2 = _interopRequireDefault(_ac_stacknav);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports.default = MainTabNav = (0, _reactNavigation.TabNavigator)({
+	var MainTabNav = (0, _reactNavigation.TabNavigator)({
 		Home: {
 			screen: _home_stacknav2.default,
 			navigationOptions: {
@@ -61773,7 +61744,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						color: tintColor,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 18
+							lineNumber: 16
 						}
 					});
 				}
@@ -61792,7 +61763,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						color: tintColor,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 31
+							lineNumber: 29
 						}
 					});
 				}
@@ -61811,7 +61782,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						color: tintColor,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 44
+							lineNumber: 42
 						}
 					});
 				}
@@ -61819,15 +61790,16 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 		}
 	}, {
 		tabBarOptions: {
-			activeTintColor: 'blue',
-			inactiveTintColor: 'gray'
+			activeTintColor: "blue",
+			inactiveTintColor: "gray"
 		},
 		tabBarComponent: _reactNavigation.TabBarBottom,
-		tabBarPosition: 'bottom',
+		tabBarPosition: "bottom",
 		animationEnabled: false,
 		swipeEnabled: false
 	});
-},493,[494,495,492,118,570,648,650,651],"src/js/main_nav.js");
+	exports.default = MainTabNav;
+},493,[494,495,118,570,650,651],"src/js/main_nav.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -78286,18 +78258,6 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			payload: payload
 		});
 	}
-
-	function objectToString(Obj) {
-		if (!Obj) return "Not an object: Null or undefined.";
-		var arr = Object.getOwnPropertyNames(Obj);
-		var returnString = "";
-
-		for (var i = 0; i < arr.length - 1; i++) {
-			returnString += arr[i] + "<" + typeof Obj[arr[i]] + "> => " + Obj[arr[i]] + ", ";
-		}
-
-		return returnString += arr[arr.length - 1] + "=" + Obj[arr[arr.length - 1]];
-	}
 },639,[640,655,653,641],"src/js/books/books_dispatchers.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
@@ -80787,820 +80747,6 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 	exports.default = ConnectedBookDetails;
 },647,[118,179,620,644,12],"src/js/books/book_details.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.getImageSource = exports.ToolbarAndroid = exports.TabBarItemIOS = exports.TabBarItem = exports.Button = undefined;
-
-  var _createIconSet = _require(_dependencyMap[0], "./lib/create-icon-set");
-
-  var _createIconSet2 = _interopRequireDefault(_createIconSet);
-
-  var _FontAwesome = _require(_dependencyMap[1], "./glyphmaps/FontAwesome.json");
-
-  var _FontAwesome2 = _interopRequireDefault(_FontAwesome);
-
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-  var iconSet = (0, _createIconSet2.default)(_FontAwesome2.default, 'FontAwesome', 'FontAwesome.ttf');
-  exports.default = iconSet;
-  var Button = exports.Button = iconSet.Button;
-  var TabBarItem = exports.TabBarItem = iconSet.TabBarItem;
-  var TabBarItemIOS = exports.TabBarItemIOS = iconSet.TabBarItemIOS;
-  var ToolbarAndroid = exports.ToolbarAndroid = iconSet.ToolbarAndroid;
-  var getImageSource = exports.getImageSource = iconSet.getImageSource;
-},648,[571,649],"node_modules/react-native-vector-icons/FontAwesome.js");
-__d(function (global, _require, module, exports, _dependencyMap) {
-  module.exports = {
-    "glass": 61440,
-    "music": 61441,
-    "search": 61442,
-    "envelope-o": 61443,
-    "heart": 61444,
-    "star": 61445,
-    "star-o": 61446,
-    "user": 61447,
-    "film": 61448,
-    "th-large": 61449,
-    "th": 61450,
-    "th-list": 61451,
-    "check": 61452,
-    "remove": 61453,
-    "close": 61453,
-    "times": 61453,
-    "search-plus": 61454,
-    "search-minus": 61456,
-    "power-off": 61457,
-    "signal": 61458,
-    "gear": 61459,
-    "cog": 61459,
-    "trash-o": 61460,
-    "home": 61461,
-    "file-o": 61462,
-    "clock-o": 61463,
-    "road": 61464,
-    "download": 61465,
-    "arrow-circle-o-down": 61466,
-    "arrow-circle-o-up": 61467,
-    "inbox": 61468,
-    "play-circle-o": 61469,
-    "rotate-right": 61470,
-    "repeat": 61470,
-    "refresh": 61473,
-    "list-alt": 61474,
-    "lock": 61475,
-    "flag": 61476,
-    "headphones": 61477,
-    "volume-off": 61478,
-    "volume-down": 61479,
-    "volume-up": 61480,
-    "qrcode": 61481,
-    "barcode": 61482,
-    "tag": 61483,
-    "tags": 61484,
-    "book": 61485,
-    "bookmark": 61486,
-    "print": 61487,
-    "camera": 61488,
-    "font": 61489,
-    "bold": 61490,
-    "italic": 61491,
-    "text-height": 61492,
-    "text-width": 61493,
-    "align-left": 61494,
-    "align-center": 61495,
-    "align-right": 61496,
-    "align-justify": 61497,
-    "list": 61498,
-    "dedent": 61499,
-    "outdent": 61499,
-    "indent": 61500,
-    "video-camera": 61501,
-    "photo": 61502,
-    "image": 61502,
-    "picture-o": 61502,
-    "pencil": 61504,
-    "map-marker": 61505,
-    "adjust": 61506,
-    "tint": 61507,
-    "edit": 61508,
-    "pencil-square-o": 61508,
-    "share-square-o": 61509,
-    "check-square-o": 61510,
-    "arrows": 61511,
-    "step-backward": 61512,
-    "fast-backward": 61513,
-    "backward": 61514,
-    "play": 61515,
-    "pause": 61516,
-    "stop": 61517,
-    "forward": 61518,
-    "fast-forward": 61520,
-    "step-forward": 61521,
-    "eject": 61522,
-    "chevron-left": 61523,
-    "chevron-right": 61524,
-    "plus-circle": 61525,
-    "minus-circle": 61526,
-    "times-circle": 61527,
-    "check-circle": 61528,
-    "question-circle": 61529,
-    "info-circle": 61530,
-    "crosshairs": 61531,
-    "times-circle-o": 61532,
-    "check-circle-o": 61533,
-    "ban": 61534,
-    "arrow-left": 61536,
-    "arrow-right": 61537,
-    "arrow-up": 61538,
-    "arrow-down": 61539,
-    "mail-forward": 61540,
-    "share": 61540,
-    "expand": 61541,
-    "compress": 61542,
-    "plus": 61543,
-    "minus": 61544,
-    "asterisk": 61545,
-    "exclamation-circle": 61546,
-    "gift": 61547,
-    "leaf": 61548,
-    "fire": 61549,
-    "eye": 61550,
-    "eye-slash": 61552,
-    "warning": 61553,
-    "exclamation-triangle": 61553,
-    "plane": 61554,
-    "calendar": 61555,
-    "random": 61556,
-    "comment": 61557,
-    "magnet": 61558,
-    "chevron-up": 61559,
-    "chevron-down": 61560,
-    "retweet": 61561,
-    "shopping-cart": 61562,
-    "folder": 61563,
-    "folder-open": 61564,
-    "arrows-v": 61565,
-    "arrows-h": 61566,
-    "bar-chart-o": 61568,
-    "bar-chart": 61568,
-    "twitter-square": 61569,
-    "facebook-square": 61570,
-    "camera-retro": 61571,
-    "key": 61572,
-    "gears": 61573,
-    "cogs": 61573,
-    "comments": 61574,
-    "thumbs-o-up": 61575,
-    "thumbs-o-down": 61576,
-    "star-half": 61577,
-    "heart-o": 61578,
-    "sign-out": 61579,
-    "linkedin-square": 61580,
-    "thumb-tack": 61581,
-    "external-link": 61582,
-    "sign-in": 61584,
-    "trophy": 61585,
-    "github-square": 61586,
-    "upload": 61587,
-    "lemon-o": 61588,
-    "phone": 61589,
-    "square-o": 61590,
-    "bookmark-o": 61591,
-    "phone-square": 61592,
-    "twitter": 61593,
-    "facebook-f": 61594,
-    "facebook": 61594,
-    "github": 61595,
-    "unlock": 61596,
-    "credit-card": 61597,
-    "feed": 61598,
-    "rss": 61598,
-    "hdd-o": 61600,
-    "bullhorn": 61601,
-    "bell": 61683,
-    "certificate": 61603,
-    "hand-o-right": 61604,
-    "hand-o-left": 61605,
-    "hand-o-up": 61606,
-    "hand-o-down": 61607,
-    "arrow-circle-left": 61608,
-    "arrow-circle-right": 61609,
-    "arrow-circle-up": 61610,
-    "arrow-circle-down": 61611,
-    "globe": 61612,
-    "wrench": 61613,
-    "tasks": 61614,
-    "filter": 61616,
-    "briefcase": 61617,
-    "arrows-alt": 61618,
-    "group": 61632,
-    "users": 61632,
-    "chain": 61633,
-    "link": 61633,
-    "cloud": 61634,
-    "flask": 61635,
-    "cut": 61636,
-    "scissors": 61636,
-    "copy": 61637,
-    "files-o": 61637,
-    "paperclip": 61638,
-    "save": 61639,
-    "floppy-o": 61639,
-    "square": 61640,
-    "navicon": 61641,
-    "reorder": 61641,
-    "bars": 61641,
-    "list-ul": 61642,
-    "list-ol": 61643,
-    "strikethrough": 61644,
-    "underline": 61645,
-    "table": 61646,
-    "magic": 61648,
-    "truck": 61649,
-    "pinterest": 61650,
-    "pinterest-square": 61651,
-    "google-plus-square": 61652,
-    "google-plus": 61653,
-    "money": 61654,
-    "caret-down": 61655,
-    "caret-up": 61656,
-    "caret-left": 61657,
-    "caret-right": 61658,
-    "columns": 61659,
-    "unsorted": 61660,
-    "sort": 61660,
-    "sort-down": 61661,
-    "sort-desc": 61661,
-    "sort-up": 61662,
-    "sort-asc": 61662,
-    "envelope": 61664,
-    "linkedin": 61665,
-    "rotate-left": 61666,
-    "undo": 61666,
-    "legal": 61667,
-    "gavel": 61667,
-    "dashboard": 61668,
-    "tachometer": 61668,
-    "comment-o": 61669,
-    "comments-o": 61670,
-    "flash": 61671,
-    "bolt": 61671,
-    "sitemap": 61672,
-    "umbrella": 61673,
-    "paste": 61674,
-    "clipboard": 61674,
-    "lightbulb-o": 61675,
-    "exchange": 61676,
-    "cloud-download": 61677,
-    "cloud-upload": 61678,
-    "user-md": 61680,
-    "stethoscope": 61681,
-    "suitcase": 61682,
-    "bell-o": 61602,
-    "coffee": 61684,
-    "cutlery": 61685,
-    "file-text-o": 61686,
-    "building-o": 61687,
-    "hospital-o": 61688,
-    "ambulance": 61689,
-    "medkit": 61690,
-    "fighter-jet": 61691,
-    "beer": 61692,
-    "h-square": 61693,
-    "plus-square": 61694,
-    "angle-double-left": 61696,
-    "angle-double-right": 61697,
-    "angle-double-up": 61698,
-    "angle-double-down": 61699,
-    "angle-left": 61700,
-    "angle-right": 61701,
-    "angle-up": 61702,
-    "angle-down": 61703,
-    "desktop": 61704,
-    "laptop": 61705,
-    "tablet": 61706,
-    "mobile-phone": 61707,
-    "mobile": 61707,
-    "circle-o": 61708,
-    "quote-left": 61709,
-    "quote-right": 61710,
-    "spinner": 61712,
-    "circle": 61713,
-    "mail-reply": 61714,
-    "reply": 61714,
-    "github-alt": 61715,
-    "folder-o": 61716,
-    "folder-open-o": 61717,
-    "smile-o": 61720,
-    "frown-o": 61721,
-    "meh-o": 61722,
-    "gamepad": 61723,
-    "keyboard-o": 61724,
-    "flag-o": 61725,
-    "flag-checkered": 61726,
-    "terminal": 61728,
-    "code": 61729,
-    "mail-reply-all": 61730,
-    "reply-all": 61730,
-    "star-half-empty": 61731,
-    "star-half-full": 61731,
-    "star-half-o": 61731,
-    "location-arrow": 61732,
-    "crop": 61733,
-    "code-fork": 61734,
-    "unlink": 61735,
-    "chain-broken": 61735,
-    "question": 61736,
-    "info": 61737,
-    "exclamation": 61738,
-    "superscript": 61739,
-    "subscript": 61740,
-    "eraser": 61741,
-    "puzzle-piece": 61742,
-    "microphone": 61744,
-    "microphone-slash": 61745,
-    "shield": 61746,
-    "calendar-o": 61747,
-    "fire-extinguisher": 61748,
-    "rocket": 61749,
-    "maxcdn": 61750,
-    "chevron-circle-left": 61751,
-    "chevron-circle-right": 61752,
-    "chevron-circle-up": 61753,
-    "chevron-circle-down": 61754,
-    "html5": 61755,
-    "css3": 61756,
-    "anchor": 61757,
-    "unlock-alt": 61758,
-    "bullseye": 61760,
-    "ellipsis-h": 61761,
-    "ellipsis-v": 61762,
-    "rss-square": 61763,
-    "play-circle": 61764,
-    "ticket": 61765,
-    "minus-square": 61766,
-    "minus-square-o": 61767,
-    "level-up": 61768,
-    "level-down": 61769,
-    "check-square": 61770,
-    "pencil-square": 61771,
-    "external-link-square": 61772,
-    "share-square": 61773,
-    "compass": 61774,
-    "toggle-down": 61776,
-    "caret-square-o-down": 61776,
-    "toggle-up": 61777,
-    "caret-square-o-up": 61777,
-    "toggle-right": 61778,
-    "caret-square-o-right": 61778,
-    "euro": 61779,
-    "eur": 61779,
-    "gbp": 61780,
-    "dollar": 61781,
-    "usd": 61781,
-    "rupee": 61782,
-    "inr": 61782,
-    "cny": 61783,
-    "rmb": 61783,
-    "yen": 61783,
-    "jpy": 61783,
-    "ruble": 61784,
-    "rouble": 61784,
-    "rub": 61784,
-    "won": 61785,
-    "krw": 61785,
-    "bitcoin": 61786,
-    "btc": 61786,
-    "file": 61787,
-    "file-text": 61788,
-    "sort-alpha-asc": 61789,
-    "sort-alpha-desc": 61790,
-    "sort-amount-asc": 61792,
-    "sort-amount-desc": 61793,
-    "sort-numeric-asc": 61794,
-    "sort-numeric-desc": 61795,
-    "thumbs-up": 61796,
-    "thumbs-down": 61797,
-    "youtube-square": 61798,
-    "youtube": 61799,
-    "xing": 61800,
-    "xing-square": 61801,
-    "youtube-play": 61802,
-    "dropbox": 61803,
-    "stack-overflow": 61804,
-    "instagram": 61805,
-    "flickr": 61806,
-    "adn": 61808,
-    "bitbucket": 61809,
-    "bitbucket-square": 61810,
-    "tumblr": 61811,
-    "tumblr-square": 61812,
-    "long-arrow-down": 61813,
-    "long-arrow-up": 61814,
-    "long-arrow-left": 61815,
-    "long-arrow-right": 61816,
-    "apple": 61817,
-    "windows": 61818,
-    "android": 61819,
-    "linux": 61820,
-    "dribbble": 61821,
-    "skype": 61822,
-    "foursquare": 61824,
-    "trello": 61825,
-    "female": 61826,
-    "male": 61827,
-    "gittip": 61828,
-    "gratipay": 61828,
-    "sun-o": 61829,
-    "moon-o": 61830,
-    "archive": 61831,
-    "bug": 61832,
-    "vk": 61833,
-    "weibo": 61834,
-    "renren": 61835,
-    "pagelines": 61836,
-    "stack-exchange": 61837,
-    "arrow-circle-o-right": 61838,
-    "arrow-circle-o-left": 61840,
-    "toggle-left": 61841,
-    "caret-square-o-left": 61841,
-    "dot-circle-o": 61842,
-    "wheelchair": 61843,
-    "vimeo-square": 61844,
-    "turkish-lira": 61845,
-    "try": 61845,
-    "plus-square-o": 61846,
-    "space-shuttle": 61847,
-    "slack": 61848,
-    "envelope-square": 61849,
-    "wordpress": 61850,
-    "openid": 61851,
-    "institution": 61852,
-    "bank": 61852,
-    "university": 61852,
-    "mortar-board": 61853,
-    "graduation-cap": 61853,
-    "yahoo": 61854,
-    "google": 61856,
-    "reddit": 61857,
-    "reddit-square": 61858,
-    "stumbleupon-circle": 61859,
-    "stumbleupon": 61860,
-    "delicious": 61861,
-    "digg": 61862,
-    "pied-piper-pp": 61863,
-    "pied-piper-alt": 61864,
-    "drupal": 61865,
-    "joomla": 61866,
-    "language": 61867,
-    "fax": 61868,
-    "building": 61869,
-    "child": 61870,
-    "paw": 61872,
-    "spoon": 61873,
-    "cube": 61874,
-    "cubes": 61875,
-    "behance": 61876,
-    "behance-square": 61877,
-    "steam": 61878,
-    "steam-square": 61879,
-    "recycle": 61880,
-    "automobile": 61881,
-    "car": 61881,
-    "cab": 61882,
-    "taxi": 61882,
-    "tree": 61883,
-    "spotify": 61884,
-    "deviantart": 61885,
-    "soundcloud": 61886,
-    "database": 61888,
-    "file-pdf-o": 61889,
-    "file-word-o": 61890,
-    "file-excel-o": 61891,
-    "file-powerpoint-o": 61892,
-    "file-photo-o": 61893,
-    "file-picture-o": 61893,
-    "file-image-o": 61893,
-    "file-zip-o": 61894,
-    "file-archive-o": 61894,
-    "file-sound-o": 61895,
-    "file-audio-o": 61895,
-    "file-movie-o": 61896,
-    "file-video-o": 61896,
-    "file-code-o": 61897,
-    "vine": 61898,
-    "codepen": 61899,
-    "jsfiddle": 61900,
-    "life-bouy": 61901,
-    "life-buoy": 61901,
-    "life-saver": 61901,
-    "support": 61901,
-    "life-ring": 61901,
-    "circle-o-notch": 61902,
-    "ra": 61904,
-    "resistance": 61904,
-    "rebel": 61904,
-    "ge": 61905,
-    "empire": 61905,
-    "git-square": 61906,
-    "git": 61907,
-    "y-combinator-square": 61908,
-    "yc-square": 61908,
-    "hacker-news": 61908,
-    "tencent-weibo": 61909,
-    "qq": 61910,
-    "wechat": 61911,
-    "weixin": 61911,
-    "send": 61912,
-    "paper-plane": 61912,
-    "send-o": 61913,
-    "paper-plane-o": 61913,
-    "history": 61914,
-    "circle-thin": 61915,
-    "header": 61916,
-    "paragraph": 61917,
-    "sliders": 61918,
-    "share-alt": 61920,
-    "share-alt-square": 61921,
-    "bomb": 61922,
-    "soccer-ball-o": 61923,
-    "futbol-o": 61923,
-    "tty": 61924,
-    "binoculars": 61925,
-    "plug": 61926,
-    "slideshare": 61927,
-    "twitch": 61928,
-    "yelp": 61929,
-    "newspaper-o": 61930,
-    "wifi": 61931,
-    "calculator": 61932,
-    "paypal": 61933,
-    "google-wallet": 61934,
-    "cc-visa": 61936,
-    "cc-mastercard": 61937,
-    "cc-discover": 61938,
-    "cc-amex": 61939,
-    "cc-paypal": 61940,
-    "cc-stripe": 61941,
-    "bell-slash": 61942,
-    "bell-slash-o": 61943,
-    "trash": 61944,
-    "copyright": 61945,
-    "at": 61946,
-    "eyedropper": 61947,
-    "paint-brush": 61948,
-    "birthday-cake": 61949,
-    "area-chart": 61950,
-    "pie-chart": 61952,
-    "line-chart": 61953,
-    "lastfm": 61954,
-    "lastfm-square": 61955,
-    "toggle-off": 61956,
-    "toggle-on": 61957,
-    "bicycle": 61958,
-    "bus": 61959,
-    "ioxhost": 61960,
-    "angellist": 61961,
-    "cc": 61962,
-    "shekel": 61963,
-    "sheqel": 61963,
-    "ils": 61963,
-    "meanpath": 61964,
-    "buysellads": 61965,
-    "connectdevelop": 61966,
-    "dashcube": 61968,
-    "forumbee": 61969,
-    "leanpub": 61970,
-    "sellsy": 61971,
-    "shirtsinbulk": 61972,
-    "simplybuilt": 61973,
-    "skyatlas": 61974,
-    "cart-plus": 61975,
-    "cart-arrow-down": 61976,
-    "diamond": 61977,
-    "ship": 61978,
-    "user-secret": 61979,
-    "motorcycle": 61980,
-    "street-view": 61981,
-    "heartbeat": 61982,
-    "venus": 61985,
-    "mars": 61986,
-    "mercury": 61987,
-    "intersex": 61988,
-    "transgender": 61988,
-    "transgender-alt": 61989,
-    "venus-double": 61990,
-    "mars-double": 61991,
-    "venus-mars": 61992,
-    "mars-stroke": 61993,
-    "mars-stroke-v": 61994,
-    "mars-stroke-h": 61995,
-    "neuter": 61996,
-    "genderless": 61997,
-    "facebook-official": 62000,
-    "pinterest-p": 62001,
-    "whatsapp": 62002,
-    "server": 62003,
-    "user-plus": 62004,
-    "user-times": 62005,
-    "hotel": 62006,
-    "bed": 62006,
-    "viacoin": 62007,
-    "train": 62008,
-    "subway": 62009,
-    "medium": 62010,
-    "yc": 62011,
-    "y-combinator": 62011,
-    "optin-monster": 62012,
-    "opencart": 62013,
-    "expeditedssl": 62014,
-    "battery-4": 62016,
-    "battery": 62016,
-    "battery-full": 62016,
-    "battery-3": 62017,
-    "battery-three-quarters": 62017,
-    "battery-2": 62018,
-    "battery-half": 62018,
-    "battery-1": 62019,
-    "battery-quarter": 62019,
-    "battery-0": 62020,
-    "battery-empty": 62020,
-    "mouse-pointer": 62021,
-    "i-cursor": 62022,
-    "object-group": 62023,
-    "object-ungroup": 62024,
-    "sticky-note": 62025,
-    "sticky-note-o": 62026,
-    "cc-jcb": 62027,
-    "cc-diners-club": 62028,
-    "clone": 62029,
-    "balance-scale": 62030,
-    "hourglass-o": 62032,
-    "hourglass-1": 62033,
-    "hourglass-start": 62033,
-    "hourglass-2": 62034,
-    "hourglass-half": 62034,
-    "hourglass-3": 62035,
-    "hourglass-end": 62035,
-    "hourglass": 62036,
-    "hand-grab-o": 62037,
-    "hand-rock-o": 62037,
-    "hand-stop-o": 62038,
-    "hand-paper-o": 62038,
-    "hand-scissors-o": 62039,
-    "hand-lizard-o": 62040,
-    "hand-spock-o": 62041,
-    "hand-pointer-o": 62042,
-    "hand-peace-o": 62043,
-    "trademark": 62044,
-    "registered": 62045,
-    "creative-commons": 62046,
-    "gg": 62048,
-    "gg-circle": 62049,
-    "tripadvisor": 62050,
-    "odnoklassniki": 62051,
-    "odnoklassniki-square": 62052,
-    "get-pocket": 62053,
-    "wikipedia-w": 62054,
-    "safari": 62055,
-    "chrome": 62056,
-    "firefox": 62057,
-    "opera": 62058,
-    "internet-explorer": 62059,
-    "tv": 62060,
-    "television": 62060,
-    "contao": 62061,
-    "500px": 62062,
-    "amazon": 62064,
-    "calendar-plus-o": 62065,
-    "calendar-minus-o": 62066,
-    "calendar-times-o": 62067,
-    "calendar-check-o": 62068,
-    "industry": 62069,
-    "map-pin": 62070,
-    "map-signs": 62071,
-    "map-o": 62072,
-    "map": 62073,
-    "commenting": 62074,
-    "commenting-o": 62075,
-    "houzz": 62076,
-    "vimeo": 62077,
-    "black-tie": 62078,
-    "fonticons": 62080,
-    "reddit-alien": 62081,
-    "edge": 62082,
-    "credit-card-alt": 62083,
-    "codiepie": 62084,
-    "modx": 62085,
-    "fort-awesome": 62086,
-    "usb": 62087,
-    "product-hunt": 62088,
-    "mixcloud": 62089,
-    "scribd": 62090,
-    "pause-circle": 62091,
-    "pause-circle-o": 62092,
-    "stop-circle": 62093,
-    "stop-circle-o": 62094,
-    "shopping-bag": 62096,
-    "shopping-basket": 62097,
-    "hashtag": 62098,
-    "bluetooth": 62099,
-    "bluetooth-b": 62100,
-    "percent": 62101,
-    "gitlab": 62102,
-    "wpbeginner": 62103,
-    "wpforms": 62104,
-    "envira": 62105,
-    "universal-access": 62106,
-    "wheelchair-alt": 62107,
-    "question-circle-o": 62108,
-    "blind": 62109,
-    "audio-description": 62110,
-    "volume-control-phone": 62112,
-    "braille": 62113,
-    "assistive-listening-systems": 62114,
-    "asl-interpreting": 62115,
-    "american-sign-language-interpreting": 62115,
-    "deafness": 62116,
-    "hard-of-hearing": 62116,
-    "deaf": 62116,
-    "glide": 62117,
-    "glide-g": 62118,
-    "signing": 62119,
-    "sign-language": 62119,
-    "low-vision": 62120,
-    "viadeo": 62121,
-    "viadeo-square": 62122,
-    "snapchat": 62123,
-    "snapchat-ghost": 62124,
-    "snapchat-square": 62125,
-    "pied-piper": 62126,
-    "first-order": 62128,
-    "yoast": 62129,
-    "themeisle": 62130,
-    "google-plus-circle": 62131,
-    "google-plus-official": 62131,
-    "fa": 62132,
-    "font-awesome": 62132,
-    "handshake-o": 62133,
-    "envelope-open": 62134,
-    "envelope-open-o": 62135,
-    "linode": 62136,
-    "address-book": 62137,
-    "address-book-o": 62138,
-    "vcard": 62139,
-    "address-card": 62139,
-    "vcard-o": 62140,
-    "address-card-o": 62140,
-    "user-circle": 62141,
-    "user-circle-o": 62142,
-    "user-o": 62144,
-    "id-badge": 62145,
-    "drivers-license": 62146,
-    "id-card": 62146,
-    "drivers-license-o": 62147,
-    "id-card-o": 62147,
-    "quora": 62148,
-    "free-code-camp": 62149,
-    "telegram": 62150,
-    "thermometer-4": 62151,
-    "thermometer": 62151,
-    "thermometer-full": 62151,
-    "thermometer-3": 62152,
-    "thermometer-three-quarters": 62152,
-    "thermometer-2": 62153,
-    "thermometer-half": 62153,
-    "thermometer-1": 62154,
-    "thermometer-quarter": 62154,
-    "thermometer-0": 62155,
-    "thermometer-empty": 62155,
-    "shower": 62156,
-    "bathtub": 62157,
-    "s15": 62157,
-    "bath": 62157,
-    "podcast": 62158,
-    "window-maximize": 62160,
-    "window-minimize": 62161,
-    "window-restore": 62162,
-    "times-rectangle": 62163,
-    "window-close": 62163,
-    "times-rectangle-o": 62164,
-    "window-close-o": 62164,
-    "bandcamp": 62165,
-    "grav": 62166,
-    "etsy": 62167,
-    "imdb": 62168,
-    "ravelry": 62169,
-    "eercast": 62170,
-    "microchip": 62171,
-    "snowflake-o": 62172,
-    "superpowers": 62173,
-    "wpexplorer": 62174,
-    "meetup": 62176
-  };
-},649,[],"node_modules/react-native-vector-icons/glyphmaps/FontAwesome.json");
-__d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
@@ -81747,15 +80893,13 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
 	var _view_signin2 = _interopRequireDefault(_view_signin);
 
-	var _ac_tabnav = _require(_dependencyMap[5], "./ac_tabnav");
-
-	var _ac_tabnav2 = _interopRequireDefault(_ac_tabnav);
-
-	var _store = _require(_dependencyMap[6], "../store");
+	var _store = _require(_dependencyMap[5], "../store");
 
 	var _store2 = _interopRequireDefault(_store);
 
-	var _reactRedux = _require(_dependencyMap[7], "react-redux");
+	var _ac_tabnav = _require(_dependencyMap[6], "./ac_tabnav");
+
+	var _ac_tabnav2 = _interopRequireDefault(_ac_tabnav);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -81768,9 +80912,6 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 	var _components = {
 		SignUpIn: {
 			displayName: "SignUpIn"
-		},
-		_Switch: {
-			displayName: "_Switch"
 		},
 		Switch: {
 			displayName: "Switch"
@@ -81818,7 +80959,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						style: styles.wrapper,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 24
+							lineNumber: 26
 						}
 					},
 					_react3.default.createElement(
@@ -81832,7 +80973,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							},
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 25
+								lineNumber: 27
 							}
 						},
 						_react3.default.createElement(
@@ -81841,7 +80982,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								style: styles.upBtn,
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 35
+									lineNumber: 37
 								}
 							},
 							_react3.default.createElement(
@@ -81850,7 +80991,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.btnText,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 36
+										lineNumber: 38
 									}
 								},
 								"Sign Up"
@@ -81868,7 +81009,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							},
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 42
+								lineNumber: 44
 							}
 						},
 						_react3.default.createElement(
@@ -81877,7 +81018,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								style: styles.upBtn,
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 47
+									lineNumber: 49
 								}
 							},
 							_react3.default.createElement(
@@ -81886,7 +81027,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.btnText,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 48
+										lineNumber: 50
 									}
 								},
 								"Sign In"
@@ -81900,98 +81041,55 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 		return SignUpIn;
 	}(_react2.Component));
 
-	var _Switch = _wrapComponent("_Switch")(function (_Component2) {
-		_inherits(_Switch, _Component2);
-
-		function _Switch() {
-			_classCallCheck(this, _Switch);
-
-			return _possibleConstructorReturn(this, (_Switch.__proto__ || Object.getPrototypeOf(_Switch)).apply(this, arguments));
-		}
-
-		_createClass(_Switch, [{
-			key: "render",
-			value: function render() {
-				var selected_component = "";
-				console.log("isLoggedIn? " + this.props.session.isLoggedIn);
-				console.log(Object.getOwnPropertyNames(this.props.session).toString());
-
-				if (this.props.session.isLoggedIn) {
-					selected_component = _react3.default.createElement(_ac_tabnav2.default, {
-						navigation: this.props.navigation,
-						__source: {
-							fileName: _jsxFileName,
-							lineNumber: 67
-						}
-					});
-				} else {
-					selected_component = _react3.default.createElement(SignUpIn, {
-						navigation: this.props.navigation,
-						__source: {
-							fileName: _jsxFileName,
-							lineNumber: 69
-						}
-					});
-				}
-
-				return selected_component;
-			}
-		}]);
-
-		return _Switch;
-	}(_react2.Component));
-
-	function mapStateToProps(state) {
-		console.log(Object.getOwnPropertyNames(state).toString());
-		return {
-			session: state.session
-		};
-	}
-
-	function mapDispatchToProps(dispatch) {
-		return {
-			dispatch: dispatch
-		};
-	}
-
-	var ConnectedSwitch = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Switch);
-
-	var Switch = _wrapComponent("Switch")(function (_Component3) {
-		_inherits(Switch, _Component3);
+	var Switch = _wrapComponent("Switch")(function (_Component2) {
+		_inherits(Switch, _Component2);
 
 		function Switch() {
+			var _ref;
+
+			var _temp, _this2, _ret;
+
 			_classCallCheck(this, Switch);
 
-			return _possibleConstructorReturn(this, (Switch.__proto__ || Object.getPrototypeOf(Switch)).apply(this, arguments));
+			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+				args[_key] = arguments[_key];
+			}
+
+			return _ret = (_temp = (_this2 = _possibleConstructorReturn(this, (_ref = Switch.__proto__ || Object.getPrototypeOf(Switch)).call.apply(_ref, [this].concat(args))), _this2), _this2.componentDidMount = function () {
+				var that = _this2;
+
+				_store2.default.subscribe(function () {
+					console.log("STORE CHANGED!");
+
+					if (_store2.default.getState().session.isLoggedIn) {
+						that.render();
+					}
+				});
+			}, _temp), _possibleConstructorReturn(_this2, _ret);
 		}
 
 		_createClass(Switch, [{
 			key: "render",
 			value: function render() {
-				return _react3.default.createElement(
-					_reactRedux.Provider,
-					{
-						store: _store2.default,
+				var isLoggedIn = _store2.default.getState().session.isLoggedIn;
+
+				if (isLoggedIn) {
+					return _react3.default.createElement(_ac_tabnav2.default, {
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 96
+							lineNumber: 77
 						}
-					},
-					_react3.default.createElement(ConnectedSwitch, {
-						navigation: this.props.navigation,
-						__source: {
-							fileName: _jsxFileName,
-							lineNumber: 99
-						}
-					})
-				);
+					});
+				} else {
+					return SignUpIn;
+				}
 			}
 		}]);
 
 		return Switch;
 	}(_react2.Component));
 
-	exports.default = AccountStack = (0, _reactNavigation.StackNavigator)({
+	var AccountStack = (0, _reactNavigation.StackNavigator)({
 		AccountHome: {
 			screen: Switch,
 			navigationOptions: {
@@ -82007,6 +81105,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 	}, {
 		initialRouteName: ""
 	});
+	exports.default = AccountStack;
 
 	var styles = _reactNative.StyleSheet.create({
 		wrapper: {
@@ -82034,7 +81133,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			width: 100
 		}
 	});
-},651,[118,179,12,495,652,656,644,620],"src/js/account/ac_stacknav.js");
+},651,[118,179,12,495,652,644,656],"src/js/account/ac_stacknav.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -82310,17 +81409,18 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
 	var _reactNative = _require(_dependencyMap[2], "react-native");
 
+	var _shared_utilities = _require(_dependencyMap[3], "../shared_components/shared_utilities");
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-	var DOMParser = _require(_dependencyMap[3], "xmldom").DOMParser;
+	var DOMParser = _require(_dependencyMap[4], "xmldom").DOMParser;
 
 	var host = _univ_const2.default.server_url;
 
 	function login(dispatch, payload) {
 		_login(dispatch, payload, function (session_data) {
-			console.log(objectToString(session_data));
 			dispatch({
 				type: actions.LOGIN_SUCCESS,
 				payload: session_data
@@ -82328,22 +81428,10 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
 			_reactNative.AsyncStorage.setItem("creds", JSON.stringify(payload), function (error) {
 				if (error) {
-					console.log(objectToString(error));
+					console.log((0, _shared_utilities.objectToString)(error));
 				}
 			});
 		});
-	}
-
-	function objectToString(Obj) {
-		if (!Obj) return "Not an object: Null or undefined.";
-		var arr = Object.getOwnPropertyNames(Obj);
-		var returnString = "";
-
-		for (var i = 0; i < arr.length - 1; i++) {
-			returnString += arr[i] + "<" + typeof Obj[arr[i]] + "> => " + Obj[arr[i]] + ", ";
-		}
-
-		return returnString += arr[arr.length - 1] + "=" + Obj[arr[arr.length - 1]];
 	}
 
 	var START_UP = "connect_at_start_up";
@@ -82357,9 +81445,6 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			xhr.responseType = "text";
 
 			xhr.onreadystatechange = function () {
-				console.log("Readystate: " + this.readyState);
-				console.log("Status: " + this.status);
-
 				if (this.readyState === 4 && this.status === 200) {
 					var Parser = new DOMParser();
 					var xmlDoc = Parser.parseFromString(this.responseText);
@@ -82367,7 +81452,6 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 					srv_res_status = parseInt(srv_res_status);
 
 					if (srv_res_status === 0) {
-						console.log("That wasn't the problem.");
 						var usrDataObj = JSON.parse(xmlDoc.getElementsByTagName("usr_info")[0].childNodes[0].nodeValue);
 						var user_data = {
 							alias: usrDataObj["alias"],
@@ -82380,8 +81464,6 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							student: usrDataObj["student"],
 							school: usrDataObj["school"]
 						};
-						console.log("Problem solved");
-						console.log(user_data);
 						dispatch({
 							type: actions.LOGIN_SUCCESS,
 							payload: user_data
@@ -82400,7 +81482,6 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			};
 
 			try {
-				console.log("Opening and sending");
 				xhr.open("POST", "" + host, true);
 				xhr.send();
 			} catch (error) {
@@ -82447,14 +81528,10 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 		xhr.responseType = "text";
 
 		xhr.onreadystatechange = function () {
-			console.log("Readystate: " + this.readyState);
-			console.log("Status: " + this.status);
-
 			if (this.readyState === 4 && this.status === 200) {
 				var Parser = new DOMParser();
 				var xmlDoc = Parser.parseFromString(this.responseText);
 				var srv_res_status = parseInt(xmlDoc.getElementsByTagName("srv_res_status")[0].childNodes[0].nodeValue);
-				console.log("Server status: " + srv_res_status);
 				var usrDataObj = JSON.parse(xmlDoc.getElementsByTagName("usr_info")[0].childNodes[0].nodeValue);
 
 				if (srv_res_status === 0) {
@@ -82469,10 +81546,8 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						student: usrDataObj["student"],
 						school: usrDataObj["school"]
 					};
-					console.log(user_data);
 					callback(user_data);
 				} else {
-					console.log("Dispatching err");
 					dispatch({
 						type: actions.LOGIN_ERROR,
 						payload: "The srv_res_status returned is " + srv_res_status
@@ -82489,7 +81564,6 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 		};
 
 		try {
-			console.log("Opening and sending");
 			xhr.open("POST", host + "/log/in", true);
 			xhr.send(fd);
 		} catch (error) {
@@ -82500,12 +81574,103 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			});
 		}
 	}
-},653,[646,655,12,641],"src/js/account/ac_dispatchers.js");
+},653,[646,655,12,660,641],"src/js/account/ac_dispatchers.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
     module.exports = {
-        "server_url": "http://10.4.141.72:8000"
+        "server_url": "http://10.4.142.139:8000"
     };
 },655,[],"univ_const.json");
+__d(function (global, _require, module, exports, _dependencyMap) {
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	var _jsxFileName = "/var/www/html/books/BooksNativeApp/src/js/account/ac_tabnav.js";
+
+	var _reactNavigation = _require(_dependencyMap[0], "react-navigation");
+
+	var _my_books = _require(_dependencyMap[1], "./my_books");
+
+	var _my_books2 = _interopRequireDefault(_my_books);
+
+	var _my_pastpapers = _require(_dependencyMap[2], "./my_pastpapers");
+
+	var _my_pastpapers2 = _interopRequireDefault(_my_pastpapers);
+
+	var _my_profile = _require(_dependencyMap[3], "./my_profile");
+
+	var _my_profile2 = _interopRequireDefault(_my_profile);
+
+	var _react = _require(_dependencyMap[4], "react");
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Ionicons = _require(_dependencyMap[5], "react-native-vector-icons/Ionicons");
+
+	var _Ionicons2 = _interopRequireDefault(_Ionicons);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var AccountTabNav = (0, _reactNavigation.TabNavigator)({
+		MyBooks: {
+			screen: _my_books2.default,
+			tabBarIcon: function tabBarIcon(_ref) {
+				var focused = _ref.focused,
+				    tintColor = _ref.tintColor;
+				return _react2.default.createElement(_Ionicons2.default, {
+					name: "ios-person-outline",
+					size: 25,
+					color: tintColor,
+					__source: {
+						fileName: _jsxFileName,
+						lineNumber: 16
+					}
+				});
+			}
+		},
+		MyPastPapers: {
+			screen: _my_pastpapers2.default,
+			tabBarIcon: function tabBarIcon(_ref2) {
+				var focused = _ref2.focused,
+				    tintColor = _ref2.tintColor;
+				return _react2.default.createElement(_Ionicons2.default, {
+					name: "ios-person-outline",
+					size: 25,
+					color: tintColor,
+					__source: {
+						fileName: _jsxFileName,
+						lineNumber: 26
+					}
+				});
+			}
+		},
+		MyProfile: {
+			screen: _my_profile2.default,
+			tabBarIcon: function tabBarIcon(_ref3) {
+				var focused = _ref3.focused,
+				    tintColor = _ref3.tintColor;
+				return _react2.default.createElement(_Ionicons2.default, {
+					name: "ios-person-outline",
+					size: 25,
+					color: tintColor,
+					__source: {
+						fileName: _jsxFileName,
+						lineNumber: 36
+					}
+				});
+			}
+		}
+	}, {
+		tabBarOptions: {
+			activeTintColor: "blue",
+			inactiveTintColor: "grey"
+		},
+		tabBarComponent: _reactNavigation.TabBarBottom,
+		tabBarPosition: "top",
+		animationEnabled: true,
+		swipeEnabled: true
+	});
+	exports.default = AccountTabNav;
+},656,[495,657,658,659,118,570],"src/js/account/ac_tabnav.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -82519,25 +81684,11 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
 	var _index2 = _interopRequireDefault(_index);
 
-	var _jsxFileName = "/var/www/html/books/BooksNativeApp/src/js/account/ac_tabnav.js";
+	var _jsxFileName = "/var/www/html/books/BooksNativeApp/src/js/account/my_books.js";
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _reactNative = _require(_dependencyMap[2], "react-native");
-
-	var _reactNavigation = _require(_dependencyMap[3], "react-navigation");
-
-	var _my_books = _require(_dependencyMap[4], "./my_books");
-
-	var _my_books2 = _interopRequireDefault(_my_books);
-
-	var _my_pastpapers = _require(_dependencyMap[5], "./my_pastpapers");
-
-	var _my_pastpapers2 = _interopRequireDefault(_my_pastpapers);
-
-	var _my_profile = _require(_dependencyMap[6], "./my_profile");
-
-	var _my_profile2 = _interopRequireDefault(_my_profile);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -82548,13 +81699,13 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var _components = {
-		AccountTabNav: {
-			displayName: "AccountTabNav"
+		MyBooks: {
+			displayName: "MyBooks"
 		}
 	};
 
 	var _node_modulesReactTransformHmrLibIndexJs2 = (0, _index2.default)({
-		filename: "/var/www/html/books/BooksNativeApp/src/js/account/ac_tabnav.js",
+		filename: "/var/www/html/books/BooksNativeApp/src/js/account/my_books.js",
 		components: _components,
 		locals: [module],
 		imports: [_react3.default]
@@ -82566,16 +81717,16 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 		};
 	}
 
-	var AccountTabNav = _wrapComponent("AccountTabNav")(function (_Component) {
-		_inherits(AccountTabNav, _Component);
+	var MyBooks = _wrapComponent("MyBooks")(function (_Component) {
+		_inherits(MyBooks, _Component);
 
-		function AccountTabNav() {
-			_classCallCheck(this, AccountTabNav);
+		function MyBooks() {
+			_classCallCheck(this, MyBooks);
 
-			return _possibleConstructorReturn(this, (AccountTabNav.__proto__ || Object.getPrototypeOf(AccountTabNav)).apply(this, arguments));
+			return _possibleConstructorReturn(this, (MyBooks.__proto__ || Object.getPrototypeOf(MyBooks)).apply(this, arguments));
 		}
 
-		_createClass(AccountTabNav, [{
+		_createClass(MyBooks, [{
 			key: "render",
 			value: function render() {
 				return _react3.default.createElement(
@@ -82584,7 +81735,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						style: styles.wrapper,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 17
+							lineNumber: 11
 						}
 					},
 					_react3.default.createElement(
@@ -82593,19 +81744,19 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							style: styles.text,
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 18
+								lineNumber: 12
 							}
 						},
-						"Hello, this will be the stack navigation. If you are seeing this, it means you are logged in. Youll be able to select between: 1. MyBooks 2. MyPastPapers 3. MyProfile"
+						"Oh, hi Mark! MyBooks!"
 					)
 				);
 			}
 		}]);
 
-		return AccountTabNav;
+		return MyBooks;
 	}(_react2.Component));
 
-	exports.default = AccountTabNav;
+	exports.default = MyBooks;
 
 	var styles = _reactNative.StyleSheet.create({
 		wrapper: {
@@ -82617,10 +81768,221 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			color: "gray"
 		}
 	});
-},656,[118,179,12,495,657,658,659],"src/js/account/ac_tabnav.js");
-__d(function (global, _require, module, exports, _dependencyMap) {},657,[],"src/js/account/my_books.js");
-__d(function (global, _require, module, exports, _dependencyMap) {},658,[],"src/js/account/my_pastpapers.js");
-__d(function (global, _require, module, exports, _dependencyMap) {},659,[],"src/js/account/my_profile.js");
+},657,[118,179,12],"src/js/account/my_books.js");
+__d(function (global, _require, module, exports, _dependencyMap) {
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _react2 = _require(_dependencyMap[0], "react");
+
+	var _react3 = _interopRequireDefault(_react2);
+
+	var _index = _require(_dependencyMap[1], "./../../../node_modules/react-transform-hmr/lib/index.js");
+
+	var _index2 = _interopRequireDefault(_index);
+
+	var _jsxFileName = "/var/www/html/books/BooksNativeApp/src/js/account/my_pastpapers.js";
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _reactNative = _require(_dependencyMap[2], "react-native");
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _components = {
+		MyPastPapers: {
+			displayName: "MyPastPapers"
+		}
+	};
+
+	var _node_modulesReactTransformHmrLibIndexJs2 = (0, _index2.default)({
+		filename: "/var/www/html/books/BooksNativeApp/src/js/account/my_pastpapers.js",
+		components: _components,
+		locals: [module],
+		imports: [_react3.default]
+	});
+
+	function _wrapComponent(id) {
+		return function (Component) {
+			return _node_modulesReactTransformHmrLibIndexJs2(Component, id);
+		};
+	}
+
+	var MyPastPapers = _wrapComponent("MyPastPapers")(function (_Component) {
+		_inherits(MyPastPapers, _Component);
+
+		function MyPastPapers() {
+			_classCallCheck(this, MyPastPapers);
+
+			return _possibleConstructorReturn(this, (MyPastPapers.__proto__ || Object.getPrototypeOf(MyPastPapers)).apply(this, arguments));
+		}
+
+		_createClass(MyPastPapers, [{
+			key: "render",
+			value: function render() {
+				return _react3.default.createElement(
+					_reactNative.View,
+					{
+						style: styles.wrapper,
+						__source: {
+							fileName: _jsxFileName,
+							lineNumber: 11
+						}
+					},
+					_react3.default.createElement(
+						_reactNative.Text,
+						{
+							style: styles.text,
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 12
+							}
+						},
+						"Oh, hi Mark! Past papers!"
+					)
+				);
+			}
+		}]);
+
+		return MyPastPapers;
+	}(_react2.Component));
+
+	exports.default = MyPastPapers;
+
+	var styles = _reactNative.StyleSheet.create({
+		wrapper: {
+			flex: 1,
+			justifyContent: "center",
+			alignItems: "center"
+		},
+		text: {
+			color: "gray"
+		}
+	});
+},658,[118,179,12],"src/js/account/my_pastpapers.js");
+__d(function (global, _require, module, exports, _dependencyMap) {
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _react2 = _require(_dependencyMap[0], "react");
+
+	var _react3 = _interopRequireDefault(_react2);
+
+	var _index = _require(_dependencyMap[1], "./../../../node_modules/react-transform-hmr/lib/index.js");
+
+	var _index2 = _interopRequireDefault(_index);
+
+	var _jsxFileName = "/var/www/html/books/BooksNativeApp/src/js/account/my_profile.js";
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _reactNative = _require(_dependencyMap[2], "react-native");
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _components = {
+		MyProfile: {
+			displayName: "MyProfile"
+		}
+	};
+
+	var _node_modulesReactTransformHmrLibIndexJs2 = (0, _index2.default)({
+		filename: "/var/www/html/books/BooksNativeApp/src/js/account/my_profile.js",
+		components: _components,
+		locals: [module],
+		imports: [_react3.default]
+	});
+
+	function _wrapComponent(id) {
+		return function (Component) {
+			return _node_modulesReactTransformHmrLibIndexJs2(Component, id);
+		};
+	}
+
+	var MyProfile = _wrapComponent("MyProfile")(function (_Component) {
+		_inherits(MyProfile, _Component);
+
+		function MyProfile() {
+			_classCallCheck(this, MyProfile);
+
+			return _possibleConstructorReturn(this, (MyProfile.__proto__ || Object.getPrototypeOf(MyProfile)).apply(this, arguments));
+		}
+
+		_createClass(MyProfile, [{
+			key: "render",
+			value: function render() {
+				return _react3.default.createElement(
+					_reactNative.View,
+					{
+						style: styles.wrapper,
+						__source: {
+							fileName: _jsxFileName,
+							lineNumber: 11
+						}
+					},
+					_react3.default.createElement(
+						_reactNative.Text,
+						{
+							style: styles.text,
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 12
+							}
+						},
+						"Oh, hi Mark! Profile!"
+					)
+				);
+			}
+		}]);
+
+		return MyProfile;
+	}(_react2.Component));
+
+	exports.default = MyProfile;
+
+	var styles = _reactNative.StyleSheet.create({
+		wrapper: {
+			flex: 1,
+			justifyContent: "center",
+			alignItems: "center"
+		},
+		text: {
+			color: "gray"
+		}
+	});
+},659,[118,179,12],"src/js/account/my_profile.js");
+__d(function (global, _require, module, exports, _dependencyMap) {
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.objectToString = objectToString;
+
+	function objectToString(Obj) {
+		if (!Obj) return "Not an object: Null or undefined.";
+		var arr = Object.getOwnPropertyNames(Obj);
+		var returnString = "";
+
+		for (var i = 0; i < arr.length - 1; i++) {
+			returnString += arr[i] + "<" + typeof Obj[arr[i]] + "> => " + Obj[arr[i]] + ", ";
+		}
+
+		return returnString += arr[arr.length - 1] + "=" + Obj[arr[arr.length - 1]];
+	}
+},660,[],"src/js/shared_components/shared_utilities.js");
 require(44);
 require(11);
 //# sourceMappingURL=index.map

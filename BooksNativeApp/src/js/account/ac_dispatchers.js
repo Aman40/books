@@ -3,12 +3,12 @@ let DOMParser = require("xmldom").DOMParser;
 import univ_const from "/var/www/html/books/BooksNativeApp/univ_const.json";
 const host = univ_const.server_url;
 import {AsyncStorage} from "react-native";
+import {objectToString} from "../shared_components/shared_utilities";
 
 export /**/ function login(dispatch, payload) {
 	//Payload must be {email, password}
 	_login(dispatch, payload, (session_data)=>{
 		//Dispatch login success and store credentials
-		console.log(objectToString(session_data));
 		dispatch({
 			type: actions.LOGIN_SUCCESS,
 			payload: session_data,
@@ -25,21 +25,6 @@ export /**/ function login(dispatch, payload) {
 			}
 		);
 	});
-}
-function objectToString(Obj) {
-	/*return value: [string] "property1=<type1>value1, property2=<type2>value2[, ..."
-		* The req.session.cookie object doesn't have a toString() method
-		* So I'm making my own generic one. It doesn't make prior assumptions
-		* about the properties of the object. It, however, only returns a
-		* string of enum()-able properties and their values
-	* */
-	if(!Obj) return "Not an object: Null or undefined.";
-	let arr = Object.getOwnPropertyNames(Obj); //Get all the properties
-	let returnString = "";
-	for(let i=0;i<arr.length-1; i++) {
-		returnString+=`${arr[i]}<${typeof(Obj[arr[i]])}> => ${Obj[arr[i]]}, `;	
-	}
-	return returnString+=`${arr[arr.length-1]}=${Obj[arr[arr.length-1]]}`; //The comma at the end
 }
 
 const START_UP = "connect_at_start_up";
@@ -71,17 +56,14 @@ export /*to books_view*/ function createSession(context, dispatch) {
 		let xhr = new XMLHttpRequest();
 		xhr.responseType = "text";
 		xhr.onreadystatechange = function() {
-			console.log(`Readystate: ${this.readyState}`);
-			console.log(`Status: ${this.status}`);
 			if(this.readyState===4 && this.status===200) {
 				let Parser = new DOMParser();
 				let xmlDoc = Parser.parseFromString(this.responseText);
-		
+
 				let srv_res_status = xmlDoc.getElementsByTagName("srv_res_status")[0].childNodes[0].nodeValue;
 				srv_res_status = parseInt(srv_res_status);
 				if(srv_res_status===0) {
 					//Session exists
-					console.log("That wasn't the problem.");
 					let usrDataObj = JSON.parse(xmlDoc.getElementsByTagName("usr_info")[0].childNodes[0].nodeValue);
 					let user_data = { //set user_data
 						alias: usrDataObj["alias"],
@@ -94,8 +76,6 @@ export /*to books_view*/ function createSession(context, dispatch) {
 						student: usrDataObj["student"],
 						school: usrDataObj["school"],
 					};
-					console.log("Problem solved");
-					console.log(user_data);
 
 					dispatch({ //Store session
 						type: actions.LOGIN_SUCCESS, //Session exists.
@@ -118,7 +98,6 @@ export /*to books_view*/ function createSession(context, dispatch) {
 			}
 		};
 		try {
-			console.log("Opening and sending");
 			xhr.open("POST",`${host}`, true);
 			xhr.send();
 		}
@@ -137,7 +116,7 @@ export /*to books_view*/ function createSession(context, dispatch) {
 
 function _autoLoginWithCreds(context, dispatch) {
 	//Checks for stored credentials and auto logs in if found.
-	//Else, prompts for manual login by dispatching action to navigate to 
+	//Else, prompts for manual login by dispatching action to navigate to
 	//Manual login view. Code reuse is why this is a function.
 	let credentials = null;
 	AsyncStorage.getItem("creds", (error, result)=>{
@@ -183,14 +162,12 @@ function _login(dispatch, credentials, callback) {
 	let xhr = new XMLHttpRequest();
 	xhr.responseType = "text";
 	xhr.onreadystatechange = function() {
-		console.log(`Readystate: ${this.readyState}`);
-		console.log(`Status: ${this.status}`);
 		if(this.readyState===4 && this.status===200) {
 			let Parser = new DOMParser();
 			let xmlDoc = Parser.parseFromString(this.responseText);
 
 			let srv_res_status = parseInt(xmlDoc.getElementsByTagName("srv_res_status")[0].childNodes[0].nodeValue);
-			console.log("Server status: "+srv_res_status);
+
 			let usrDataObj = JSON.parse(xmlDoc.getElementsByTagName("usr_info")[0].childNodes[0].nodeValue);
 
 			if(srv_res_status===0) {
@@ -205,11 +182,9 @@ function _login(dispatch, credentials, callback) {
 					student: usrDataObj["student"],
 					school: usrDataObj["school"],
 				};
-				console.log(user_data);
 				callback(user_data);
 			}
 			else {
-				console.log("Dispatching err");
 				dispatch({
 					type: actions.LOGIN_ERROR,
 					payload: "The srv_res_status returned is "+srv_res_status,
@@ -226,7 +201,6 @@ function _login(dispatch, credentials, callback) {
 		}
 	};
 	try {
-		console.log("Opening and sending");
 		xhr.open("POST",`${host}/log/in`, true);
 		xhr.send(fd);
 	}

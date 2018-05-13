@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import univ_const from "/var/www/html/books/BooksNativeApp/univ_const.json";
 import * as accountDispatchers from "../account/ac_dispatchers";
+//import {objectToString} from "../shared_components/shared_utilities";
 
 //Call create session with context {type: "START_UP", }
 //Under what if statement and boolean from the store??(state.props.session)
@@ -33,28 +34,25 @@ export default class BooksView extends Component {
 			this.props.createSession(context);
 		} 
 		this.props.fetchBooks();
+		//Subscribe to the store for rerenderings whenever the store changes.
 	}
 	componentWillUnmount=()=>{
 		//Release resources.
 	}
-	render() {
-		console.log("After mounting, props: "+objectToString(this.props.session));
 
+	render() {
 		let innerText = "Initializing. Please wait...";
 		let books = [];
 		//Get the books or error if none.
 		if(this.props.books.isFetching) {
 			//Display the "wait" spinner
 			innerText = "Fetching Books. Please wait...";
-			console.log(innerText);
 		}
 		if(this.props.books.successFetching) {
 			//Finished fetching. Check if there are any
 			//books.
 			innerText = "hasFinished Fetching...";
-			console.log(innerText);
 			if(this.props.books.booksArr.length>0) {
-				console.log(`There are ${this.props.books.booksArr.length} books.`);
 				//Some books were found
 				//Render them in a separate component.
 				innerText = `${this.props.books.booksArr.length} books by were found.`;
@@ -72,7 +70,6 @@ export default class BooksView extends Component {
 			} else {
 				//Report an error.
 				innerText = "No books were found. Perhaps if you started working on the server side function responsible...";
-				console.log(innerText);
 			}
 		} else {
 			//Error is implied
@@ -184,19 +181,4 @@ class BookView extends Component {
 			</TouchableOpacity>
 		);
 	}
-}
-function objectToString(Obj) {
-	/*return value: [string] "property1=<type1>value1, property2=<type2>value2[, ..."
-		* The req.session.cookie object doesn't have a toString() method
-		* So I'm making my own generic one. It doesn't make prior assumptions
-		* about the properties of the object. It, however, only returns a
-		* string of enum()-able properties and their values
-	* */
-	if(!Obj) return "Not an object: Null or undefined.";
-	let arr = Object.getOwnPropertyNames(Obj); //Get all the properties
-	let returnString = "";
-	for(let i=0;i<arr.length-1; i++) {
-		returnString+=`${arr[i]}<${typeof(Obj[arr[i]])}> => ${Obj[arr[i]]}, `;
-	}
-	return returnString+=`${arr[arr.length-1]}=${Obj[arr[arr.length-1]]}`; //The comma at the end
 }
