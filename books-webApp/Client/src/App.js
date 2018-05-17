@@ -46,7 +46,7 @@ class App extends Component {
         this.english = languages.english; //Sourced from the languages.json file
         this.japanese = languages.japanese;// "
     }
-    handleUpChange = (ev) => {
+    handleUpChange = (ev)=>{
         const up_form_copy = Object.assign({}, this.state.up_form);
 
         if(ev.target.name==="password1") { //Check the length and strength

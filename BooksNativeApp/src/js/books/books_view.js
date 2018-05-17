@@ -12,14 +12,16 @@ import {
 } from "react-native";
 import univ_const from "/var/www/html/books/BooksNativeApp/univ_const.json";
 import * as accountDispatchers from "../account/ac_dispatchers";
-//import {objectToString} from "../shared_components/shared_utilities";
+/*
+	//import {objectToString} from "../shared_components/shared_utilities";
 
-//Call create session with context {type: "START_UP", }
-//Under what if statement and boolean from the store??(state.props.session)
-//Careful not to run into an infinite loop
-//Automatically prompt manual login??
-//If no session and no creds, don't prompt login. Navigate to init. User might not
-//have signed up. Only prompt login if session check was triggered by srv_res_status 9
+	//Call create session with context {type: "START_UP", }
+	//Under what if statement and boolean from the store??(state.props.session)
+	//Careful not to run into an infinite loop
+	//Automatically prompt manual login??
+	//If no session and no creds, don't prompt login. Navigate to init. User might not
+	//have signed up. Only prompt login if session check was triggered by srv_res_status 9
+*/
 const host = univ_const.server_url;
 export default class BooksView extends Component {
 	componentDidMount=()=>{

@@ -35,6 +35,7 @@ export function fetchBooks(dispatch) {
 				//call the create session function. It will check for stored creds, and
 				//if any, it will log in automatically AND resume the last request. 
 				//otherwise, it will prompt manual login
+				console.log("A FAILED REQUEST. NOT LOGGED IN!");
 				let context = {
 					type: accountDispatchers.FAILED_REQ,
 					payload: {

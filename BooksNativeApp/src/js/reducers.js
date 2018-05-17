@@ -48,6 +48,9 @@ export function session(state={
 	loginErrorMsg: "",
 	isLoggedIn: false,
 	userData: "",
+	logoutWait: false,
+	logoutSuccess: false,
+	logoutErrorMsg: "",
 }, action) {
 	switch (action.type) {
 	case accountActions.IS_LOGGING_IN:
@@ -58,7 +61,7 @@ export function session(state={
 			loginSuccess: false,
 			isLoggedIn: false,
 			userData: "",
-			refererView: action.payload,
+			logoutSuccess: false,
 		};
 	case accountActions.LOGIN_SUCCESS:
 		console.log("We are logged in yo!");
@@ -78,9 +81,55 @@ export function session(state={
 			isLoggedIn: false,
 			userData: "",
 		};
+	case accountActions.IS_LOGGING_OUT:
+		return {
+			...state,
+			logoutWait: true,
+			logoutErrorMsg: "",
+			logoutSuccess: false,
+			loginSuccess: false,
+		};
+	case accountActions.LOGOUT_SUCCESS:
+		return {
+			...state,
+			logoutWait: false,
+			isLoggedIn: false,
+			logoutSuccess: true,
+			userData: "",
+		};
+	case accountActions.LOGOUT_ERROR:
+		return {
+			...state,
+			logoutSuccess: false,
+			logoutErrorMsg: action.payload,
+		};
 	default:
 		return state;
 
+	}
+}
+
+export function guiControl(
+	state={
+		showAccountHeaderMenu: false,
+	},
+	action
+){
+	switch(action.type) {
+	case accountActions.SHOW_AC_MENU:
+		return {
+			...state,
+			showAccountHeaderMenu: true,
+		};
+	case accountActions.HIDE_AC_MENU:
+		return {
+			...state,
+			showAccountHeaderMenu: false,
+		};
+	default:
+		return {
+			...state,
+		};
 	}
 }
 //NOTES: Async functions should always dispatch 3 types of actions.

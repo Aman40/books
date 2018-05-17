@@ -128,9 +128,10 @@ export default class SignIn extends Component {
 		return (
 			<Provider
 				store={store}
-				navigation={this.props.navigation}
 			>
-				<_ConnectedSignIn/>
+				<_ConnectedSignIn
+					navigation={this.props.navigation}
+				/>
 			</Provider>
 		);
 	}

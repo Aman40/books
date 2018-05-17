@@ -7,6 +7,7 @@ export default store = createStore(
 		{
 			books: reducers.books,
 			session: reducers.session,
+			guiControl: reducers.guiControl,
 		}
 	)
 );

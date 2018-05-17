@@ -49,19 +49,7 @@ app.use("/", (req, res, next)=>{
 		res.end("ok");
 	}
 });
-/*
-app.use('/', (req, res, next)=>{
-    console.log(req.method);
-    /*Answer the pre-flight request for allowed headers
-    res.setHeader("Access-Control-Allow-Origin","*");
-    res.setHeader("Access-Control-Allow-Credentials",true);
-    res.setHeader("Access-Control-Allow-Methods","GET, HEAD, OPTIONS, POST, PUT");
-    res.setHeader("Access-Control-Allow-Headers","Cookie, Set-Cookie, Access-Control-Allow-Headers, " +
-        "Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method," +
-        "Access-Control-Request-Headers");
-    next();
-});
-*/
+
 //Route the request for <domain>/favicon.ico here before sessions begin
 app.use(function (req, res, next) {
 	/*The client browser couldn't allow setting the "cookie" header, so it's sent over via
@@ -95,18 +83,22 @@ app.listen(8000);
 //callback for destroying session
 function logout(req, res) {
 	req.session.save((err)=>{
-		console.log(`couldn't save the session. An error occurred: ${err}`);
-		req.session.destroy((err)=>{
-			if(err) {
-				console.log(err.name);
-				console.log(err.message);
-				res.write("<msg>A problem happened.</msg>");
-				res.end("<srv_res_status>1</srv_res_status>"); //NOT OK
-			} else {
-				res.write("<msg>Session successfully destroyed</msg>");
-				res.end("<srv_res_status>0</srv_res_status>"); //OK
-			}
-		});
+		if(err) {
+			console.log(`couldn't save the session. An error occurred: ${err}`);
+		} else {
+			req.session.destroy((err)=>{
+				if(err) {
+					console.log(err.name);
+					console.log(err.message);
+					res.write("<msg>A problem happened.</msg>");
+					res.end("<srv_res_status>1</srv_res_status>"); //NOT OK
+				} else {
+					res.write("<msg>Session successfully destroyed</msg>");
+					res.end("<srv_res_status>0</srv_res_status>"); //OK
+				}
+			});
+		}
+		
 	});
 }
 function send_session_data(req, res){
