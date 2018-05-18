@@ -61435,7 +61435,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 		swipeEnabled: false
 	});
 	exports.default = MainTabNav;
-},492,[493,494,118,569,651,652],"src/js/main_nav.js");
+},492,[493,494,118,569,652,653],"src/js/main_nav.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -61479,7 +61479,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			}
 		}
 	}, {});
-},493,[494,118,569,618,626,650],"src/js/books/home_stacknav.js");
+},493,[494,118,569,618,627,651],"src/js/books/home_stacknav.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
   module.exports = {
     get createNavigationContainer() {
@@ -76408,7 +76408,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 },618,[118,179,12,619,620],"src/js/books/books_view.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
     module.exports = {
-        "server_url": "http://10.4.136.91:8000"
+        "server_url": "http://10.4.143.166:8000"
     };
 },619,[],"univ_const.json");
 __d(function (global, _require, module, exports, _dependencyMap) {
@@ -76433,11 +76433,15 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
 	var _shared_utilities = _require(_dependencyMap[3], "../shared_components/shared_utilities");
 
+	var _reactNativeRestart = _require(_dependencyMap[4], "react-native-restart");
+
+	var _reactNativeRestart2 = _interopRequireDefault(_reactNativeRestart);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-	var DOMParser = _require(_dependencyMap[4], "xmldom").DOMParser;
+	var DOMParser = _require(_dependencyMap[5], "xmldom").DOMParser;
 
 	var host = _univ_const2.default.server_url;
 
@@ -76453,6 +76457,8 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 					console.log((0, _shared_utilities.objectToString)(error));
 				} else {
 					console.log("Stored creds successfully");
+
+					_reactNativeRestart2.default.Restart();
 				}
 			});
 		});
@@ -76685,6 +76691,8 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									type: actions.LOGOUT_SUCCESS,
 									payload: "none"
 								});
+
+								_reactNativeRestart2.default.Restart();
 							}
 						}).done();
 					} catch (error) {
@@ -76723,7 +76731,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			payload: "none"
 		});
 	}
-},620,[621,619,12,622,623],"src/js/account/ac_dispatchers.js");
+},620,[621,619,12,622,623,624],"src/js/account/ac_dispatchers.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -76755,6 +76763,18 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 		return returnString += arr[arr.length - 1] + "=" + Obj[arr[arr.length - 1]];
 	}
 },622,[],"src/js/shared_components/shared_utilities.js");
+__d(function (global, _require, module, exports, _dependencyMap) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  var _reactNative = _require(_dependencyMap[0], "react-native");
+
+  var RNRestart = _reactNative.NativeModules.RNRestart;
+  exports.default = RNRestart;
+},623,[12],"node_modules/react-native-restart/index.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	function DOMParser(options) {
 		this.options = options || {
@@ -76981,7 +77001,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
 	exports.XMLSerializer = _require(_dependencyMap[1], './dom').XMLSerializer;
 	exports.DOMParser = DOMParser;
-},623,[624,625],"node_modules/xmldom/dom-parser.js");
+},624,[625,626],"node_modules/xmldom/dom-parser.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	var nameStartChar = /[A-Z_a-z\xC0-\xD6\xD8-\xF6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD]/;
 	var nameChar = new RegExp("[\\-\\.0-9" + nameStartChar.source.slice(1, -1) + "\\u00B7\\u0300-\\u036F\\u203F-\\u2040]");
@@ -77645,7 +77665,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 	}
 
 	exports.XMLReader = XMLReader;
-},624,[],"node_modules/xmldom/sax.js");
+},625,[],"node_modules/xmldom/sax.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	function copy(src, dest) {
 		for (var p in src) {
@@ -78942,7 +78962,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
 	exports.DOMImplementation = DOMImplementation;
 	exports.XMLSerializer = XMLSerializer;
-},625,[],"node_modules/xmldom/dom.js");
+},626,[],"node_modules/xmldom/dom.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -79064,7 +79084,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 	}(_react2.Component));
 
 	exports.default = ConnectedBooksView;
-},626,[118,179,618,627,646,648,620],"src/js/books/books_connector.js");
+},627,[118,179,618,628,647,649,620],"src/js/books/books_connector.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
   'use strict';
 
@@ -79093,7 +79113,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
   exports.createProvider = _Provider.createProvider;
   exports.connectAdvanced = _connectAdvanced2.default;
   exports.connect = _connect2.default;
-},627,[628,631,634],"node_modules/react-redux/lib/index.js");
+},628,[629,632,635],"node_modules/react-redux/lib/index.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
   'use strict';
 
@@ -79208,7 +79228,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
   }
 
   exports.default = createProvider();
-},628,[118,129,629,630],"node_modules/react-redux/lib/components/Provider.js");
+},629,[118,129,630,631],"node_modules/react-redux/lib/components/Provider.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
   'use strict';
 
@@ -79237,7 +79257,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
     dispatch: _propTypes2.default.func.isRequired,
     getState: _propTypes2.default.func.isRequired
   });
-},629,[129],"node_modules/react-redux/lib/utils/PropTypes.js");
+},630,[129],"node_modules/react-redux/lib/utils/PropTypes.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
   'use strict';
 
@@ -79253,7 +79273,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
       throw new Error(message);
     } catch (e) {}
   }
-},630,[],"node_modules/react-redux/lib/utils/warning.js");
+},631,[],"node_modules/react-redux/lib/utils/warning.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
   'use strict';
 
@@ -79561,7 +79581,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
       return (0, _hoistNonReactStatics2.default)(Connect, WrappedComponent);
     };
   }
-},631,[512,632,118,633,629],"node_modules/react-redux/lib/components/connectAdvanced.js");
+},632,[512,633,118,634,630],"node_modules/react-redux/lib/components/connectAdvanced.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
   'use strict';
 
@@ -79592,7 +79612,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
   };
 
   module.exports = invariant;
-},632,[],"node_modules/invariant/browser.js");
+},633,[],"node_modules/invariant/browser.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
   "use strict";
 
@@ -79685,7 +79705,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
   }();
 
   exports.default = Subscription;
-},633,[],"node_modules/react-redux/lib/utils/Subscription.js");
+},634,[],"node_modules/react-redux/lib/utils/Subscription.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
   'use strict';
 
@@ -79813,7 +79833,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
   }
 
   exports.default = createConnect();
-},634,[631,635,636,642,643,644],"node_modules/react-redux/lib/connect/connect.js");
+},635,[632,636,637,643,644,645],"node_modules/react-redux/lib/connect/connect.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
   'use strict';
 
@@ -79848,7 +79868,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
     return true;
   }
-},635,[],"node_modules/react-redux/lib/utils/shallowEqual.js");
+},636,[],"node_modules/react-redux/lib/utils/shallowEqual.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
   'use strict';
 
@@ -79880,7 +79900,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
   }
 
   exports.default = [whenMapDispatchToPropsIsFunction, whenMapDispatchToPropsIsMissing, whenMapDispatchToPropsIsObject];
-},636,[637,640],"node_modules/react-redux/lib/connect/mapDispatchToProps.js");
+},637,[638,641],"node_modules/react-redux/lib/connect/mapDispatchToProps.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
   'use strict';
 
@@ -80308,7 +80328,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
   exports.applyMiddleware = applyMiddleware;
   exports.compose = compose;
   exports.__DO_NOT_USE__ActionTypes = ActionTypes;
-},637,[638],"node_modules/redux/lib/redux.js");
+},638,[639],"node_modules/redux/lib/redux.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
   'use strict';
 
@@ -80342,7 +80362,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
   var result = (0, _ponyfill2['default'])(root);
   exports['default'] = result;
-},638,[639],"node_modules/symbol-observable/lib/index.js");
+},639,[640],"node_modules/symbol-observable/lib/index.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	'use strict';
 
@@ -80370,7 +80390,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 	}
 
 	;
-},639,[],"node_modules/symbol-observable/lib/ponyfill.js");
+},640,[],"node_modules/symbol-observable/lib/ponyfill.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
   'use strict';
 
@@ -80434,7 +80454,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
       return proxy;
     };
   }
-},640,[641],"node_modules/react-redux/lib/connect/wrapMapToProps.js");
+},641,[642],"node_modules/react-redux/lib/connect/wrapMapToProps.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
   'use strict';
 
@@ -80460,7 +80480,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
       (0, _warning2.default)(methodName + '() in ' + displayName + ' must return a plain object. Instead received ' + value + '.');
     }
   }
-},641,[607,630],"node_modules/react-redux/lib/utils/verifyPlainObject.js");
+},642,[607,631],"node_modules/react-redux/lib/utils/verifyPlainObject.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
   'use strict';
 
@@ -80481,7 +80501,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
   }
 
   exports.default = [whenMapStateToPropsIsFunction, whenMapStateToPropsIsMissing];
-},642,[640],"node_modules/react-redux/lib/connect/mapStateToProps.js");
+},643,[641],"node_modules/react-redux/lib/connect/mapStateToProps.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
   'use strict';
 
@@ -80554,7 +80574,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
   }
 
   exports.default = [whenMergePropsIsFunction, whenMergePropsIsOmitted];
-},643,[641],"node_modules/react-redux/lib/connect/mergeProps.js");
+},644,[642],"node_modules/react-redux/lib/connect/mergeProps.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
   'use strict';
 
@@ -80667,7 +80687,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
     var selectorFactory = options.pure ? pureFinalPropsSelectorFactory : impureFinalPropsSelectorFactory;
     return selectorFactory(mapStateToProps, mapDispatchToProps, mergeProps, dispatch, options);
   }
-},644,[645],"node_modules/react-redux/lib/connect/selectorFactory.js");
+},645,[646],"node_modules/react-redux/lib/connect/selectorFactory.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
   'use strict';
 
@@ -80699,7 +80719,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
     verify(mapDispatchToProps, 'mapDispatchToProps', displayName);
     verify(mergeProps, 'mergeProps', displayName);
   }
-},645,[630],"node_modules/react-redux/lib/connect/verifySubselectors.js");
+},646,[631],"node_modules/react-redux/lib/connect/verifySubselectors.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -80796,7 +80816,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			payload: payload
 		});
 	}
-},646,[647,619,620,623],"src/js/books/books_dispatchers.js");
+},647,[648,619,620,624],"src/js/books/books_dispatchers.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -80805,7 +80825,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
   var SUCCESS_FETCHING_BOOKS = exports.SUCCESS_FETCHING_BOOKS = "finished_fetching_books";
   var ERROR_FETCHING = exports.ERROR_FETCHING = "error_fetching";
   var CLICKED_ITEM = exports.CLICKED_ITEM = "clicked_item";
-},647,[],"src/js/books/books_actions.js");
+},648,[],"src/js/books/books_actions.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -80824,7 +80844,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 		session: reducers.session,
 		guiControl: reducers.guiControl
 	}));
-},648,[649,637],"src/js/store.js");
+},649,[650,638],"src/js/store.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -80978,7 +80998,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 				return _extends({}, state);
 		}
 	}
-},649,[647,621],"src/js/reducers.js");
+},650,[648,621],"src/js/reducers.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -81136,7 +81156,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 	}(_react2.Component));
 
 	exports.default = ConnectedBookDetails;
-},650,[118,179,627,648,12],"src/js/books/book_details.js");
+},651,[118,179,628,649,12],"src/js/books/book_details.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -81258,7 +81278,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 		},
 		text: {}
 	});
-},651,[118,179,12,494],"src/js/past-papers/pp_mainstack.js");
+},652,[118,179,12,494],"src/js/past-papers/pp_mainstack.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -81314,7 +81334,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 		}
 	});
 	exports.default = AccountStack;
-},652,[118,494,653,654,660],"src/js/account/ac_stacknav.js");
+},653,[118,494,654,655,661],"src/js/account/ac_stacknav.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -81572,7 +81592,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 	}(_react2.Component));
 
 	exports.default = SignIn;
-},653,[118,179,12,648,627,620],"src/js/account/view_signin.js");
+},654,[118,179,12,649,628,620],"src/js/account/view_signin.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -81715,7 +81735,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 	}(_react2.Component));
 
 	exports.default = Switch;
-},654,[118,179,655,648,659,627],"src/js/account/ac_switch.js");
+},655,[118,179,656,649,660,628],"src/js/account/ac_switch.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -81806,7 +81826,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 		swipeEnabled: true
 	});
 	exports.default = AccountTabNav;
-},655,[494,656,657,658,118,569],"src/js/account/ac_tabnav.js");
+},656,[494,657,658,659,118,569],"src/js/account/ac_tabnav.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -81904,7 +81924,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			color: "gray"
 		}
 	});
-},656,[118,179,12],"src/js/account/my_books.js");
+},657,[118,179,12],"src/js/account/my_books.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -82002,7 +82022,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			color: "gray"
 		}
 	});
-},657,[118,179,12],"src/js/account/my_pastpapers.js");
+},658,[118,179,12],"src/js/account/my_pastpapers.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -82614,7 +82634,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			flex: 2
 		}
 	});
-},658,[118,179,12,627,648,622],"src/js/account/my_profile.js");
+},659,[118,179,12,628,649,622],"src/js/account/my_profile.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -82799,7 +82819,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			width: 100
 		}
 	});
-},659,[118,179,12],"src/js/account/ac_signupin.js");
+},660,[118,179,12],"src/js/account/ac_signupin.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -83068,7 +83088,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			fontWeight: "bold"
 		}
 	});
-},660,[118,179,12,627,648,569,620,661],"src/js/account/titlebar.js");
+},661,[118,179,12,628,649,569,620,662],"src/js/account/titlebar.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -83345,7 +83365,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			width: "100%"
 		}
 	});
-},661,[118,179,12,627,648,620],"src/js/account/account_menu.js");
+},662,[118,179,12,628,649,620],"src/js/account/account_menu.js");
 require(44);
 require(11);
 //# sourceMappingURL=index.map

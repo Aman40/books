@@ -4,9 +4,11 @@ import univ_const from "/var/www/html/books/BooksNativeApp/univ_const.json";
 const host = univ_const.server_url;
 import {AsyncStorage} from "react-native";
 import {objectToString} from "../shared_components/shared_utilities";
+import RNRestart from "react-native-restart";
 
 export /**/ function login(dispatch, payload) {
 	//Payload must be {email, password}
+	//Manual login. Exported to login screen
 	_login(dispatch, payload, (session_data)=>{
 		//Dispatch login success and store credentials
 		dispatch({
@@ -22,6 +24,7 @@ export /**/ function login(dispatch, payload) {
 					console.log(objectToString(error));
 				} else {
 					console.log("Stored creds successfully");
+					RNRestart.Restart();
 				}
 			}
 		);
@@ -35,10 +38,12 @@ module.exports.FAILED_REQ = FAILED_REQ;
 
 export /*to books_view*/ function createSession(context, dispatch) {
 	/*
+		Called when the app starts. OR
+		When a request fails due to an expired session
 		1. Check if user is logged in, logs in, if not.
 		2. If there exist stored credentials, login automatically.
-		Otherwise, prompt manual login. Don't resume last request.
-		Navigate to initial route.
+		Otherwise, (don't prompt manual login). Don't resume last request.
+		Reload the app.
 		3. If context was from failed request, resume request upon success
 		If context is start up, simply load initial route as "ready"
 		4. Context argument should be object of structure:
@@ -112,15 +117,19 @@ export /*to books_view*/ function createSession(context, dispatch) {
 		}
 	}
 	else {
+		//Will come in handy to handle expired requests and resume the last request.
 		_autoLoginWithCreds(context, dispatch);
 	}
 }
 
 function _autoLoginWithCreds(context, dispatch) {
-	//Checks for stored credentials and auto logs in if found.
-	//Else, prompts for manual login by dispatching action to navigate to
-	//Manual login view. Code reuse is why this is a function.
-
+	/*
+		Checks for stored credentials and auto logs in if found.
+		What happens next will shock you! Depending on context.type, the app's
+		javascrips bundle reloads OR calls the last failed request.
+		Else, prompts for manual login by dispatching action to navigate to
+		Manual login view. Code reuse is why this is a function.
+	*/
 	try {
 		let credentials = null;
 		AsyncStorage.getItem("creds", (error, result)=>{
@@ -197,6 +206,7 @@ function _login(dispatch, credentials, callback) {
 		1. Sending the login credentials to the db
 		2. Sending session data to the store and
 		3. Call the callback with user_data argument.
+		4. Dispatches appropriate errors upon failure.
 	*/
 	//Payload must be {email, password}
 	let fd = new FormData();
@@ -291,7 +301,7 @@ export function logout(dispatch) {
 					console.log("Attempting to delete creds");
 					AsyncStorage.removeItem("creds").then((error)=>{
 						if(error) {
-							//Re-login with the creds
+							//Re-login with the creds. Might as well
 							console.log("(then)Error deleting creds, so re-logging in");
 							console.log(`Error: ${error}`);
 							const context = {
@@ -306,6 +316,7 @@ export function logout(dispatch) {
 								type: actions.LOGOUT_SUCCESS,
 								payload: "none",
 							});
+							RNRestart.Restart();
 						}
 					}).done();
 				} catch(error) {

@@ -31,10 +31,17 @@ export function fetchBooks(dispatch) {
 				//No results
 				//TODO
 			} else if(srv_res_status===9) {
-				//User is not logged in. The magic begins. 
-				//call the create session function. It will check for stored creds, and
-				//if any, it will log in automatically AND resume the last request. 
-				//otherwise, it will prompt manual login
+				/*
+					User is not logged in. The magic begins. 
+					call the create session function. It will check for stored creds, and
+					if any, it will log in automatically AND resume the last request. 
+					otherwise, it will prompt manual login
+					TODO: This will never be applicable here. Logging in is not a requirement.
+					Code in this block will,therefore, never run.
+					createSession will, however be applicable for other requests for which
+					a session is necessary. Especially useful when the session expires and
+					the request fails.
+				*/
 				console.log("A FAILED REQUEST. NOT LOGGED IN!");
 				let context = {
 					type: accountDispatchers.FAILED_REQ,

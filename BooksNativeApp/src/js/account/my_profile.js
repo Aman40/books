@@ -7,26 +7,31 @@ import {
 } from "react-native";
 import {connect, Provider} from "react-redux";
 import store from "../store";
-import {objectToString} from "../shared_components/shared_utilities";
+//import {objectToString} from "../shared_components/shared_utilities";
 
 class _MyProfile /*to ac_tabnav.js*/ extends Component {
 	render() {
-		console.log(objectToString(this.props.userData));
 		return (
 			<View style={styles.wrapper}>
 				<View style={styles.statsBar}>
 					<View style={styles.num_books}>
-						<Text>
+						<Text
+							style={styles.tbtext}
+						>
 							#books
 						</Text>
 					</View>
 					<View style={styles.num_papers}>
-						<Text>
+						<Text
+							style={styles.tbtext}
+						>
 							#papers
 						</Text>
 					</View>
 					<View style={styles.num_notifs}>
-						<Text>
+						<Text
+							style={styles.tbtext}
+						>
 							#notifs
 						</Text>
 					</View>
@@ -169,14 +174,23 @@ const styles = StyleSheet.create(
 			alignItems: "center",
 			height: 42
 		},
+		tbtext: {
+			fontSize: 16,
+		},
 		num_books: {
 			flex: 1,
+			justifyContent: "center",
+			alignItems: "center",
 		},
 		num_papers: {
 			flex: 1,
+			justifyContent: "center",
+			alignItems: "center",
 		},
 		num_notifs: {
 			flex: 1,
+			justifyContent: "center",
+			alignItems: "center",
 		},
 		scroll: {
 			justifyContent: "flex-start",
