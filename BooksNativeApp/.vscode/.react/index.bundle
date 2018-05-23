@@ -73726,12 +73726,38 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 				console.log(this.props.searchMode ? "SEARCH MODE" : "NORMAL MODE");
 				var books = [];
 
-				if (this.props.searchMode) {} else {
+				if (this.props.searchMode) {
+					if (this.props.books.isSearching) {}
+
+					if (this.props.books.successSearching) {
+						if (this.props.books.searchResultsArr.length > 0) {
+							var _loop = function _loop(i) {
+								books.push(_react3.default.createElement(BookView, {
+									showDetails: function showDetails() {
+										_this2.props.showItemDetails(i);
+
+										_this2.props.navigation.navigate("BookDetails");
+									},
+									key: _this2.props.books.searchResultsArr[i].BookID,
+									book: _this2.props.books.searchResultsArr[i],
+									__source: {
+										fileName: _jsxFileName,
+										lineNumber: 62
+									}
+								}));
+							};
+
+							for (var i = 0; i < this.props.books.searchResultsArr.length; i++) {
+								_loop(i);
+							}
+						} else {}
+					} else {}
+				} else {
 					if (this.props.books.isFetching) {}
 
 					if (this.props.books.successFetching) {
 						if (this.props.books.booksArr.length > 0) {
-							var _loop = function _loop(i) {
+							var _loop2 = function _loop2(i) {
 								books.push(_react3.default.createElement(BookView, {
 									showDetails: function showDetails() {
 										_this2.props.showItemDetails(i);
@@ -73742,13 +73768,13 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									book: _this2.props.books.booksArr[i],
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 63
+										lineNumber: 90
 									}
 								}));
 							};
 
 							for (var i = 0; i < this.props.books.booksArr.length; i++) {
-								_loop(i);
+								_loop2(i);
 							}
 						} else {}
 					} else {}
@@ -73760,7 +73786,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						style: styles.container,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 81
+							lineNumber: 108
 						}
 					},
 					_react3.default.createElement(
@@ -73768,7 +73794,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						{
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 82
+								lineNumber: 109
 							}
 						},
 						books
@@ -73803,7 +73829,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						style: styles.bk_wrapper,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 96
+							lineNumber: 123
 						}
 					},
 					_react3.default.createElement(
@@ -73812,7 +73838,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							style: styles.bk_imageWrapper,
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 100
+								lineNumber: 127
 							}
 						},
 						_react3.default.createElement(_reactNative.Image, {
@@ -73824,7 +73850,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							},
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 101
+								lineNumber: 128
 							}
 						})
 					),
@@ -73834,7 +73860,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							style: styles.bk_contentWrapper,
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 108
+								lineNumber: 135
 							}
 						},
 						_react3.default.createElement(
@@ -73843,7 +73869,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								style: styles.bk_contentRow,
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 109
+									lineNumber: 136
 								}
 							},
 							_react3.default.createElement(
@@ -73854,7 +73880,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									}),
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 110
+										lineNumber: 137
 									}
 								},
 								this.props.book.Title
@@ -73865,7 +73891,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.bk_contentValue,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 118
+										lineNumber: 145
 									}
 								},
 								"by: ",
@@ -73877,7 +73903,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.bk_contentValue,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 121
+										lineNumber: 148
 									}
 								},
 								this.props.book.Language === "english" ? "English" : "Japanese"
@@ -73890,7 +73916,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									}),
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 124
+										lineNumber: 151
 									}
 								},
 								this.props.book.Cover === "paper_back" ? "Paperback" : "Hardcover"
@@ -73904,7 +73930,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									}),
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 132
+										lineNumber: 159
 									}
 								},
 								"JPY " + this.props.book.Price
@@ -73915,7 +73941,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.bk_contentValue,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 141
+										lineNumber: 168
 									}
 								},
 								"Pages: " + this.props.book.PageNo
@@ -73974,7 +74000,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 },570,[118,179,12,571,572],"src/js/books/books_view.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
     module.exports = {
-        "server_url": "http://10.4.143.241:8000"
+        "server_url": "http://192.168.0.14:8000"
     };
 },571,[],"univ_const.json");
 __d(function (global, _require, module, exports, _dependencyMap) {
@@ -78419,7 +78445,11 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			count: 50,
 			booksArr: [],
 			clickedOn: 0,
-			searchStatusString: ""
+			isSearching: false,
+			successSearching: false,
+			searchStatusString: "",
+			searchErrorString: "",
+			searchResultsArr: []
 		};
 		var action = arguments[1];
 
@@ -78448,6 +78478,27 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			case booksActions.CLICKED_ITEM:
 				return _extends({}, state, {
 					clickedOn: action.payload
+				});
+
+			case booksActions.SEARCH_START:
+				return _extends({}, state, {
+					isSearching: true,
+					searchStatusString: "Searching. Please wait..."
+				});
+
+			case booksActions.SEARCH_SUCCESS:
+				return _extends({}, state, {
+					searchResultsArr: action.payload,
+					successSearching: true,
+					isSearching: false,
+					searchStatusString: "Found " + action.payload.length.toString() + " results"
+				});
+
+			case booksActions.SEARCH_ERROR:
+				return _extends({}, state, {
+					isSearching: false,
+					searchErrorString: action.payload,
+					searchStatusString: "An error occurred. " + action.payload
 				});
 
 			default:
@@ -79620,7 +79671,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
 	function mapStateToProps(state) {
 		return {
-			book: state.books.booksArr[state.books.clickedOn]
+			book: state.guiControl.searchMode ? state.books.searchResultsArr[state.books.clickedOn] : state.books.booksArr[state.books.clickedOn]
 		};
 	}
 
@@ -79656,14 +79707,14 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						store: _store2.default,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 353
+							lineNumber: 355
 						}
 					},
 					_react3.default.createElement(_ConnectedBookDetails, {
 						navigation: this.props.navigation,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 356
+							lineNumber: 358
 						}
 					})
 				);
@@ -83946,8 +83997,10 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 				}));
 			};
 
-			_this.handleSubmit = function () {
+			_this.handleSearch = function () {
 				console.log("Searching for " + _this.state.query);
+
+				_this.props.searchBook(_this.state.query);
 			};
 
 			_this.handleFocus = function (event) {
@@ -83993,7 +84046,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						style: styles.wrapper,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 77
+							lineNumber: 78
 						}
 					},
 					_react3.default.createElement(
@@ -84002,7 +84055,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							style: styles.titleTop,
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 78
+								lineNumber: 79
 							}
 						},
 						_react3.default.createElement(
@@ -84011,7 +84064,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								style: styles.left,
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 79
+									lineNumber: 80
 								}
 							},
 							_react3.default.createElement(
@@ -84022,7 +84075,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									}),
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 80
+										lineNumber: 81
 									}
 								},
 								"III"
@@ -84034,7 +84087,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								style: styles.center,
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 90
+									lineNumber: 91
 								}
 							},
 							_react3.default.createElement(
@@ -84043,7 +84096,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.searchbar,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 92
+										lineNumber: 93
 									}
 								},
 								_react3.default.createElement(_reactNative.TextInput, {
@@ -84059,7 +84112,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									placeholder: "Search for book...",
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 93
+										lineNumber: 94
 									}
 								}),
 								_react3.default.createElement(
@@ -84068,16 +84121,16 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 										style: styles.submit,
 										__source: {
 											fileName: _jsxFileName,
-											lineNumber: 101
+											lineNumber: 102
 										}
 									},
 									_react3.default.createElement(
 										_reactNative.TouchableOpacity,
 										{
-											onPress: this.handleSubmit,
+											onPress: this.handleSearch,
 											__source: {
 												fileName: _jsxFileName,
-												lineNumber: 102
+												lineNumber: 103
 											}
 										},
 										_react3.default.createElement(_Ionicons2.default, {
@@ -84086,7 +84139,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 											color: "black",
 											__source: {
 												fileName: _jsxFileName,
-												lineNumber: 106
+												lineNumber: 107
 											}
 										})
 									)
@@ -84100,7 +84153,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								onPress: this.showMenu,
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 116
+									lineNumber: 117
 								}
 							},
 							_react3.default.createElement(
@@ -84108,7 +84161,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								{
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 120
+										lineNumber: 121
 									}
 								},
 								_react3.default.createElement(_Ionicons2.default, {
@@ -84117,7 +84170,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									color: "black",
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 121
+										lineNumber: 122
 									}
 								})
 							)
@@ -84129,7 +84182,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							style: styles.titleBottom,
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 129
+								lineNumber: 130
 							}
 						},
 						_react3.default.createElement(
@@ -84138,7 +84191,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								style: styles.results_meta,
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 131
+									lineNumber: 132
 								}
 							},
 							_react3.default.createElement(
@@ -84146,7 +84199,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								{
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 133
+										lineNumber: 134
 									}
 								},
 								this.props.searchMode ? "Search for a book" : this.props.searchStatusMsg
@@ -84158,7 +84211,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								style: styles.filter,
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 141
+									lineNumber: 142
 								}
 							},
 							_react3.default.createElement(
@@ -84169,7 +84222,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									},
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 143
+										lineNumber: 144
 									}
 								},
 								"Filter  "
@@ -84180,7 +84233,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								color: "black",
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 146
+									lineNumber: 147
 								}
 							})
 						)
@@ -84230,14 +84283,14 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						store: _store2.default,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 180
+							lineNumber: 181
 						}
 					},
 					_react3.default.createElement(ConnectedTitleBar, {
 						navigation: this.props.navigation,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 183
+							lineNumber: 184
 						}
 					})
 				);

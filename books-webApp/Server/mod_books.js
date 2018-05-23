@@ -632,7 +632,7 @@ router.use("/search", (req, res)=>{
 			console.log("Couldn't connect to the db");
 			//Return appropriate error to user. TODO LATER
 		}
-		const query = url.parse(req.url, true).query;
+		const query = url.parse(req.url, true).query.query;
 		const fetch_max = 25; //Others will be 50, 75, 100, all specified by the client.
 		const sql = "SELECT Transient.BookID AS BookID," +
             "Transient.UserID AS UserID," +
@@ -656,11 +656,10 @@ router.use("/search", (req, res)=>{
             "Transient.BookSerial AS BookSerial," +
             "BookImgs.ImageURI AS ImageURI," +
 			"BookImgs.ImgID AS ImgID FROM (SELECT * FROM `Books`"+
-			"WHERE MATCH(Title, Authors, Description) AGAINST("+query+")"+
+			"WHERE MATCH(Title, Authors, Description) AGAINST('"+query+"')"+
 			" ORDER BY `BookSerial` " +
             "DESC LIMIT "+fetch_max+") AS Transient LEFT JOIN " +
             "BookImgs ON Transient.BookID=BookImgs.BookID ORDER BY `BookSerial`";
-
 		con.query(sql, (err, result)=>{
 			if(err) {
 				//Errors unrelated to the user

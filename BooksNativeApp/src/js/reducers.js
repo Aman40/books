@@ -6,11 +6,15 @@ export function books(
 		isFetching: false, //Started fetching?
 		successFetching: false, //Ended successfully
 		fetchErrorString: null,
-		offSet: 0, //From the start
-		count: 50, //Fetch 50 at a time
+		offSet: 0, //From the start - shared
+		count: 50, //Fetch 50 at a time - shared
 		booksArr: [],
-		clickedOn: 0,
+		clickedOn: 0, //Shared
+		isSearching: false,
+		successSearching: false,
 		searchStatusString: "",
+		searchErrorString: "",
+		searchResultsArr: [],
 	},action
 ) {
 	switch (action.type) {
@@ -39,6 +43,27 @@ export function books(
 		return {
 			...state,
 			clickedOn: action.payload,
+		};
+	case booksActions.SEARCH_START:
+		return {
+			...state,
+			isSearching: true,
+			searchStatusString: "Searching. Please wait...",
+		};
+	case booksActions.SEARCH_SUCCESS:
+		return {
+			...state,
+			searchResultsArr: action.payload,
+			successSearching: true,
+			isSearching: false,
+			searchStatusString: `Found ${action.payload.length.toString()} results`,
+		};
+	case booksActions.SEARCH_ERROR:
+		return {
+			...state,
+			isSearching: false,
+			searchErrorString: action.payload,
+			searchStatusString: "An error occurred. "+action.payload,
 		};
 	default:
 		return state;

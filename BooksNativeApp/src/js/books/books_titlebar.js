@@ -30,9 +30,10 @@ class _TitleBar extends Component {
 			query: text,
 		});
 	}
-	handleSubmit=()=>{
+	handleSearch=()=>{
 		//Call the dispatcher with the query
 		console.log("Searching for "+this.state.query);
+		this.props.searchBook(this.state.query);
 	}
 	handleFocus=(event)=>{
 		/**
@@ -100,7 +101,7 @@ class _TitleBar extends Component {
 							/>
 							<View style={styles.submit}>
 								<TouchableOpacity
-									onPress={this.handleSubmit}
+									onPress={this.handleSearch}
 								>
 									{/*A search button icon*/}
 									<Ionicons

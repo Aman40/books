@@ -47,6 +47,33 @@ export default class BooksView extends Component {
 		//Get the books or error if none.
 		if(this.props.searchMode) {
 			//Only display results from the search
+			//Display all results
+			if(this.props.books.isSearching) {
+				//Display the "wait" spinner
+			}
+			if(this.props.books.successSearching) {
+				//Finished fetching. Check if there are any
+				//books.
+				if(this.props.books.searchResultsArr.length>0) {
+					//Some books were found
+					//Render them in a separate component.
+					for(let i=0;i<this.props.books.searchResultsArr.length;i++) {
+						books.push(
+							<BookView
+								showDetails={()=>{
+									this.props.showItemDetails(i);
+									this.props.navigation.navigate("BookDetails");
+								}}
+								key={this.props.books.searchResultsArr[i].BookID}
+								book={this.props.books.searchResultsArr[i]}
+							/>);
+					}
+				} else {
+					//Report an error.
+				}
+			} else {
+				//Error is implied
+			}
 		} else {
 			//Display all results
 			if(this.props.books.isFetching) {

@@ -331,7 +331,9 @@ const styles = StyleSheet.create({
 //connect it.
 function mapStateToProps(state) {
 	return {
-		book: state.books.booksArr[state.books.clickedOn],
+		book: state.guiControl.searchMode?
+			state.books.searchResultsArr[state.books.clickedOn]:
+			state.books.booksArr[state.books.clickedOn],
 	};
 }
 function mapDispatchToProps(dispatch) {
