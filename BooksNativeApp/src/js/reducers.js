@@ -10,6 +10,7 @@ export function books(
 		count: 50, //Fetch 50 at a time
 		booksArr: [],
 		clickedOn: 0,
+		searchStatusString: "",
 	},action
 ) {
 	switch (action.type) {
@@ -17,19 +18,22 @@ export function books(
 		return {
 			...state,
 			isFetching: true,
+			searchStatusString: "Fetching books. Please wait...",
 		};
 	case booksActions.SUCCESS_FETCHING_BOOKS:
 		return {
 			...state,
 			booksArr: action.payload,
 			successFetching: true,
-			isFetching: false
+			isFetching: false,
+			searchStatusString: `Found ${action.payload.length.toString()} results`,
 		};
 	case booksActions.ERROR_FETCHING:
 		return {
 			...state,
 			isFetching: false,
 			fetchErrorString: action.payload,
+			searchStatusString: "An error occurred. "+action.payload,
 		};
 	case booksActions.CLICKED_ITEM:
 		return {
@@ -112,6 +116,7 @@ export function session(state={
 export function guiControl(
 	state={
 		showAccountHeaderMenu: false,
+		searchMode: false,
 	},
 	action
 ){
@@ -125,6 +130,11 @@ export function guiControl(
 		return {
 			...state,
 			showAccountHeaderMenu: false,
+		};
+	case booksActions.TOGGLE_SEARCH_MODE:
+		return {
+			...state,
+			searchMode: !state.searchMode,
 		};
 	default:
 		return {

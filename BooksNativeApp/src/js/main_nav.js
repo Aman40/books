@@ -14,7 +14,7 @@ let MainTabNav = TabNavigator(
 				title: "Books",
 				tabBarIcon: ({focused, tintColor})=>{
 					return (<Ionicons
-						name="ios-book-outline"
+						name="ios-book"
 						size={25}
 						color={tintColor}
 					/>);
@@ -27,7 +27,7 @@ let MainTabNav = TabNavigator(
 				title: "Past Papers",
 				tabBarIcon: ({focused, tintColor})=>{
 					return (<Ionicons
-						name={"ios-paper-outline"}
+						name={"ios-paper"}
 						size={25}
 						color={tintColor}
 					/>);
@@ -40,7 +40,7 @@ let MainTabNav = TabNavigator(
 				title: "Account",
 				tabBarIcon: ({focused, tintColor})=>{
 					return (<Ionicons
-						name={"ios-person-outline"}
+						name={"ios-person"}
 						size={25}
 						color={tintColor}
 					/>);
@@ -50,8 +50,8 @@ let MainTabNav = TabNavigator(
 	},
 	{
 		tabBarOptions: {
-			activeTintColor: "blue",
-			inactiveTintColor: "gray"
+			activeTintColor: "teal",
+			inactiveTintColor: "#506060"
 		},
 		tabBarComponent: TabBarBottom,
 		tabBarPosition: "bottom",

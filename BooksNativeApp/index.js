@@ -1,4 +1,7 @@
-import { AppRegistry } from 'react-native';
-import App from './App';
+import { AppRegistry } from "react-native";
+import App from "./App";
+import { YellowBox } from "react-native";
 
-AppRegistry.registerComponent('BooksNativeApp', () => App);
+YellowBox.ignoreWarnings(["Warning: isMounted(...) is deprecated", "Module RCTImageLoader"]);
+
+AppRegistry.registerComponent("BooksNativeApp", () => App);

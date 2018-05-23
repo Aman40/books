@@ -11,6 +11,7 @@ function mapStateToProps(state) {
 	return {
 		books: state.books,
 		session: state.session,
+		searchMode: state.guiControl.searchMode,
 	};
 }
 

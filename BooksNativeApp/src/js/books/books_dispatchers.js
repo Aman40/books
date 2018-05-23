@@ -25,9 +25,8 @@ export function fetchBooks(dispatch) {
 					type: booksActions.SUCCESS_FETCHING_BOOKS,
 					payload: booksArr, //Array
 				});
-
 				//TODO
-			} else if(srv_res_status===1) {
+			} else if(srv_res_status===3) {
 				//No results
 				//TODO
 			} else if(srv_res_status===9) {
@@ -36,6 +35,7 @@ export function fetchBooks(dispatch) {
 					call the create session function. It will check for stored creds, and
 					if any, it will log in automatically AND resume the last request. 
 					otherwise, it will prompt manual login
+
 					TODO: This will never be applicable here. Logging in is not a requirement.
 					Code in this block will,therefore, never run.
 					createSession will, however be applicable for other requests for which
@@ -101,3 +101,80 @@ export function showItemDetails(dispatch, payload) {
 	});
 }
 
+export function searchBook(dispatch, payload){
+	/**
+	 * Exported to books_titlebar.js
+	 * This searches the database for a specific book title
+	 * and returns several books ordered by relevance.
+	 * Other possible sorting orders: Price, Closest first
+	 * payload should contain the string to be searched.
+	 */
+	let xhr = new XMLHttpRequest();
+	xhr.responseType = "text";
+	xhr.onreadystatechange = function() {
+		if(this.readyState===4 && this.status===200) {
+			//OK. Get the srv_res_status
+			let Parser = new DOMParser();
+			let xmlDoc = Parser.parseFromString(this.responseText);
+			let srv_res_status = parseInt(xmlDoc.getElementsByTagName("srv_res_status")[0].childNodes[0].nodeValue);
+			console.log("Account server response status: "+srv_res_status);
+			/**
+			 * Srv_res_statuses:
+			 * 0: Found results
+			 * 3: No results
+			 * 4: server error
+			 * 8: The query failed validation checks. 
+			 * Malcious intent or something. 
+			 */
+			if(srv_res_status===0) {
+				//Found results
+				console.log("Found results");
+				let booksArr = JSON.parse(xmlDoc.getElementsByTagName("bks_info")[0].childNodes[0].nodeValue);
+
+				dispatch({
+					type: booksActions.SEARCH_SUCCESS,
+					payload: booksArr,
+				});
+			} else if(srv_res_status===3) {
+				//No results
+				dispatch({
+					type: booksActions.SEARCH_SUCCESS,
+					payload: [],
+				});
+			} else if(srv_res_status===8) {
+				//Query failed validation
+			} else {
+				//No idea what this could be. Dispatch something 
+				//for now anyway
+				console.log(`Error: srv_res_status: ${srv_res_status}`);
+			}
+		} else if(this.readyState===4) {
+			//Server issues or network.
+			console.log("Error fetching.");
+			dispatch({
+				type: booksActions.SEARCH_ERROR,
+				payload: `Possible internal server error. Status: ${this.status}`,
+			});
+		}
+	};
+	try {
+		xhr.open("POST", `${host}/books/search?query=${payload}`, true);
+		xhr.send();
+	} catch(err) {
+		console.log("Error");
+		dispatch({
+			type: booksActions.SEARCH_ERROR,
+			payload: "Failed to open or send the request."
+		});
+	}
+	dispatch({
+		type: booksActions.SEARCH_START,
+		payload: null,
+	});
+}
+export function toggleSearchMode(dispatch){
+	dispatch({
+		type: booksActions.TOGGLE_SEARCH_MODE,
+		payload: null,
+	});
+}

@@ -122,6 +122,36 @@ router.post("/alter", [ /*Validate form*/
 	}
 });
 
+router.post("/search",[
+	check("query")
+		.optional({nullable: true, checkFalsy: true})
+		.trim()
+		.escape()
+		.isLength({max: 255})
+		.withMessage("QUERY_TOO_LONG")
+],(req, res, next)=>{
+	/*res.writeHead(200, {'Content-Type':'text/html', 'Access-Control-Allow-Origin': 'http://localhost:3000'});*/
+	res.write("<?xml version='1.0' encoding='UTF-8' ?>");
+	res.statusCode = 200;
+	res.write(`<cookie>${res.getHeader("Set-Cookie")}</cookie>`); //DEV
+	
+	//Check the validation result here
+	let result = validationResult(req);
+	if(result.isEmpty()) {
+		next();
+	} else {
+		//Format the errors and echo them back to the client
+		//The query ends here
+		//Return an array of validation results/errors. Only the first error
+		let error_array = result.array({onlyFirstError: true});
+	
+		res.write(`<err_arr>${JSON.stringify(error_array)}</err_arr>`);
+		res.write("<msg>There was a problem with the form entries</msg>");
+	
+		res.end("<srv_res_status>8</srv_res_status>");
+	}
+});
+
 router.post("/alter/add", function (req, res) {
 	res.write("<?xml version='1.0' encoding='UTF-8' ?>");
 	res.write(`<cookie>${res.getHeader("Set-Cookie")}</cookie>`); //DEV
@@ -551,6 +581,83 @@ router.use("/all", (req, res, next)=>{
             "Transient.BookSerial AS BookSerial," +
             "BookImgs.ImageURI AS ImageURI," +
             "BookImgs.ImgID AS ImgID FROM (SELECT * FROM `Books`  ORDER BY `BookSerial` " +
+            "DESC LIMIT "+fetch_max+") AS Transient LEFT JOIN " +
+            "BookImgs ON Transient.BookID=BookImgs.BookID ORDER BY `BookSerial`";
+
+		con.query(sql, (err, result)=>{
+			if(err) {
+				//Errors unrelated to the user
+				console.log(err.msg);
+				res.write("<srv_res_status>4</srv_res_status>");
+				res.write(`<err>${err.name}</err>`);
+				res.end(`<err>${err.message}</err>`); //Perhaps attempted SQL injection?
+				return;
+			}
+			if(result.length===0) {
+				//The entire db is empty!
+				res.write("<srv_res_status>3</srv_res_status>");
+				res.end("<msg>No results found</msg>");
+				return;
+			} else {
+				let Books = [];
+				let _tmpBook = {};
+				_tmpBook.images = [];
+				let curr__book = result.pop();
+				res.write(`<bks_info>${JSON.stringify(refactor_book_results(Books, result, curr__book, _tmpBook))}</bks_info>`);
+				res.write("<msg>Got your books, boss! Dev</msg>");
+				res.end("<srv_res_status>0</srv_res_status>");
+			}
+		});
+	});
+});
+
+router.use("/search", (req, res)=>{
+	/**
+	 * Searches for books matching a certain query using mysql's FULL TEXT WITH 
+	 * NATURAL LANGUAGE functionality against Books(Title, Authors, Description). Sort
+	 * results according to relevance
+	 */
+	res.write("<?xml version='1.0' encoding='UTF-8' ?>");
+	res.write(`<cookie>${res.getHeader("Set-Cookie")}</cookie>`); //DEV
+	//Fetch 25 - 50 books at a time depending on how many the user specifies with
+	//The "show" filter
+	const con = mysql.createConnection({
+		host: "localhost",
+		user: "aman",
+		password: "password",
+		database: "books"
+	});
+	con.connect((err)=>{
+		if(err) {
+			console.log("Couldn't connect to the db");
+			//Return appropriate error to user. TODO LATER
+		}
+		const query = url.parse(req.url, true).query;
+		const fetch_max = 25; //Others will be 50, 75, 100, all specified by the client.
+		const sql = "SELECT Transient.BookID AS BookID," +
+            "Transient.UserID AS UserID," +
+            "Transient.Title AS Title," +
+            "Transient.Edition AS Edition," +
+            "Transient.Authors AS Authors," +
+            "Transient.Description AS Description," +
+            "Transient.Language as Language,"+
+            "Transient.Cover AS Cover," +
+            "Transient.PageNo AS PageNo," +
+            "Transient.Publisher AS Publisher," +
+            "Transient.Published AS Published," +
+            "Transient.ISBN as ISBN," +
+            "Transient.New AS `New`," +
+            "Transient.Condition AS `Condition`," +
+            "Transient.Location AS `Location`," +
+            "Transient.Price AS `Price`," +
+            "Transient.Deliverable AS Deliverable," +
+            "Transient.DateAdded AS DateAdded," +
+            "Transient.OfferExpiry AS OfferExpiry," +
+            "Transient.BookSerial AS BookSerial," +
+            "BookImgs.ImageURI AS ImageURI," +
+			"BookImgs.ImgID AS ImgID FROM (SELECT * FROM `Books`"+
+			"WHERE MATCH(Title, Authors, Description) AGAINST("+query+")"+
+			" ORDER BY `BookSerial` " +
             "DESC LIMIT "+fetch_max+") AS Transient LEFT JOIN " +
             "BookImgs ON Transient.BookID=BookImgs.BookID ORDER BY `BookSerial`";
 

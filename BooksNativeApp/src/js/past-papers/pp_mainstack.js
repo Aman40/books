@@ -5,7 +5,7 @@ import {
 	Text
 } from "react-native";
 import {StackNavigator} from "react-navigation";
-
+//import MapView from "react-native-maps";
 class PastPapersHome extends Component {
 	constructor(props) {
 		super(props);
@@ -24,7 +24,7 @@ class PastPapersHome extends Component {
 	}
 }
 
-export default PastPaperStack = StackNavigator(
+const PastPaperStack = StackNavigator(
 	{
 		PastPapersHome: {
 			screen: PastPapersHome,
@@ -37,6 +37,8 @@ export default PastPaperStack = StackNavigator(
 
 	}
 );
+export default PastPaperStack;
+
 const styles = StyleSheet.create({
 	wrapper: {
 		flex: 1,

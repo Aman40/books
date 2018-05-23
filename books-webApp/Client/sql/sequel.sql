@@ -81,3 +81,5 @@ CREATE TABLE IF NOT EXISTS BookImgs
   PRIMARY KEY (ImgID),
   FOREIGN KEY (BookID) REFERENCES Books(BookID)
 );
+
+ALTER TABLE Books ADD FULLTEXT(Title, Authors, Description);

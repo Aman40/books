@@ -3,24 +3,24 @@ text input elements. Just wrap your text input component in AvoidKeyboard
 and then sit back and enjoy.
 You're welcome!
 */
-import React, {Component} from 'react'
+import React, {Component} from "react";
 import {
 	View,
 	Keyboard,
 	Dimensions,
 	StyleSheet
-} from 'react-native'
+} from "react-native";
 export default class AvoidKeyboard extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			kbdDidShow: false,
 			paddedStyle: ""
-		}
+		};
 	}
 	componentDidMount=()=>{
-		this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
-		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
+		this.keyboardDidShowListener = Keyboard.addListener("keyboardDidShow", this._keyboardDidShow);
+		this.keyboardDidHideListener = Keyboard.addListener("keyboardDidHide", this._keyboardDidHide);
 	}
 
 	componentWillUnmount=()=>{
@@ -35,8 +35,8 @@ export default class AvoidKeyboard extends Component {
 		//Immediately change the padding
 		setTimeout(()=>{
 			this.avoidkeyboard.measure((offx, offy, width, height, pgx, pgy)=>{
-				let fromBottom = Dimensions.get('window').height - (pgy + height);
-				kbd_height = e.endCoordinates.height
+				let fromBottom = Dimensions.get("window").height - (pgy + height);
+				let kbd_height = e.endCoordinates.height;
 				if(kbd_height>fromBottom) {
 					//The keyboard is obstructing the input
 					//get the original style and adding padding to the bottom
@@ -50,8 +50,8 @@ export default class AvoidKeyboard extends Component {
 						paddedStyle: paddedStyle
 					});
 				}
-			})
-		}, 0)
+			});
+		}, 0);
 	}
 
 	_keyboardDidHide=()=>{
@@ -66,7 +66,7 @@ export default class AvoidKeyboard extends Component {
 			>
 				{this.props.children}
 			</View>
-		)
+		);
 	}
 }
 // NOTE: Don't forget to bind functions.

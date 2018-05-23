@@ -1,17 +1,25 @@
 //This modules imports all the
-import {StackNavigator} from 'react-navigation';
-import React, {Component} from 'react';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import BooksView from './books_view'
-import ConnectedBooksView from './books_connector'
-import ConnectedBookDetails from './book_details'
+import {StackNavigator} from "react-navigation";
+import React from "react";
+import ConnectedBooksView from "./books_connector";
+import ConnectedBookDetails from "./book_details";
+import TitleBar from "./books_titlebar";
+//import { objectToString } from "../shared_components/shared_utilities";
 
-export default BookDetailsStack = StackNavigator(
+const BookDetailsStack = StackNavigator(
 	{
 		Home: {
 			screen: ConnectedBooksView,
-			navigationOptions: {
-				title: "Add Search Bar",
+			navigationOptions: ({navigation, screenProps})=>{
+				return {
+					header: (headerProps)=>{
+						return (<TitleBar
+							navigation={navigation}
+							screenProps={screenProps}
+							headerProps={headerProps}
+						/>);
+					}
+				};
 			}
 		},
 		BookDetails: {
@@ -24,4 +32,8 @@ export default BookDetailsStack = StackNavigator(
 	{
 		// TODO:
 	}
-)
+);
+export default BookDetailsStack;
+/*
+ * Create a header for the stack navigator.
+ */

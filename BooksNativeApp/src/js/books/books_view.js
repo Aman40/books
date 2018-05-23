@@ -35,54 +35,50 @@ export default class BooksView extends Component {
 			};
 			this.props.createSession(context);
 		} 
-		this.props.fetchBooks();
+		if(!this.props.searchMode) {
+			this.props.fetchBooks();
+		}
 		//Subscribe to the store for rerenderings whenever the store changes.
-	}
-	componentWillUnmount=()=>{
-		//Release resources.
 	}
 
 	render() {
-		let innerText = "Initializing. Please wait...";
+		console.log(this.props.searchMode?"SEARCH MODE":"NORMAL MODE");
 		let books = [];
 		//Get the books or error if none.
-		if(this.props.books.isFetching) {
+		if(this.props.searchMode) {
+			//Only display results from the search
+		} else {
+			//Display all results
+			if(this.props.books.isFetching) {
 			//Display the "wait" spinner
-			innerText = "Fetching Books. Please wait...";
-		}
-		if(this.props.books.successFetching) {
+			}
+			if(this.props.books.successFetching) {
 			//Finished fetching. Check if there are any
 			//books.
-			innerText = "hasFinished Fetching...";
-			if(this.props.books.booksArr.length>0) {
+				if(this.props.books.booksArr.length>0) {
 				//Some books were found
 				//Render them in a separate component.
-				innerText = `${this.props.books.booksArr.length} books by were found.`;
-				for(let i=0;i<this.props.books.booksArr.length;i++) {
-					books.push(
-						<BookView
-							showDetails={()=>{
-								this.props.showItemDetails(i);
-								this.props.navigation.navigate("BookDetails");
-							}}
-							key={this.props.books.booksArr[i].BookID}
-							book={this.props.books.booksArr[i]}
-						/>);
+					for(let i=0;i<this.props.books.booksArr.length;i++) {
+						books.push(
+							<BookView
+								showDetails={()=>{
+									this.props.showItemDetails(i);
+									this.props.navigation.navigate("BookDetails");
+								}}
+								key={this.props.books.booksArr[i].BookID}
+								book={this.props.books.booksArr[i]}
+							/>);
+					}
+				} else {
+				//Report an error.
 				}
 			} else {
-				//Report an error.
-				innerText = "No books were found. Perhaps if you started working on the server side function responsible...";
-			}
-		} else {
 			//Error is implied
-			innerText = "An error occurred: "+this.props.books.fetchErrorString;
+			}
 		}
 
 		return (
 			<View style={styles.container}>
-				<Text>
-					{innerText}
-				</Text>
 				<ScrollView>
 					{books}
 				</ScrollView>
@@ -91,6 +87,66 @@ export default class BooksView extends Component {
 	}
 }
 //Separate module for each book.
+
+
+class BookView extends Component {
+	//Receives book object as props.
+	render() {
+		return (
+			<TouchableOpacity
+				onPress={this.props.showDetails}
+				style={styles.bk_wrapper}
+			>
+				<View style={styles.bk_imageWrapper}>
+					<Image
+						style={styles.bk_image}
+						source={{uri: (()=>{
+							return this.props.book.images.length?`${host}/images/`+this.props.book.images[0].ImgID+".jpeg":`${host}/images/placeholder.jpg`;
+						})()}}
+					/>
+				</View>
+				<View style={styles.bk_contentWrapper}>
+					<View style={styles.bk_contentRow}>
+						< Text style = {
+							{ 
+								...StyleSheet.flatten(styles.bk_title),
+								color: "black"
+							}
+						} >
+							{this.props.book.Title}
+						</Text>
+						<Text style={styles.bk_contentValue}>
+							by: {this.props.book.Authors}
+						</Text>
+						<Text style={styles.bk_contentValue}>
+							{this.props.book.Language==="english"?"English":"Japanese"}
+						</Text>
+						<Text style = {
+							{ 
+								...StyleSheet.flatten(styles.bk_title),
+								color: "black"
+							}
+						} >
+							{this.props.book.Cover==="paper_back"?"Paperback":"Hardcover"}
+						</Text>
+						<Text style = {
+							{ 
+								...StyleSheet.flatten(styles.bk_title),
+								color: "red",
+								fontSize: 16,
+							}
+						} >
+							{"JPY "+this.props.book.Price}
+						</Text>
+						<Text style={styles.bk_contentValue}>
+							{"Pages: "+this.props.book.PageNo}
+						</Text>
+					</View>
+				</View>
+			</TouchableOpacity>
+		);
+	}
+}
 
 const styles = StyleSheet.create({
 	container: {
@@ -101,7 +157,7 @@ const styles = StyleSheet.create({
 	},
 	bk_wrapper: {
 		width: 400,
-		height: 200,
+		height: 144,
 		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "stretch",
@@ -110,8 +166,8 @@ const styles = StyleSheet.create({
 		flex: 1,
 		flexDirection: "row",
 		justifyContent: "flex-start",
-		alignItems: "center",
-		backgroundColor: "#000",
+		alignItems: "flex-start",
+		backgroundColor: "white",
 	},
 	bk_image: {
 		flex: 1,
@@ -138,49 +194,5 @@ const styles = StyleSheet.create({
 
 	}
 });
-
-class BookView extends Component {
-	//Receives book object as props.
-	render() {
-		return (
-			<TouchableOpacity
-				onPress={this.props.showDetails}
-				style={styles.bk_wrapper}
-			>
-				<View style={styles.bk_imageWrapper}>
-					<Image
-						style={styles.bk_image}
-						source={{uri: (()=>{
-							return this.props.book.images.length?`${host}/images/`+this.props.book.images[0].ImgID+".jpeg":`${host}/images/placeholder.jpg`;
-						})()}}
-					/>
-				</View>
-				<View style={styles.bk_contentWrapper}>
-					<View style={styles.bk_contentRow}>
-						<Text style={styles.bk_title}>
-							{this.props.book.Title}
-						</Text>
-						<Text style={styles.bk_contentValue}>
-							{this.props.book.Authors}
-						</Text>
-						<Text style={styles.bk_contentValue}>
-							{this.props.book.Language}
-						</Text>
-						<Text style={styles.bk_contentValue}>
-							{this.props.book.Publisher}
-						</Text>
-						<Text style={styles.bk_contentValue}>
-							{this.props.book.Published}
-						</Text>
-						<Text style={styles.bk_contentValue}>
-							{"Price: "+this.props.book.Price+" Yen"}
-						</Text>
-						<Text style={styles.bk_contentValue}>
-							{"Pages: "+this.props.book.PageNo}
-						</Text>
-					</View>
-				</View>
-			</TouchableOpacity>
-		);
-	}
-}
+//TODO: Keep books' history to enable auto fill in future/maintain a catalog of books to
+//select from.
