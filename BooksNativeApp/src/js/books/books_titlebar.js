@@ -4,7 +4,8 @@ import {
 	StyleSheet,
 	TouchableOpacity,
 	TextInput,
-	BackHandler
+	BackHandler,
+	Image
 } from "react-native";
 import {
 	connect,
@@ -78,14 +79,11 @@ class _TitleBar extends Component {
 			<View style={styles.wrapper}>
 				<View style={styles.titleTop}>
 					<View style={styles.left}>
-						< Text style = {
-							{
-								...StyleSheet.flatten(styles.text),
-								color: "black",
-							}
-						} >
-						III
-						</Text>
+						<Image
+							style={styles.logo}
+							resizeMode={"contain"}
+							source={require("../../../books-logo.png")}
+						/>
 					</View>
 
 					<View style={styles.center}>
@@ -190,6 +188,10 @@ export default class TitleBar extends Component {
 }
 
 const styles = StyleSheet.create({
+	logo: {
+		flex: 1,
+		height: 56,
+	},
 	wrapper: {
 		justifyContent: "center",
 		alignItems: "stretch",
@@ -197,7 +199,7 @@ const styles = StyleSheet.create({
 	titleTop: {
 		alignSelf: "center",
 		height: 56,
-		backgroundColor: "teal",
+		backgroundColor: "#6A9B9C",
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "stretch"
@@ -243,7 +245,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: "center",
 		alignItems: "center",
-		backgroundColor: "#506060",
+		backgroundColor: "#AAA",
 		borderTopRightRadius: 10,
 		borderBottomRightRadius: 10,
 	},
@@ -253,7 +255,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "#eee",
 		flexDirection: "row",
 		justifyContent: "space-between",
-		alignItems: "stretch",
+		alignItems: "center",
 		paddingHorizontal: 10,
 	},
 	results_meta: {
@@ -268,6 +270,6 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "center",
 		borderLeftWidth: 1,
-		borderLeftColor: "#777"
+		borderLeftColor: "#AAA"
 	}
 });

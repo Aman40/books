@@ -27,13 +27,14 @@ class SignUpIn extends Component {
 					accessibilityComponentType="button"
 					style = {
 						{
+							...StyleSheet.flatten(styles.btn),
 							width: "80%",
 							flexDirection: "row",
 							marginBottom: 10,
 						}
 					}
 				>
-					<View style={styles.upBtn}>
+					<View >
 						<Text style={styles.btnText}>
 							Sign Up
 						</Text>
@@ -43,9 +44,15 @@ class SignUpIn extends Component {
 				<TouchableOpacity
 					onPress={this.navigateToSignIn}
 					accessibilityComponentType="button"
-					style={{width: "80%", flexDirection: "row"}}
+					style = {
+						{
+							...StyleSheet.flatten(styles.btn),
+							width: "80%",
+							flexDirection: "row",
+						}
+					}
 				>
-					<View style={styles.upBtn}>
+					<View >
 						<Text style={styles.btnText}>
 							Sign In
 						</Text>
@@ -60,7 +67,6 @@ export default SignUpIn;
 const styles = StyleSheet.create({
 	wrapper: {
 		flex: 1,
-		width: 400,
 		justifyContent: "center",
 		alignItems: "center",
 	},
@@ -71,17 +77,14 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 		color: "white",
 	},
-	upBtn: {
-		flex: 1,
-		backgroundColor: "#007AFF",
-		elevation: 5,
+	btn: {
+		backgroundColor: "#6A9B9C",
+		elevation: 10,
 		paddingHorizontal: 5,
 		paddingVertical: 5,
 		justifyContent: "center",
 		alignItems: "center",
-		borderRadius: 5
+		borderRadius: 5,
+		height: 40,
 	},
-	inBtn: {
-		width: 100,
-	}
 });

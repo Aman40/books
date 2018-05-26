@@ -106,7 +106,13 @@ export default class BooksView extends Component {
 
 		return (
 			<View style={styles.container}>
-				<ScrollView>
+				<ScrollView 
+					style={styles.scrollview}
+					contentContainerStyle={{
+						justifyContent:"flex-start",
+						alignItems: "stretch"
+					}}
+				>
 					{books}
 				</ScrollView>
 			</View>
@@ -179,11 +185,13 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		justifyContent: "flex-start",
-		alignItems: "center",
+		alignItems: "stretch",
 		backgroundColor: "#FEFEFE",
 	},
+	scrollview: {
+		flex: 1,
+	},
 	bk_wrapper: {
-		width: 400,
 		height: 144,
 		flexDirection: "row",
 		justifyContent: "center",

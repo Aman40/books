@@ -12,9 +12,9 @@ const formidable = require("formidable");
 const fs = require("fs");
 const events = require("events");
 
-router.post("/alter", checkSession);
+router.post("/alter/*", checkSession);
 
-router.post("/alter", [ /*Validate form*/
+router.post("/alter/*", [ /*Validate form*/
 	check("title")
 		.not()
 		.isEmpty()
@@ -80,6 +80,11 @@ router.post("/alter", [ /*Validate form*/
 		.withMessage("ER_LOC_LEN")
 		.trim()
 		.escape(),
+	check("zipcode")
+		.isNumeric()
+		.withMessage("ERR_NUMERIC")
+		.isLength({min: 7, max: 7})
+		.withMessage("ERR_LENGTH"),
 	check("price")
 		.not()
 		.isEmpty()
@@ -99,7 +104,6 @@ router.post("/alter", [ /*Validate form*/
 		.isEmpty()
 		.withMessage("ER_NO_EXP")
 ], (req, res, next)=>{
-
 	/*res.writeHead(200, {'Content-Type':'text/html', 'Access-Control-Allow-Origin': 'http://localhost:3000'});*/
 	res.write("<?xml version='1.0' encoding='UTF-8' ?>");
 	res.statusCode = 200;
@@ -108,8 +112,10 @@ router.post("/alter", [ /*Validate form*/
 	//Check the validation result here
 	let result = validationResult(req);
 	if(result.isEmpty()) {
+		console.log("Passed the validation");
 		next();
 	} else {
+		console.log("Failed the validation");
 		//Format the errors and echo them back to the client
 		//The query ends here
 		//Return an array of validation results/errors. Only the first error
@@ -117,7 +123,6 @@ router.post("/alter", [ /*Validate form*/
 
 		res.write(`<err_arr>${JSON.stringify(error_array)}</err_arr>`);
 		res.write("<msg>There was a problem with the form entries</msg>");
-
 		res.end("<srv_res_status>8</srv_res_status>");
 	}
 });
@@ -168,7 +173,7 @@ router.post("/alter/add", function (req, res) {
 		let sql = "INSERT INTO Books(`UserID`,`BookID`, `Title`, `Edition`, `Authors`, `Language`," +
             " `Description`," +
             "`Cover`, `PageNo`, `Publisher`, `Published`, `ISBN`, `New`, `Condition`," +
-            "`Location`, `Price`, `Deliverable`, `DateAdded`, `OfferExpiry`) VALUES ?";
+            "`ZipCode`,`Location` , `Price`, `Deliverable`, `DateAdded`, `OfferExpiry`) VALUES ?";
 
 		let book_id = genUid("B");
 
@@ -192,6 +197,7 @@ router.post("/alter/add", function (req, res) {
 			fields.isbn,
 			fields.is_new,
 			fields.condition,
+			fields.zipcode,
 			fields.location,
 			fields.price,
 			fields.deliverable,
@@ -229,6 +235,7 @@ router.post("/alter/add", function (req, res) {
 				isbn: fields.isbn,
 				is_new: fields.is_new,
 				condition: fields.condition,
+				zipcode: fields.zipcode,
 				location: fields.location,
 				price: fields.price,
 				deliverable: fields.deliverable,
@@ -267,7 +274,7 @@ router.post("/alter/edit", function (req, res) {
 
 		let sql = "UPDATE Books SET `Title`=?, `Edition`=?, `Authors`=?, `Language`=?, `Description`=?," +
             "`Cover`=?, `PageNo`=?, `Publisher`=?, `Published`=?, `ISBN`=?, `New`=?, `Condition`=?," +
-            "`Location`=?, `Price`=?, `Deliverable`=?, `DateAdded`=?, `OfferExpiry`=? WHERE `UserID`=? AND `BookID`=?";
+            "`ZipCode`=?, `Location`=?, `Price`=?, `Deliverable`=?, `DateAdded`=?, `OfferExpiry`=? WHERE `UserID`=? AND `BookID`=?";
 
 		let form_fields = [
 			fields.title,
@@ -282,6 +289,7 @@ router.post("/alter/edit", function (req, res) {
 			fields.isbn,
 			fields.is_new,
 			fields.condition,
+			fields.zipcode,
 			fields.location,
 			fields.price,
 			fields.deliverable,
@@ -323,6 +331,7 @@ router.post("/alter/edit", function (req, res) {
 				isbn: fields.isbn,
 				is_new: fields.is_new,
 				condition: fields.condition,
+				zipcode: fields.zipcode,
 				location: fields.location,
 				price: fields.price,
 				deliverable: fields.deliverable,
@@ -336,10 +345,6 @@ router.post("/alter/edit", function (req, res) {
 			res.end("<srv_res_status>0</srv_res_status>");
 		});
 	});
-});
-
-router.use("/find", function (req, res, next) {
-	res.send("<h1>What exactly is finding??</h1>");
 });
 
 router.use("/fetch", (req,res)=>{
@@ -375,8 +380,11 @@ router.use("/fetch", (req,res)=>{
             "Transient.Published AS Published," +
             "Transient.ISBN as ISBN," +
             "Transient.New AS `New`," +
-            "Transient.Condition AS `Condition`," +
-            "Transient.Location AS `Location`," +
+			"Transient.Condition AS `Condition`," +
+			"Transient.ZipCode AS `ZipCode`,"+
+			"Transient.Latitude AS `Latitude`,"+
+			"Transient.Longitude AS `Longitude`,"+
+			"Transient.Location AS `Location`," +
             "Transient.Price AS `Price`," +
             "Transient.Deliverable AS Deliverable," +
             "Transient.DateAdded AS DateAdded," +
@@ -572,7 +580,10 @@ router.use("/all", (req, res, next)=>{
             "Transient.Published AS Published," +
             "Transient.ISBN as ISBN," +
             "Transient.New AS `New`," +
-            "Transient.Condition AS `Condition`," +
+			"Transient.Condition AS `Condition`," +
+			"Transient.ZipCode AS `ZipCode`," +
+			"Transient.Latitude AS `Latitude`,"+
+			"Transient.Longitude AS `Longitude`,"+
             "Transient.Location AS `Location`," +
             "Transient.Price AS `Price`," +
             "Transient.Deliverable AS Deliverable," +
@@ -647,7 +658,10 @@ router.use("/search", (req, res)=>{
             "Transient.Published AS Published," +
             "Transient.ISBN as ISBN," +
             "Transient.New AS `New`," +
-            "Transient.Condition AS `Condition`," +
+			"Transient.Condition AS `Condition`," +
+			"Transient.ZipCode AS `ZipCode`," +
+			"Transient.Latitude AS `Latitude`,"+
+			"Transient.Longitude AS `Longitude`,"+
             "Transient.Location AS `Location`," +
             "Transient.Price AS `Price`," +
             "Transient.Deliverable AS Deliverable," +
@@ -691,10 +705,12 @@ function checkSession(req, res, next){
 	//DEV:
 	console.log("Sent cookie: "+res.getHeader("Set-Cookie"));
 	if(req.session.uid) {
+		console.log("Is logged in.");
 		next(); //The user is logged in or not. If not, they shouldn't be here. Prompt them to log in.
 	} else {
 		//Return an appropriate response to let the user know that their session is expired
 		/*res.writeHead(200, {'Content-Type':'text/html', 'Access-Control-Allow-Origin': 'http://localhost:3000'});*/
+		console.log("Not logged in");
 		res.write("<?xml version='1.0' encoding='UTF-8' ?>");
 		res.write(`<cookie>${res.getHeader("Set-Cookie")}</cookie>`); //DEV
 		res.write("<msg>Please log in again.</msg>");

@@ -66,6 +66,7 @@ router.use("/in", function (req, res) {
 							req.session.about = usr_data.about = result[0].About;
 							req.session.student = usr_data.student = result[0].Student?true:false;
 							req.session.school = usr_data.school = result[0].School;
+							req.session.schoolzip = usr_data.schoolzip = result[0].SchoolZip;
 							//Copy a part of the session data and echo it back to the user.
 
 							//Return JSON string of names and values to be parsed into an obj

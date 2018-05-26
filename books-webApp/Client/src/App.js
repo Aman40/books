@@ -25,6 +25,7 @@ class App extends Component {
                 about: "",
                 student: false,
                 school: "",
+                schoolzip: "", //Fallback for book's location, and for user's location
                 pass_check: false, //This gets sent too, but it's really not necessary!
             },
             in_form: {
@@ -38,6 +39,7 @@ class App extends Component {
                 sex: "",
                 dob: "",
                 pref: "",
+                schoolzip: "",
                 about: "",
                 school: "",
                 password1: ""
@@ -742,6 +744,22 @@ class SignUp extends Component {
                         </div>
                     </div>
 
+                    <div className={"form-group row"}>
+                        <label className={"col-sm-2 control-label"} >School Zip Code:</label>
+                        <div className={"col-sm-10"}>
+                            <input
+                                name={"schoolzip"}
+                                type={"number"}
+                                className={"form-control"}
+                                onChange={this.props.handleUpChange}
+                                required={true}
+                            />
+                            <div className={"error"}>
+                                {this.props.err_obj.schoolzip}
+                            </div>
+                        </div>
+                    </div>
+
 
                     <div className={"form-group row"}>
                         <label className={"col-sm-2 control-label"} >
@@ -1140,7 +1158,7 @@ class AddBook extends Component {
     constructor(props) {
         super(props)
         this.state={
-            init_done: false,
+            init_done: false, //Initialization. Pre-filling old data
             values: {
                 title: "",
                 authors: "",
@@ -1155,6 +1173,7 @@ class AddBook extends Component {
                 is_new: false,
                 condition: "",
                 location: "",
+                zipcode: "",
                 price: 0,
                 deliverable: false,
                 offer_expiry: ""
@@ -1173,6 +1192,7 @@ class AddBook extends Component {
                 is_new: "",
                 condition: "",
                 location: "",
+                zipcode: "",
                 price: "",
                 deliverable: "",
                 offer_expiry: ""
@@ -1256,6 +1276,7 @@ class AddBook extends Component {
                         is_new: "",
                         condition: "",
                         location: "",
+                        zipcode: "",
                         price: "",
                         deliverable: "",
                         offer_expiry: ""
@@ -1543,6 +1564,23 @@ class AddBook extends Component {
                                 />
                                 <div className={"error"}>
                                     {this.state.errors.condition}
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div className={"form-group row"}>
+                            <label className={"col-sm-2 control-label"}>Zip Code:</label>
+                            <div className={"col-sm-10"}>
+                                <input
+                                    name={"zipcode"}
+                                    type={"number"} 
+                                    className={"form-control"}
+                                    onChange={this.handleChange}
+                                    value={this.state.values.zipcode}
+                                />
+                                <div className={"error"}>
+                                    {this.state.errors.zipcode}
                                 </div>
                             </div>
                         </div>

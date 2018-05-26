@@ -54,6 +54,11 @@ router.post("/",[
 		.withMessage("ER_SCH_LENGTH")
 		.trim()
 		.escape(),
+	check("schoolzip")
+		.isNumeric()
+		.withMessage("ERR_NUMERIC")
+		.isLength({min: 7, max: 7})
+		.withMessage("ERR_LENGTH"),
 	check("password1")
 		.not()
 		.isEmpty()
@@ -97,7 +102,7 @@ router.post("/", function (req, res) {
 	con.connect((err)=>{
 		if(err) throw err; //Report a connection error
 		let sql="INSERT INTO Users(`UserID`, `UserPassword`, `JoinDate`, `NameAlias`, `Sex`, " +
-            "`DoB`, `Email`, `Prefecture`, `About`, `Student`, `School`) VALUES ?";
+            "`DoB`, `Email`, `Prefecture`, `About`, `Student`, `School`, `SchoolZip`) VALUES ?";
 		//process password here. Either start processing and then callback
 		passwordHasher(res, fields.password1, (hashed_password)=>{
 			let uid = genUid("U");
@@ -111,7 +116,8 @@ router.post("/", function (req, res) {
 				fields.pref,
 				fields.about,
 				fields.student==="true"?1:0,
-				fields.school]];
+				fields.school,
+				fields.schoolzip]];
 
 			con.query(sql, [form_fields], (err, result)=>{
 				if(err) {
@@ -144,6 +150,7 @@ router.post("/", function (req, res) {
 				req.session.about = usr_data.about = fields.about;
 				req.session.student = usr_data.student = fields.student;
 				req.session.school = usr_data.school = fields.school;
+				req.session.schoolzip = usr_data.schoolzip = fields.schoolzip;
 				//Copy a part of the session data and echo it back to the user.
 
 				//Return JSON string of names and values to be parsed into an obj

@@ -61437,7 +61437,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 		swipeEnabled: false
 	});
 	exports.default = MainTabNav;
-},492,[493,494,118,605,655,656],"src/js/main_nav.js");
+},492,[493,494,118,605,656,657],"src/js/main_nav.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -73792,6 +73792,11 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 					_react3.default.createElement(
 						_reactNative.ScrollView,
 						{
+							style: styles.scrollview,
+							contentContainerStyle: {
+								justifyContent: "flex-start",
+								alignItems: "stretch"
+							},
 							__source: {
 								fileName: _jsxFileName,
 								lineNumber: 109
@@ -73829,7 +73834,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						style: styles.bk_wrapper,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 123
+							lineNumber: 129
 						}
 					},
 					_react3.default.createElement(
@@ -73838,7 +73843,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							style: styles.bk_imageWrapper,
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 127
+								lineNumber: 133
 							}
 						},
 						_react3.default.createElement(_reactNative.Image, {
@@ -73850,7 +73855,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							},
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 128
+								lineNumber: 134
 							}
 						})
 					),
@@ -73860,7 +73865,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							style: styles.bk_contentWrapper,
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 135
+								lineNumber: 141
 							}
 						},
 						_react3.default.createElement(
@@ -73869,7 +73874,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								style: styles.bk_contentRow,
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 136
+									lineNumber: 142
 								}
 							},
 							_react3.default.createElement(
@@ -73880,7 +73885,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									}),
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 137
+										lineNumber: 143
 									}
 								},
 								this.props.book.Title
@@ -73891,7 +73896,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.bk_contentValue,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 145
+										lineNumber: 151
 									}
 								},
 								"by: ",
@@ -73903,7 +73908,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.bk_contentValue,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 148
+										lineNumber: 154
 									}
 								},
 								this.props.book.Language === "english" ? "English" : "Japanese"
@@ -73916,7 +73921,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									}),
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 151
+										lineNumber: 157
 									}
 								},
 								this.props.book.Cover === "paper_back" ? "Paperback" : "Hardcover"
@@ -73930,7 +73935,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									}),
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 159
+										lineNumber: 165
 									}
 								},
 								"JPY " + this.props.book.Price
@@ -73941,7 +73946,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.bk_contentValue,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 168
+										lineNumber: 174
 									}
 								},
 								"Pages: " + this.props.book.PageNo
@@ -73959,11 +73964,13 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 		container: {
 			flex: 1,
 			justifyContent: "flex-start",
-			alignItems: "center",
+			alignItems: "stretch",
 			backgroundColor: "#FEFEFE"
 		},
+		scrollview: {
+			flex: 1
+		},
 		bk_wrapper: {
-			width: 400,
 			height: 144,
 			flexDirection: "row",
 			justifyContent: "center",
@@ -84046,7 +84053,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						style: styles.wrapper,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 78
+							lineNumber: 79
 						}
 					},
 					_react3.default.createElement(
@@ -84055,7 +84062,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							style: styles.titleTop,
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 79
+								lineNumber: 80
 							}
 						},
 						_react3.default.createElement(
@@ -84064,22 +84071,18 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								style: styles.left,
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 80
+									lineNumber: 81
 								}
 							},
-							_react3.default.createElement(
-								_reactNative.Text,
-								{
-									style: _extends({}, _reactNative.StyleSheet.flatten(styles.text), {
-										color: "black"
-									}),
-									__source: {
-										fileName: _jsxFileName,
-										lineNumber: 81
-									}
-								},
-								"III"
-							)
+							_react3.default.createElement(_reactNative.Image, {
+								style: styles.logo,
+								resizeMode: "contain",
+								source: _require(_dependencyMap[7], "../../../books-logo.png"),
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 82
+								}
+							})
 						),
 						_react3.default.createElement(
 							_reactNative.View,
@@ -84087,7 +84090,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								style: styles.center,
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 91
+									lineNumber: 89
 								}
 							},
 							_react3.default.createElement(
@@ -84096,7 +84099,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.searchbar,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 93
+										lineNumber: 91
 									}
 								},
 								_react3.default.createElement(_reactNative.TextInput, {
@@ -84112,7 +84115,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									placeholder: "Search for book...",
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 94
+										lineNumber: 92
 									}
 								}),
 								_react3.default.createElement(
@@ -84121,7 +84124,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 										style: styles.submit,
 										__source: {
 											fileName: _jsxFileName,
-											lineNumber: 102
+											lineNumber: 100
 										}
 									},
 									_react3.default.createElement(
@@ -84130,7 +84133,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 											onPress: this.handleSearch,
 											__source: {
 												fileName: _jsxFileName,
-												lineNumber: 103
+												lineNumber: 101
 											}
 										},
 										_react3.default.createElement(_Ionicons2.default, {
@@ -84139,7 +84142,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 											color: "black",
 											__source: {
 												fileName: _jsxFileName,
-												lineNumber: 107
+												lineNumber: 105
 											}
 										})
 									)
@@ -84153,7 +84156,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								onPress: this.showMenu,
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 117
+									lineNumber: 115
 								}
 							},
 							_react3.default.createElement(
@@ -84161,7 +84164,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								{
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 121
+										lineNumber: 119
 									}
 								},
 								_react3.default.createElement(_Ionicons2.default, {
@@ -84170,7 +84173,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									color: "black",
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 122
+										lineNumber: 120
 									}
 								})
 							)
@@ -84182,7 +84185,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							style: styles.titleBottom,
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 130
+								lineNumber: 128
 							}
 						},
 						_react3.default.createElement(
@@ -84191,7 +84194,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								style: styles.results_meta,
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 132
+									lineNumber: 130
 								}
 							},
 							_react3.default.createElement(
@@ -84199,7 +84202,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								{
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 134
+										lineNumber: 132
 									}
 								},
 								this.props.searchMode ? "Search for a book" : this.props.searchStatusMsg
@@ -84211,7 +84214,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								style: styles.filter,
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 142
+									lineNumber: 140
 								}
 							},
 							_react3.default.createElement(
@@ -84222,7 +84225,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									},
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 144
+										lineNumber: 142
 									}
 								},
 								"Filter  "
@@ -84233,7 +84236,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								color: "black",
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 147
+									lineNumber: 145
 								}
 							})
 						)
@@ -84283,14 +84286,14 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						store: _store2.default,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 181
+							lineNumber: 179
 						}
 					},
 					_react3.default.createElement(ConnectedTitleBar, {
 						navigation: this.props.navigation,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 184
+							lineNumber: 182
 						}
 					})
 				);
@@ -84303,6 +84306,10 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 	exports.default = TitleBar;
 
 	var styles = _reactNative.StyleSheet.create({
+		logo: {
+			flex: 1,
+			height: 56
+		},
 		wrapper: {
 			justifyContent: "center",
 			alignItems: "stretch"
@@ -84310,7 +84317,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 		titleTop: {
 			alignSelf: "center",
 			height: 56,
-			backgroundColor: "teal",
+			backgroundColor: "#6A9B9C",
 			flexDirection: "row",
 			justifyContent: "space-between",
 			alignItems: "stretch"
@@ -84356,7 +84363,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			flex: 1,
 			justifyContent: "center",
 			alignItems: "center",
-			backgroundColor: "#506060",
+			backgroundColor: "#AAA",
 			borderTopRightRadius: 10,
 			borderBottomRightRadius: 10
 		},
@@ -84366,7 +84373,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			backgroundColor: "#eee",
 			flexDirection: "row",
 			justifyContent: "space-between",
-			alignItems: "stretch",
+			alignItems: "center",
 			paddingHorizontal: 10
 		},
 		results_meta: {
@@ -84381,10 +84388,22 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			justifyContent: "center",
 			alignItems: "center",
 			borderLeftWidth: 1,
-			borderLeftColor: "#777"
+			borderLeftColor: "#AAA"
 		}
 	});
-},654,[118,179,12,579,602,605,600],"src/js/books/books_titlebar.js");
+},654,[118,179,12,579,602,605,600,655],"src/js/books/books_titlebar.js");
+__d(function (global, _require, module, exports, _dependencyMap) {
+  module.exports = _require(_dependencyMap[0], "react-native/Libraries/Image/AssetRegistry").registerAsset({
+    "__packager_asset": true,
+    "httpServerLocation": "/assets",
+    "width": 1004,
+    "height": 1004,
+    "scales": [1],
+    "hash": "309678cadaebceb1f60f5ecaece067f8",
+    "name": "books-logo",
+    "type": "png"
+  });
+},655,[164],"books-logo.png");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -84507,7 +84526,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 		},
 		text: {}
 	});
-},655,[118,179,12,494],"src/js/past-papers/pp_mainstack.js");
+},656,[118,179,12,494],"src/js/past-papers/pp_mainstack.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -84563,7 +84582,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 		}
 	});
 	exports.default = AccountStack;
-},656,[118,494,657,658,664],"src/js/account/ac_stacknav.js");
+},657,[118,494,658,659,665],"src/js/account/ac_stacknav.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -84821,7 +84840,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 	}(_react2.Component));
 
 	exports.default = SignIn;
-},657,[118,179,12,602,579,572],"src/js/account/view_signin.js");
+},658,[118,179,12,602,579,572],"src/js/account/view_signin.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -84964,7 +84983,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 	}(_react2.Component));
 
 	exports.default = Switch;
-},658,[118,179,659,602,663,579],"src/js/account/ac_switch.js");
+},659,[118,179,660,602,664,579],"src/js/account/ac_switch.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -85055,7 +85074,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 		swipeEnabled: true
 	});
 	exports.default = AccountTabNav;
-},659,[494,660,661,662,118,605],"src/js/account/ac_tabnav.js");
+},660,[494,661,662,663,118,605],"src/js/account/ac_tabnav.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -85153,7 +85172,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			color: "gray"
 		}
 	});
-},660,[118,179,12],"src/js/account/my_books.js");
+},661,[118,179,12],"src/js/account/my_books.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -85251,7 +85270,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			color: "gray"
 		}
 	});
-},661,[118,179,12],"src/js/account/my_pastpapers.js");
+},662,[118,179,12],"src/js/account/my_pastpapers.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -85872,7 +85891,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			flex: 2
 		}
 	});
-},662,[118,179,12,579,602],"src/js/account/my_profile.js");
+},663,[118,179,12,579,602],"src/js/account/my_profile.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -85885,6 +85904,8 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 	var _index = _require(_dependencyMap[1], "./../../../node_modules/react-transform-hmr/lib/index.js");
 
 	var _index2 = _interopRequireDefault(_index);
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	var _jsxFileName = "/var/www/html/books/BooksNativeApp/src/js/account/ac_signupin.js";
 
@@ -85954,11 +85975,11 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						_reactNative.TouchableOpacity,
 						{
 							accessibilityComponentType: "button",
-							style: {
+							style: _extends({}, _reactNative.StyleSheet.flatten(styles.btn), {
 								width: "80%",
 								flexDirection: "row",
 								marginBottom: 10
-							},
+							}),
 							__source: {
 								fileName: _jsxFileName,
 								lineNumber: 26
@@ -85967,10 +85988,9 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						_react3.default.createElement(
 							_reactNative.View,
 							{
-								style: styles.upBtn,
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 36
+									lineNumber: 37
 								}
 							},
 							_react3.default.createElement(
@@ -85979,7 +85999,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.btnText,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 37
+										lineNumber: 38
 									}
 								},
 								"Sign Up"
@@ -85991,22 +86011,21 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						{
 							onPress: this.navigateToSignIn,
 							accessibilityComponentType: "button",
-							style: {
+							style: _extends({}, _reactNative.StyleSheet.flatten(styles.btn), {
 								width: "80%",
 								flexDirection: "row"
-							},
+							}),
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 43
+								lineNumber: 44
 							}
 						},
 						_react3.default.createElement(
 							_reactNative.View,
 							{
-								style: styles.upBtn,
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 48
+									lineNumber: 55
 								}
 							},
 							_react3.default.createElement(
@@ -86015,7 +86034,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.btnText,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 49
+										lineNumber: 56
 									}
 								},
 								"Sign In"
@@ -86034,7 +86053,6 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 	var styles = _reactNative.StyleSheet.create({
 		wrapper: {
 			flex: 1,
-			width: 400,
 			justifyContent: "center",
 			alignItems: "center"
 		},
@@ -86043,21 +86061,18 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			fontSize: 18,
 			color: "white"
 		},
-		upBtn: {
-			flex: 1,
-			backgroundColor: "#007AFF",
-			elevation: 5,
+		btn: {
+			backgroundColor: "#6A9B9C",
+			elevation: 10,
 			paddingHorizontal: 5,
 			paddingVertical: 5,
 			justifyContent: "center",
 			alignItems: "center",
-			borderRadius: 5
-		},
-		inBtn: {
-			width: 100
+			borderRadius: 5,
+			height: 40
 		}
 	});
-},663,[118,179,12],"src/js/account/ac_signupin.js");
+},664,[118,179,12],"src/js/account/ac_signupin.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -86148,7 +86163,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 					menu = _react3.default.createElement(_account_menu2.default, {
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 30
+							lineNumber: 31
 						}
 					});
 				}
@@ -86159,7 +86174,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						style: styles.wrapper,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 34
+							lineNumber: 35
 						}
 					},
 					_react3.default.createElement(
@@ -86168,20 +86183,18 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							style: styles.left,
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 35
+								lineNumber: 36
 							}
 						},
-						_react3.default.createElement(
-							_reactNative.Text,
-							{
-								style: styles.text,
-								__source: {
-									fileName: _jsxFileName,
-									lineNumber: 36
-								}
-							},
-							"I"
-						)
+						_react3.default.createElement(_reactNative.Image, {
+							style: styles.logo,
+							resizeMode: "contain",
+							source: _require(_dependencyMap[8], "../../../books-logo.png"),
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 37
+							}
+						})
 					),
 					_react3.default.createElement(
 						_reactNative.View,
@@ -86189,7 +86202,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							style: styles.center,
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 41
+								lineNumber: 44
 							}
 						},
 						_react3.default.createElement(
@@ -86198,7 +86211,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								style: styles.text,
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 42
+									lineNumber: 45
 								}
 							},
 							"Center component"
@@ -86211,7 +86224,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							onPress: this.showMenu,
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 47
+								lineNumber: 50
 							}
 						},
 						_react3.default.createElement(
@@ -86219,7 +86232,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							{
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 51
+									lineNumber: 54
 								}
 							},
 							_react3.default.createElement(_Ionicons2.default, {
@@ -86228,7 +86241,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								color: "black",
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 52
+									lineNumber: 55
 								}
 							}),
 							menu
@@ -86275,13 +86288,13 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						store: _store2.default,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 86
+							lineNumber: 89
 						}
 					},
 					_react3.default.createElement(ConnectedTitleBar, {
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 89
+							lineNumber: 92
 						}
 					})
 				);
@@ -86294,10 +86307,14 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 	exports.default = TitleBar;
 
 	var styles = _reactNative.StyleSheet.create({
+		logo: {
+			flex: 1,
+			height: 56
+		},
 		wrapper: {
 			alignSelf: "center",
 			height: 56,
-			backgroundColor: "teal",
+			backgroundColor: "#6A9B9C",
 			flexDirection: "row",
 			justifyContent: "space-between",
 			alignItems: "stretch"
@@ -86326,7 +86343,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			fontWeight: "bold"
 		}
 	});
-},664,[118,179,12,579,602,605,572,665],"src/js/account/titlebar.js");
+},665,[118,179,12,579,602,605,572,666,655],"src/js/account/titlebar.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -86603,7 +86620,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			width: "100%"
 		}
 	});
-},665,[118,179,12,579,602,572],"src/js/account/account_menu.js");
+},666,[118,179,12,579,602,572],"src/js/account/account_menu.js");
 require(44);
 require(11);
 //# sourceMappingURL=index.map

@@ -3,6 +3,7 @@ import {
 	Text,
 	StyleSheet,
 	TouchableOpacity,
+	Image,
 } from "react-native";
 import {
 	connect,
@@ -33,9 +34,11 @@ class _TitleBar extends Component {
 		return (
 			<View style={styles.wrapper}>
 				<View style={styles.left}>
-					<Text style={styles.text}>
-						I
-					</Text>
+					<Image
+						style={styles.logo}
+						resizeMode={"contain"}
+						source={require("../../../books-logo.png")}
+					/>
 				</View>
 				
 				<View style={styles.center}>
@@ -93,10 +96,14 @@ export default class TitleBar extends Component {
 }
 
 const styles = StyleSheet.create({
+	logo: {
+		flex: 1,
+		height: 56,
+	},
 	wrapper: {
 		alignSelf: "center",
 		height: 56,
-		backgroundColor: "teal",
+		backgroundColor: "#6A9B9C",
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "stretch"

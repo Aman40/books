@@ -3,3 +3,27 @@ Parcel:
 There are up to 6 different classes for reading and writing primitive data types
 to parcels.
 	There's also a plethora of methods for writing arrays of primitives to parcels.
+
+USING LOCATION
+The purpose of this is to show the closest items to the user first
+1. 	The user's location is not necessary. It will be obtained or requested 
+	(for browsers) real time to display the closest items. 
+	
+	If a student, the user's school's zip code is taken. This willl be used 
+	as a fallback for items' location when not provided.
+
+BOOKS LOCATION
+1. 	For each book added, a default location, based on the user's, will be auto-filled.
+	Users can then change this, should it differ from the real one.
+	Using this, the latitude and longitude of each will be triangulated. From these, and
+	the user's location, materials can be shown from closest first.
+
+IMPLEMENTATION:
+1. Edit the sequel.sql 
+2. Edit the Client book addition form and signup from.
+3. Add the columns to the db table. Try not to erase the already existing data.
+4. Test by adding another book.
+5. Sign up for a google id
+6. Display a map in the app and show the locations of the books.
+7. Create the user signup form and book addition form.
+8. GOOD LUCK!!
