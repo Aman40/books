@@ -70,6 +70,54 @@ export function books(
 	}
 }
 
+export function myBooks(
+	state={
+		isFetching: false,
+		successFetching: false,
+		fetchErrorString: null,
+		fetchStatusString: "",
+		offSet: 0, //Actions for this later. 
+		count: 50,// This too
+		booksArr: [],
+		clickedOn: 0,
+		isSearching: false, //Searching from own books
+		successSearching: false,
+		searchStatusString: "",
+		searchErrorString: "",
+		searchResultsArr: [],
+	}, action
+) {
+	switch (action.type) {
+	case accountActions.IS_FETCHING_MY_BOOKS:
+		return {
+			...state,
+			isFetching: true,
+			successFetching: false,
+			fetchErrorString: null,
+			booksArr: [],			
+			fetchStatusString: "Fetching books",
+		};
+	case accountActions.SUCCESS_FETCHING_MY_BOOKS:
+		return {
+			...state,
+			isFetching: false,
+			successFetching: true,
+			booksArr: action.payload, //obj expected
+			fetchStatusString: "Done fetching books",
+		};
+	case accountActions.ERROR_FETCHING_MY_BOOKS:
+		return {
+			...state,
+			isFetching: false,
+			successFetching: false,
+			fetchErrorString: action.payload,
+			fetchStatusString: "Error: "+action.payload,
+		};
+	default:
+		return state;
+	}
+}
+
 export function session(state={
 	promptLogin: false,
 	loginWait: false,

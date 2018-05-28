@@ -6,3 +6,6 @@ export const HIDE_AC_MENU = "hide_account_menu";
 export const IS_LOGGING_OUT = "started_logging_out";
 export const LOGOUT_ERROR = "error_logging_out";
 export const LOGOUT_SUCCESS = "successfully_logged_out";
+export const SUCCESS_FETCHING_MY_BOOKS = "success fetching my books";
+export const ERROR_FETCHING_MY_BOOKS = "error fetching my books";
+export const IS_FETCHING_MY_BOOKS = "started fetching my books";

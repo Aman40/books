@@ -6,6 +6,7 @@ import * as accountDispatchers from "../account/ac_dispatchers";
 const host = univ_const.server_url;
 
 export function fetchBooks(dispatch) {
+	//Fetches all the books (closest to user's location)
 	let xhr = new XMLHttpRequest();
 	xhr.responseType = "text";
 	xhr.onreadystatechange = function(){
