@@ -74007,7 +74007,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 },570,[118,179,12,571,572],"src/js/books/books_view.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
     module.exports = {
-        "server_url": "http://10.4.137.154:8000"
+        "server_url": "http://192.168.0.14:8000"
     };
 },571,[],"univ_const.json");
 __d(function (global, _require, module, exports, _dependencyMap) {
@@ -74020,6 +74020,8 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 	exports.hideAccountMenu = hideAccountMenu;
 	exports.logout = logout;
 	exports.fetchMyBooks = fetchMyBooks;
+	exports.showAddMethodSelectorMenu = showAddMethodSelectorMenu;
+	exports.hideAddMethodSelectorMenu = hideAddMethodSelectorMenu;
 
 	var _ac_actions = _require(_dependencyMap[0], "./ac_actions");
 
@@ -74394,6 +74396,20 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			});
 		}
 	}
+
+	function showAddMethodSelectorMenu(dispatch) {
+		dispatch({
+			type: actions.SHOW_METHOD_SELECT_MENU,
+			payload: ""
+		});
+	}
+
+	function hideAddMethodSelectorMenu(dispatch) {
+		dispatch({
+			type: actions.HIDE_METHOD_SELECT_MENU,
+			payload: ""
+		});
+	}
 },572,[573,571,12,574,575,576],"src/js/account/ac_dispatchers.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
@@ -74410,6 +74426,8 @@ __d(function (global, _require, module, exports, _dependencyMap) {
   var SUCCESS_FETCHING_MY_BOOKS = exports.SUCCESS_FETCHING_MY_BOOKS = "success fetching my books";
   var ERROR_FETCHING_MY_BOOKS = exports.ERROR_FETCHING_MY_BOOKS = "error fetching my books";
   var IS_FETCHING_MY_BOOKS = exports.IS_FETCHING_MY_BOOKS = "started fetching my books";
+  var SHOW_METHOD_SELECT_MENU = exports.SHOW_METHOD_SELECT_MENU = "show book add method select menu";
+  var HIDE_METHOD_SELECT_MENU = exports.HIDE_METHOD_SELECT_MENU = "hide book add method select menu";
 },573,[],"src/js/account/ac_actions.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
@@ -78704,7 +78722,8 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 	function guiControl() {
 		var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
 			showAccountHeaderMenu: false,
-			searchMode: false
+			searchMode: false,
+			showBookAddMethodSelectorMenu: false
 		};
 		var action = arguments[1];
 
@@ -78722,6 +78741,16 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			case booksActions.TOGGLE_SEARCH_MODE:
 				return _extends({}, state, {
 					searchMode: !state.searchMode
+				});
+
+			case accountActions.SHOW_METHOD_SELECT_MENU:
+				return _extends({}, state, {
+					showBookAddMethodSelectorMenu: true
+				});
+
+			case accountActions.HIDE_METHOD_SELECT_MENU:
+				return _extends({}, state, {
+					showBookAddMethodSelectorMenu: false
 				});
 
 			default:
@@ -94223,7 +94252,13 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
 	var _univ_const2 = _interopRequireDefault(_univ_const);
 
-	var _shared_utilities = _require(_dependencyMap[7], "../shared_components/shared_utilities");
+	var _Ionicons = _require(_dependencyMap[7], "react-native-vector-icons/Ionicons");
+
+	var _Ionicons2 = _interopRequireDefault(_Ionicons);
+
+	var _slct_bk_add_method = _require(_dependencyMap[8], "./slct_bk_add_method");
+
+	var _slct_bk_add_method2 = _interopRequireDefault(_slct_bk_add_method);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -94284,7 +94319,6 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			value: function render() {
 				var _this2 = this;
 
-				console.log((0, _shared_utilities.objectToString)(this.props));
 				var books = [];
 				var errReport = "";
 
@@ -94303,7 +94337,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								book: _this2.props.books.booksArr[i],
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 37
+									lineNumber: 41
 								}
 							}));
 						};
@@ -94317,7 +94351,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							{
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 49
+									lineNumber: 53
 								}
 							},
 							_react3.default.createElement(
@@ -94325,7 +94359,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								{
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 50
+										lineNumber: 54
 									}
 								},
 								"No books found."
@@ -94338,7 +94372,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						{
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 59
+								lineNumber: 63
 							}
 						},
 						_react3.default.createElement(
@@ -94346,7 +94380,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							{
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 60
+									lineNumber: 64
 								}
 							},
 							"Implied Error: ",
@@ -94361,9 +94395,65 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						style: styles.container,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 68
+							lineNumber: 72
 						}
 					},
+					_react3.default.createElement(
+						_reactNative.View,
+						{
+							style: styles.controls,
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 73
+							}
+						},
+						_react3.default.createElement(
+							_reactNative.TouchableOpacity,
+							{
+								style: styles.addbk,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 74
+								}
+							},
+							_react3.default.createElement(_Ionicons2.default, {
+								onPress: this.props.showMenu,
+								name: "md-add-circle",
+								size: 28,
+								color: "#333",
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 75
+								}
+							}),
+							this.props.show && _react3.default.createElement(_slct_bk_add_method2.default, {
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 81
+								}
+							})
+						),
+						_react3.default.createElement(
+							_reactNative.View,
+							{
+								style: styles.filterbks,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 83
+								}
+							},
+							_react3.default.createElement(
+								_reactNative.Text,
+								{
+									__source: {
+										fileName: _jsxFileName,
+										lineNumber: 84
+									}
+								},
+								"Filter"
+							)
+						)
+					),
 					_react3.default.createElement(
 						_reactNative.ScrollView,
 						{
@@ -94374,7 +94464,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							},
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 69
+								lineNumber: 87
 							}
 						},
 						books.length ? books : errReport
@@ -94403,11 +94493,11 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 				return _react3.default.createElement(
 					_reactNative.TouchableOpacity,
 					{
-						onPress: this.props.showDetails,
+						onPress: console.log("Touched."),
 						style: styles.bk_wrapper,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 87
+							lineNumber: 105
 						}
 					},
 					_react3.default.createElement(
@@ -94416,7 +94506,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							style: styles.bk_imageWrapper,
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 91
+								lineNumber: 109
 							}
 						},
 						_react3.default.createElement(_reactNative.Image, {
@@ -94428,7 +94518,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							},
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 92
+								lineNumber: 110
 							}
 						})
 					),
@@ -94438,7 +94528,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							style: styles.bk_contentWrapper,
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 99
+								lineNumber: 117
 							}
 						},
 						_react3.default.createElement(
@@ -94447,7 +94537,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								style: styles.bk_contentRow,
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 100
+									lineNumber: 118
 								}
 							},
 							_react3.default.createElement(
@@ -94458,7 +94548,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									}),
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 101
+										lineNumber: 119
 									}
 								},
 								this.props.book.Title
@@ -94469,7 +94559,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.bk_contentValue,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 109
+										lineNumber: 127
 									}
 								},
 								"by: ",
@@ -94481,7 +94571,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.bk_contentValue,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 112
+										lineNumber: 130
 									}
 								},
 								this.props.book.Language === "english" ? "English" : "Japanese"
@@ -94494,7 +94584,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									}),
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 115
+										lineNumber: 133
 									}
 								},
 								this.props.book.Cover === "paper_back" ? "Paperback" : "Hardcover"
@@ -94508,7 +94598,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									}),
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 123
+										lineNumber: 141
 									}
 								},
 								"JPY " + this.props.book.Price
@@ -94519,7 +94609,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.bk_contentValue,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 132
+										lineNumber: 150
 									}
 								},
 								"Pages: " + this.props.book.PageNo
@@ -94541,7 +94631,8 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			backgroundColor: "#FEFEFE"
 		},
 		scrollview: {
-			flex: 1
+			flex: 1,
+			paddingTop: 10
 		},
 		bk_wrapper: {
 			height: 144,
@@ -94583,12 +94674,32 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 		},
 		text: {
 			color: "gray"
+		},
+		controls: {
+			flexDirection: "row",
+			justifyContent: "center",
+			alignItems: "center",
+			backgroundColor: "#DDD",
+			height: 44
+		},
+		addbk: {
+			flex: 1,
+			justifyContent: "center",
+			alignItems: "center"
+		},
+		filterbks: {
+			flex: 1,
+			justifyContent: "center",
+			alignItems: "center",
+			borderLeftWidth: 1,
+			borderLeftColor: "#AAA"
 		}
 	});
 
 	function mapStateToProps(state) {
 		return {
-			books: state.myBooks
+			books: state.myBooks,
+			show: state.guiControl.showBookAddMethodSelectorMenu
 		};
 	}
 
@@ -94596,6 +94707,9 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 		return {
 			fetchMyBooks: function fetchMyBooks() {
 				return (0, _ac_dispatchers.fetchMyBooks)(dispatch);
+			},
+			showMenu: function showMenu() {
+				return (0, _ac_dispatchers.showAddMethodSelectorMenu)(dispatch);
 			}
 		};
 	}
@@ -94620,13 +94734,13 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						store: _store2.default,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 220
+							lineNumber: 260
 						}
 					},
 					_react3.default.createElement(ConnectedMyBooks, {
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 223
+							lineNumber: 263
 						}
 					})
 				);
@@ -94637,7 +94751,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 	}(_react2.Component));
 
 	exports.default = MyBooks;
-},670,[118,179,12,579,602,572,571,574],"src/js/account/my_books.js");
+},670,[118,179,12,579,602,572,571,605,677],"src/js/account/my_books.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -96086,6 +96200,284 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 		}
 	});
 },675,[118,179,12,579,602,572],"src/js/account/account_menu.js");
+__d(function (global, _require, module, exports, _dependencyMap) {
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _react2 = _require(_dependencyMap[0], "react");
+
+	var _react3 = _interopRequireDefault(_react2);
+
+	var _index = _require(_dependencyMap[1], "./../../../node_modules/react-transform-hmr/lib/index.js");
+
+	var _index2 = _interopRequireDefault(_index);
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _jsxFileName = "/var/www/html/books/BooksNativeApp/src/js/account/slct_bk_add_method.js";
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _reactNative = _require(_dependencyMap[2], "react-native");
+
+	var _reactRedux = _require(_dependencyMap[3], "react-redux");
+
+	var _store = _require(_dependencyMap[4], "../store");
+
+	var _store2 = _interopRequireDefault(_store);
+
+	var _ac_dispatchers = _require(_dependencyMap[5], "./ac_dispatchers");
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _components = {
+		_Menu: {
+			displayName: "_Menu"
+		},
+		MethodSelectorMenu: {
+			displayName: "MethodSelectorMenu"
+		}
+	};
+
+	var _node_modulesReactTransformHmrLibIndexJs2 = (0, _index2.default)({
+		filename: "/var/www/html/books/BooksNativeApp/src/js/account/slct_bk_add_method.js",
+		components: _components,
+		locals: [module],
+		imports: [_react3.default]
+	});
+
+	function _wrapComponent(id) {
+		return function (Component) {
+			return _node_modulesReactTransformHmrLibIndexJs2(Component, id);
+		};
+	}
+
+	var _Menu = _wrapComponent("_Menu")(function (_Component) {
+		_inherits(_Menu, _Component);
+
+		function _Menu(props) {
+			_classCallCheck(this, _Menu);
+
+			var _this = _possibleConstructorReturn(this, (_Menu.__proto__ || Object.getPrototypeOf(_Menu)).call(this, props));
+
+			_this.useBarcodeScanner = function () {
+				console.log("Using barcode scanner");
+			};
+
+			_this.useManual = function () {
+				console.log("Using Manual");
+			};
+
+			return _this;
+		}
+
+		_createClass(_Menu, [{
+			key: "render",
+			value: function render() {
+				return _react3.default.createElement(
+					_reactNative.Modal,
+					{
+						animationType: "fade",
+						transparent: true,
+						visible: true,
+						onRequestClose: this.props.closeMenu,
+						__source: {
+							fileName: _jsxFileName,
+							lineNumber: 38
+						}
+					},
+					_react3.default.createElement(
+						_reactNative.TouchableWithoutFeedback,
+						{
+							onPress: this.props.closeMenu,
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 44
+							}
+						},
+						_react3.default.createElement(
+							_reactNative.View,
+							{
+								style: styles.touchable,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 47
+								}
+							},
+							_react3.default.createElement(
+								_reactNative.View,
+								{
+									style: styles.menu,
+									__source: {
+										fileName: _jsxFileName,
+										lineNumber: 50
+									}
+								},
+								_react3.default.createElement(
+									_reactNative.TouchableOpacity,
+									{
+										onPress: this.useBarcodeScanner,
+										__source: {
+											fileName: _jsxFileName,
+											lineNumber: 51
+										}
+									},
+									_react3.default.createElement(
+										_reactNative.View,
+										{
+											style: styles.menuitem,
+											__source: {
+												fileName: _jsxFileName,
+												lineNumber: 54
+											}
+										},
+										_react3.default.createElement(
+											_reactNative.Text,
+											{
+												__source: {
+													fileName: _jsxFileName,
+													lineNumber: 55
+												}
+											},
+											"Barcode Scanner"
+										)
+									)
+								),
+								_react3.default.createElement(
+									_reactNative.TouchableOpacity,
+									{
+										onPress: this.useManual,
+										__source: {
+											fileName: _jsxFileName,
+											lineNumber: 61
+										}
+									},
+									_react3.default.createElement(
+										_reactNative.View,
+										{
+											style: _extends({}, _reactNative.StyleSheet.flatten(styles.menuitem), {
+												borderTopWidth: 1,
+												borderTopColor: "#999"
+											}),
+											__source: {
+												fileName: _jsxFileName,
+												lineNumber: 64
+											}
+										},
+										_react3.default.createElement(
+											_reactNative.Text,
+											{
+												__source: {
+													fileName: _jsxFileName,
+													lineNumber: 69
+												}
+											},
+											"Manual input"
+										)
+									)
+								)
+							)
+						)
+					)
+				);
+			}
+		}]);
+
+		return _Menu;
+	}(_react2.Component));
+
+	function mapStateToProps(state) {
+		return {
+			show: state.guiControl.showAccountHeaderMenu
+		};
+	}
+
+	function mapDispatchToProps(dispatch) {
+		return {
+			openMenu: function openMenu() {
+				return (0, _ac_dispatchers.showAddMethodSelectorMenu)(dispatch);
+			},
+			closeMenu: function closeMenu() {
+				return (0, _ac_dispatchers.hideAddMethodSelectorMenu)(dispatch);
+			}
+		};
+	}
+
+	var ConnectedMenu = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Menu);
+
+	var MethodSelectorMenu = _wrapComponent("MethodSelectorMenu")(function (_Component2) {
+		_inherits(MethodSelectorMenu, _Component2);
+
+		function MethodSelectorMenu() {
+			_classCallCheck(this, MethodSelectorMenu);
+
+			return _possibleConstructorReturn(this, (MethodSelectorMenu.__proto__ || Object.getPrototypeOf(MethodSelectorMenu)).apply(this, arguments));
+		}
+
+		_createClass(MethodSelectorMenu, [{
+			key: "render",
+			value: function render() {
+				return _react3.default.createElement(
+					_reactRedux.Provider,
+					{
+						store: _store2.default,
+						__source: {
+							fileName: _jsxFileName,
+							lineNumber: 103
+						}
+					},
+					_react3.default.createElement(ConnectedMenu, {
+						__source: {
+							fileName: _jsxFileName,
+							lineNumber: 106
+						}
+					})
+				);
+			}
+		}]);
+
+		return MethodSelectorMenu;
+	}(_react2.Component));
+
+	exports.default = MethodSelectorMenu;
+
+	var styles = _reactNative.StyleSheet.create({
+		text: {
+			color: "white",
+			fontSize: 20,
+			fontWeight: "bold"
+		},
+		touchable: {
+			flex: 1,
+			width: "100%",
+			justifyContent: "center",
+			alignItems: "center"
+		},
+		menu: {
+			width: 180,
+			backgroundColor: "#EEE",
+			zIndex: 10,
+			elevation: 10,
+			justifyContent: "center",
+			alignItems: "stretch"
+		},
+		menuitem: {
+			height: 48,
+			justifyContent: "center",
+			alignItems: "center"
+		},
+		menu_item_text: {
+			color: "gray"
+		}
+	});
+},677,[118,179,12,579,602,572],"src/js/account/slct_bk_add_method.js");
 require(44);
 require(11);
 //# sourceMappingURL=index.map

@@ -9,10 +9,15 @@ import {
 } from "react-native";
 import {connect, Provider} from "react-redux";
 import store from "../store";
-import {fetchMyBooks} from "./ac_dispatchers";
+import {
+	fetchMyBooks,
+	showAddMethodSelectorMenu,
+} from "./ac_dispatchers";
 import univ_const from "/var/www/html/books/BooksNativeApp/univ_const.json";
 const host = univ_const.server_url;
-import {objectToString} from "../shared_components/shared_utilities";
+//import {objectToString} from "../shared_components/shared_utilities";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import MethodSelectorMenu from "./slct_bk_add_method";
 
 class _MyBooks /*to ac_tabnav.js*/ extends Component {
 	componentDidMount = ()=>{
@@ -20,7 +25,6 @@ class _MyBooks /*to ac_tabnav.js*/ extends Component {
 	}
 
 	render() {
-		console.log(objectToString(this.props));
 		let books = [];
 		let errReport = "";
 		if(this.props.books.isFetching) {
@@ -66,6 +70,20 @@ class _MyBooks /*to ac_tabnav.js*/ extends Component {
 
 		return (
 			<View style={styles.container}>
+				<View style={styles.controls}>
+					<TouchableOpacity style={styles.addbk}>
+						<Ionicons
+							onPress={this.props.showMenu}
+							name={"md-add-circle"}
+							size={28}
+							color={"#333"}
+						/>
+						{this.props.show&&<MethodSelectorMenu/>}
+					</TouchableOpacity>
+					<View style={styles.filterbks}>
+						<Text>Filter</Text>
+					</View>
+				</View>
 				<ScrollView 
 					style={styles.scrollview}
 					contentContainerStyle={{
@@ -85,7 +103,7 @@ class BookView extends Component {
 	render() {
 		return (
 			<TouchableOpacity
-				onPress={this.props.showDetails}
+				onPress={console.log("Touched.")}
 				style={styles.bk_wrapper}
 			>
 				<View style={styles.bk_imageWrapper}>
@@ -148,6 +166,7 @@ const styles = StyleSheet.create({
 	},
 	scrollview: {
 		flex: 1,
+		paddingTop: 10,
 	},
 	bk_wrapper: {
 		height: 144,
@@ -194,7 +213,26 @@ const styles = StyleSheet.create({
 	text: {
 		color: "gray",
 
-	}
+	},
+	controls: {
+		flexDirection: "row",
+		justifyContent: "center",
+		alignItems: "center",
+		backgroundColor: "#DDD",
+		height: 44,
+	},
+	addbk: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	filterbks: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+		borderLeftWidth: 1,
+		borderLeftColor: "#AAA",
+	},
 });
 
 
@@ -202,11 +240,13 @@ function mapStateToProps(state) {
 	//TODO
 	return {
 		books: state.myBooks,
+		show: state.guiControl.showBookAddMethodSelectorMenu,
 	};
 }
 function mapDispatchToProps(dispatch) {
 	return {
 		fetchMyBooks: ()=>fetchMyBooks(dispatch),
+		showMenu: ()=>showAddMethodSelectorMenu(dispatch),
 	};
 }
 let ConnectedMyBooks = connect(

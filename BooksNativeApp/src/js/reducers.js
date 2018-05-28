@@ -190,6 +190,7 @@ export function guiControl(
 	state={
 		showAccountHeaderMenu: false,
 		searchMode: false,
+		showBookAddMethodSelectorMenu: false,
 	},
 	action
 ){
@@ -208,6 +209,16 @@ export function guiControl(
 		return {
 			...state,
 			searchMode: !state.searchMode,
+		};
+	case accountActions.SHOW_METHOD_SELECT_MENU:
+		return {
+			...state,
+			showBookAddMethodSelectorMenu: true,
+		};
+	case accountActions.HIDE_METHOD_SELECT_MENU:
+		return {
+			...state,
+			showBookAddMethodSelectorMenu: false,
 		};
 	default:
 		return {

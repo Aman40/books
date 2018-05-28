@@ -167,16 +167,6 @@ function _autoLoginWithCreds(context, dispatch) {
 			} else {
 			//If it's successful though, resume the last request, which should be in
 			//the context as a dispatcher and its arguments.
-			
-			/*
-			AsyncStorage.removeItem("creds", (error)=>{
-				if(error) {
-					console.log("Error deleting creds: "+error);
-				} else {
-					console.log("===Deleted creds===");
-				}
-			});
-			*/
 				credentials = JSON.parse(result);
 				console.log(`Found creds: ${credentials}`);
 				//Has credentials. Auto login
@@ -442,6 +432,21 @@ export function fetchMyBooks(dispatch) {
 			payload: "Connection or Internal database error.",
 		});
 	}
+}
+
+export function showAddMethodSelectorMenu(dispatch) {
+	//Export to slct_bk_add_method.js
+	dispatch({
+		type: actions.SHOW_METHOD_SELECT_MENU,
+		payload: "",
+	});
+}
+export function hideAddMethodSelectorMenu(dispatch){
+	//Export to slct_bk_add_method.js
+	dispatch({
+		type: actions.HIDE_METHOD_SELECT_MENU,
+		payload: "",
+	});
 }
 /*
 TODO

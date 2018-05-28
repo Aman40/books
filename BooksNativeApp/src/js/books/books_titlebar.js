@@ -51,7 +51,7 @@ class _TitleBar extends Component {
 			this.props.toggleSearchMode();
 			//Add the back button event listener. But when should it be removed?
 			//When the back button is pressed would be ideal. And also when the 
-			//mode canceler (x) is pressed. In the first case, it means having the
+			//TODO: mode canceler (x) is pressed. In the first case, it means having the
 			//event handler cancel the eventlistner. 
 			this._hardwareBackPressEvent = BackHandler.addEventListener("hardwareBackPress",()=>{
 				//This callback toggles the mode and removes the listener.
