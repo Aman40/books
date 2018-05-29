@@ -17,7 +17,7 @@ class _Switch extends Component {
 		console.log(this.props.isLoggedIn?"Switch. Logged in":"Switch. Not logged in");
 		if(this.props.isLoggedIn) {
 			return (<AccountTabNav
-				stack_navigation={this.props.navigation}
+				navigation={this.props.navigation}
 			/>);
 		} else {
 			return (<SignUpIn
@@ -48,6 +48,8 @@ export default class Switch extends Component {
 		);
 	}
 }
+//Wire the AccountTabNav router to the mother router
+Switch.router = AccountTabNav.router;
 //TODO: Check if AccountTabNav receives navigation
 //props from both TabNavigation and its parent 
 //StackNavigation.

@@ -22,63 +22,67 @@ import {
 	showAddMethodSelectorMenu,
 	hideAddMethodSelectorMenu,
 } from "./ac_dispatchers";
+import {withNavigation} from "react-navigation";
+//import {objectToString} from "../shared_components/shared_utilities";
 
 class _Menu extends Component {
 	constructor(props) {
 		super(props);
 	}
-useBarcodeScanner=()=>{
-	console.log("Using barcode scanner");
-}
-useManual=()=>{
-	console.log("Using Manual");
-}
-render() {
-	return (
-		<Modal
-			animationType="fade"
-			transparent={true}
-			visible={true}
-			onRequestClose={this.props.closeMenu}
-		>
-			<TouchableWithoutFeedback
-				onPress = {this.props.closeMenu}
+	useBarcodeScanner=()=>{
+		console.log("Using barcode scanner");
+		this.props.closeMenu();
+		this.props.navigation.navigate("BarcodeScanner");
+	}
+	useManual=()=>{
+		console.log("Using Manual");
+	}
+	render() {
+		return (
+			<Modal
+				animationType="fade"
+				transparent={true}
+				visible={true}
+				onRequestClose={this.props.closeMenu}
 			>
-				<View
-					style={styles.touchable}
+				<TouchableWithoutFeedback
+					onPress = {this.props.closeMenu}
 				>
-					<View style={styles.menu}>
-						<TouchableOpacity
-							onPress={this.useBarcodeScanner}
-						>
-							<View style={styles.menuitem}>
-								<Text>
+					<View
+						style={styles.touchable}
+					>
+						<View style={styles.menu}>
+							<TouchableOpacity
+								onPress={this.useBarcodeScanner}
+							>
+								<View style={styles.menuitem}>
+									<Text>
 Barcode Scanner
-								</Text>
-							</View>
-						</TouchableOpacity>
+									</Text>
+								</View>
+							</TouchableOpacity>
 
-						<TouchableOpacity
-							onPress={this.useManual}
-						>
-							< View style = {{
-								...StyleSheet.flatten(styles.menuitem),
-								borderTopWidth: 1,
-								borderTopColor: "#999",
-							}} >
-								<Text>
+							<TouchableOpacity
+								onPress={this.useManual}
+							>
+								< View style = {{
+									...StyleSheet.flatten(styles.menuitem),
+									borderTopWidth: 1,
+									borderTopColor: "#999",
+								}} >
+									<Text>
 Manual input
-								</Text>
-							</View>
-						</TouchableOpacity>
+									</Text>
+								</View>
+							</TouchableOpacity>
+						</View>
 					</View>
-				</View>
 
-			</TouchableWithoutFeedback>
+				</TouchableWithoutFeedback>
 
-		</Modal>	
-	);
-}
+			</Modal>	
+		);
+	}
 }
 function mapStateToProps(state) {
 	return {
@@ -95,7 +99,7 @@ function mapDispatchToProps(dispatch) {
 const ConnectedMenu = connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(_Menu);
+)(withNavigation(_Menu)); //Good luck understanding!
 
 export default class MethodSelectorMenu extends Component {
 	render() {
@@ -103,12 +107,11 @@ export default class MethodSelectorMenu extends Component {
 			<Provider
 				store={store}
 			>
-				<ConnectedMenu />
+				<ConnectedMenu/>
 			</Provider>
 		);
 	}
 }
-
 const styles = StyleSheet.create({
 	text: {
 		color: "white",

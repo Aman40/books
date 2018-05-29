@@ -71,9 +71,11 @@ class _MyBooks /*to ac_tabnav.js*/ extends Component {
 		return (
 			<View style={styles.container}>
 				<View style={styles.controls}>
-					<TouchableOpacity style={styles.addbk}>
+					<TouchableOpacity 
+						style={styles.addbk}
+						onPress={this.props.showMenu}
+					>
 						<Ionicons
-							onPress={this.props.showMenu}
 							name={"md-add-circle"}
 							size={28}
 							color={"#333"}
@@ -266,3 +268,13 @@ export default class MyBooks extends Component {
 	}
 }
 /*navigator can be passed with "withNavigator from react-redux"*/
+/**
+ * TODO: URGENT IDEA
+ * 0. Use the camera to get metadata by scanning the barcode
+ * 1. Use a camera to capture the books' pictures,
+ * 2. Use the camera to scan class notes
+ * 3. Compete the universities against each other
+ * 4. Monetize by giving extra memory
+ * 5. Monetize by asking for donations
+ * 6. Monetize by giving privacy? (Github style)
+ */

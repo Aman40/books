@@ -84572,10 +84572,6 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
 	var _reactNavigation = _require(_dependencyMap[3], "react-navigation");
 
-	var _reactNativeQrcodeScanner = _require(_dependencyMap[4], "react-native-qrcode-scanner");
-
-	var _reactNativeQrcodeScanner2 = _interopRequireDefault(_reactNativeQrcodeScanner);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -84587,9 +84583,6 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 	var _components = {
 		PastPapersHome: {
 			displayName: "PastPapersHome"
-		},
-		ScanScreen: {
-			displayName: "ScanScreen"
 		}
 	};
 
@@ -84624,7 +84617,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						style: styles.wrapper,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 19
+							lineNumber: 16
 						}
 					},
 					_react3.default.createElement(
@@ -84633,7 +84626,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							style: styles.soon,
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 20
+								lineNumber: 17
 							}
 						},
 						"COMING SOON!"
@@ -84644,17 +84637,11 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							style: styles.text,
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 23
+								lineNumber: 20
 							}
 						},
 						"Hello, its a me! Mario!"
-					),
-					_react3.default.createElement(ScanScreen, {
-						__source: {
-							fileName: _jsxFileName,
-							lineNumber: 26
-						}
-					})
+					)
 				);
 			}
 		}]);
@@ -84684,102 +84671,9 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			color: "#3465A4",
 			fontWeight: "bold"
 		},
-		text: {},
-		centerText: {
-			flex: 1,
-			fontSize: 18,
-			padding: 32,
-			color: "#777"
-		},
-		textBold: {
-			fontWeight: "500",
-			color: "#000"
-		},
-		buttonText: {
-			fontSize: 21,
-			color: "rgb(0,122,255)"
-		},
-		buttonTouchable: {
-			padding: 16
-		}
+		text: {}
 	});
-
-	var ScanScreen = _wrapComponent("ScanScreen")(function (_Component2) {
-		_inherits(ScanScreen, _Component2);
-
-		function ScanScreen() {
-			_classCallCheck(this, ScanScreen);
-
-			return _possibleConstructorReturn(this, (ScanScreen.__proto__ || Object.getPrototypeOf(ScanScreen)).apply(this, arguments));
-		}
-
-		_createClass(ScanScreen, [{
-			key: "onSuccess",
-			value: function onSuccess(e) {
-				_reactNative.Linking.openURL(e.data).catch(function (err) {
-					return console.error("An error occured", err);
-				});
-			}
-		}, {
-			key: "render",
-			value: function render() {
-				return _react3.default.createElement(_reactNativeQrcodeScanner2.default, {
-					onRead: this.onSuccess.bind(this),
-					topContent: _react3.default.createElement(
-						_reactNative.Text,
-						{
-							style: styles.centerText,
-							__source: {
-								fileName: _jsxFileName,
-								lineNumber: 94
-							}
-						},
-						"Go to ",
-						_react3.default.createElement(
-							_reactNative.Text,
-							{
-								style: styles.textBold,
-								__source: {
-									fileName: _jsxFileName,
-									lineNumber: 95
-								}
-							},
-							"wikipedia.org/wiki/QR_code"
-						),
-						" on your computer and scan the QR code."
-					),
-					bottomContent: _react3.default.createElement(
-						_reactNative.TouchableOpacity,
-						{
-							style: styles.buttonTouchable,
-							__source: {
-								fileName: _jsxFileName,
-								lineNumber: 99
-							}
-						},
-						_react3.default.createElement(
-							_reactNative.Text,
-							{
-								style: styles.buttonText,
-								__source: {
-									fileName: _jsxFileName,
-									lineNumber: 100
-								}
-							},
-							"OK. Got it!"
-						)
-					),
-					__source: {
-						fileName: _jsxFileName,
-						lineNumber: 91
-					}
-				});
-			}
-		}]);
-
-		return ScanScreen;
-	}(_react2.Component));
-},656,[118,179,12,494,657],"src/js/past-papers/pp_mainstack.js");
+},656,[118,179,12,494],"src/js/past-papers/pp_mainstack.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
   'use strict';
 
@@ -93695,6 +93589,10 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
 	var _titlebar2 = _interopRequireDefault(_titlebar);
 
+	var _barcode_scanner = _require(_dependencyMap[5], "./barcode_scanner");
+
+	var _barcode_scanner2 = _interopRequireDefault(_barcode_scanner);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var AccountStack = (0, _reactNavigation.StackNavigator)({
@@ -93711,7 +93609,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							headerProps: headerProps,
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 23
+								lineNumber: 24
 							}
 						});
 					}
@@ -93723,10 +93621,14 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			navigationOptions: {
 				title: "Sign In"
 			}
+		},
+		BarcodeScanner: {
+			screen: _barcode_scanner2.default,
+			navigationOptions: {}
 		}
 	});
 	exports.default = AccountStack;
-},666,[118,494,667,668,674],"src/js/account/ac_stacknav.js");
+},666,[118,494,667,668,674,678],"src/js/account/ac_stacknav.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -94062,7 +93964,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
 				if (this.props.isLoggedIn) {
 					return _react3.default.createElement(_ac_tabnav2.default, {
-						stack_navigation: this.props.navigation,
+						navigation: this.props.navigation,
 						__source: {
 							fileName: _jsxFileName,
 							lineNumber: 19
@@ -94127,6 +94029,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 	}(_react2.Component));
 
 	exports.default = Switch;
+	Switch.router = _ac_tabnav2.default.router;
 },668,[118,179,669,602,673,579],"src/js/account/ac_switch.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
@@ -94411,25 +94314,25 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							_reactNative.TouchableOpacity,
 							{
 								style: styles.addbk,
+								onPress: this.props.showMenu,
 								__source: {
 									fileName: _jsxFileName,
 									lineNumber: 74
 								}
 							},
 							_react3.default.createElement(_Ionicons2.default, {
-								onPress: this.props.showMenu,
 								name: "md-add-circle",
 								size: 28,
 								color: "#333",
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 75
+									lineNumber: 78
 								}
 							}),
 							this.props.show && _react3.default.createElement(_slct_bk_add_method2.default, {
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 81
+									lineNumber: 83
 								}
 							})
 						),
@@ -94439,7 +94342,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								style: styles.filterbks,
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 83
+									lineNumber: 85
 								}
 							},
 							_react3.default.createElement(
@@ -94447,7 +94350,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								{
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 84
+										lineNumber: 86
 									}
 								},
 								"Filter"
@@ -94464,7 +94367,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							},
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 87
+								lineNumber: 89
 							}
 						},
 						books.length ? books : errReport
@@ -94497,7 +94400,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						style: styles.bk_wrapper,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 105
+							lineNumber: 107
 						}
 					},
 					_react3.default.createElement(
@@ -94506,7 +94409,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							style: styles.bk_imageWrapper,
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 109
+								lineNumber: 111
 							}
 						},
 						_react3.default.createElement(_reactNative.Image, {
@@ -94518,7 +94421,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							},
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 110
+								lineNumber: 112
 							}
 						})
 					),
@@ -94528,7 +94431,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							style: styles.bk_contentWrapper,
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 117
+								lineNumber: 119
 							}
 						},
 						_react3.default.createElement(
@@ -94537,7 +94440,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								style: styles.bk_contentRow,
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 118
+									lineNumber: 120
 								}
 							},
 							_react3.default.createElement(
@@ -94548,7 +94451,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									}),
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 119
+										lineNumber: 121
 									}
 								},
 								this.props.book.Title
@@ -94559,7 +94462,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.bk_contentValue,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 127
+										lineNumber: 129
 									}
 								},
 								"by: ",
@@ -94571,7 +94474,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.bk_contentValue,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 130
+										lineNumber: 132
 									}
 								},
 								this.props.book.Language === "english" ? "English" : "Japanese"
@@ -94584,7 +94487,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									}),
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 133
+										lineNumber: 135
 									}
 								},
 								this.props.book.Cover === "paper_back" ? "Paperback" : "Hardcover"
@@ -94598,7 +94501,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									}),
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 141
+										lineNumber: 143
 									}
 								},
 								"JPY " + this.props.book.Price
@@ -94609,7 +94512,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.bk_contentValue,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 150
+										lineNumber: 152
 									}
 								},
 								"Pages: " + this.props.book.PageNo
@@ -94734,13 +94637,13 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						store: _store2.default,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 260
+							lineNumber: 262
 						}
 					},
 					_react3.default.createElement(ConnectedMyBooks, {
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 263
+							lineNumber: 265
 						}
 					})
 				);
@@ -96229,6 +96132,10 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
 	var _ac_dispatchers = _require(_dependencyMap[5], "./ac_dispatchers");
 
+	var _reactNavigation = _require(_dependencyMap[6], "react-navigation");
+
+	var _shared_utilities = _require(_dependencyMap[7], "../shared_components/shared_utilities");
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -96269,6 +96176,10 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
 			_this.useBarcodeScanner = function () {
 				console.log("Using barcode scanner");
+
+				_this.props.closeMenu();
+
+				_this.props.navigation.navigate("BarcodeScanner");
 			};
 
 			_this.useManual = function () {
@@ -96290,7 +96201,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						onRequestClose: this.props.closeMenu,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 38
+							lineNumber: 42
 						}
 					},
 					_react3.default.createElement(
@@ -96299,7 +96210,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							onPress: this.props.closeMenu,
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 44
+								lineNumber: 48
 							}
 						},
 						_react3.default.createElement(
@@ -96308,7 +96219,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								style: styles.touchable,
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 47
+									lineNumber: 51
 								}
 							},
 							_react3.default.createElement(
@@ -96317,7 +96228,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.menu,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 50
+										lineNumber: 54
 									}
 								},
 								_react3.default.createElement(
@@ -96326,7 +96237,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 										onPress: this.useBarcodeScanner,
 										__source: {
 											fileName: _jsxFileName,
-											lineNumber: 51
+											lineNumber: 55
 										}
 									},
 									_react3.default.createElement(
@@ -96335,7 +96246,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 											style: styles.menuitem,
 											__source: {
 												fileName: _jsxFileName,
-												lineNumber: 54
+												lineNumber: 58
 											}
 										},
 										_react3.default.createElement(
@@ -96343,7 +96254,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 											{
 												__source: {
 													fileName: _jsxFileName,
-													lineNumber: 55
+													lineNumber: 59
 												}
 											},
 											"Barcode Scanner"
@@ -96356,7 +96267,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 										onPress: this.useManual,
 										__source: {
 											fileName: _jsxFileName,
-											lineNumber: 61
+											lineNumber: 65
 										}
 									},
 									_react3.default.createElement(
@@ -96368,7 +96279,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 											}),
 											__source: {
 												fileName: _jsxFileName,
-												lineNumber: 64
+												lineNumber: 68
 											}
 										},
 										_react3.default.createElement(
@@ -96376,7 +96287,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 											{
 												__source: {
 													fileName: _jsxFileName,
-													lineNumber: 69
+													lineNumber: 73
 												}
 											},
 											"Manual input"
@@ -96410,7 +96321,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 		};
 	}
 
-	var ConnectedMenu = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Menu);
+	var ConnectedMenu = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)((0, _reactNavigation.withNavigation)(_Menu));
 
 	var MethodSelectorMenu = _wrapComponent("MethodSelectorMenu")(function (_Component2) {
 		_inherits(MethodSelectorMenu, _Component2);
@@ -96430,13 +96341,13 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						store: _store2.default,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 103
+							lineNumber: 107
 						}
 					},
 					_react3.default.createElement(ConnectedMenu, {
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 106
+							lineNumber: 110
 						}
 					})
 				);
@@ -96477,7 +96388,160 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			color: "gray"
 		}
 	});
-},677,[118,179,12,579,602,572],"src/js/account/slct_bk_add_method.js");
+},677,[118,179,12,579,602,572,494,574],"src/js/account/slct_bk_add_method.js");
+__d(function (global, _require, module, exports, _dependencyMap) {
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _react2 = _require(_dependencyMap[0], "react");
+
+	var _react3 = _interopRequireDefault(_react2);
+
+	var _index = _require(_dependencyMap[1], "./../../../node_modules/react-transform-hmr/lib/index.js");
+
+	var _index2 = _interopRequireDefault(_index);
+
+	var _jsxFileName = "/var/www/html/books/BooksNativeApp/src/js/account/barcode_scanner.js";
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _reactNativeQrcodeScanner = _require(_dependencyMap[2], "react-native-qrcode-scanner");
+
+	var _reactNativeQrcodeScanner2 = _interopRequireDefault(_reactNativeQrcodeScanner);
+
+	var _reactNative = _require(_dependencyMap[3], "react-native");
+
+	var _reactNavigation = _require(_dependencyMap[4], "react-navigation");
+
+	var _shared_utilities = _require(_dependencyMap[5], "../shared_components/shared_utilities");
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _components = {
+		_ScanScreen: {
+			displayName: "_ScanScreen"
+		}
+	};
+
+	var _node_modulesReactTransformHmrLibIndexJs2 = (0, _index2.default)({
+		filename: "/var/www/html/books/BooksNativeApp/src/js/account/barcode_scanner.js",
+		components: _components,
+		locals: [module],
+		imports: [_react3.default]
+	});
+
+	function _wrapComponent(id) {
+		return function (Component) {
+			return _node_modulesReactTransformHmrLibIndexJs2(Component, id);
+		};
+	}
+
+	var _ScanScreen = _wrapComponent("_ScanScreen")(function (_Component) {
+		_inherits(_ScanScreen, _Component);
+
+		function _ScanScreen() {
+			_classCallCheck(this, _ScanScreen);
+
+			return _possibleConstructorReturn(this, (_ScanScreen.__proto__ || Object.getPrototypeOf(_ScanScreen)).apply(this, arguments));
+		}
+
+		_createClass(_ScanScreen, [{
+			key: "onSuccess",
+			value: function onSuccess(e) {
+				console.log((0, _shared_utilities.objectToString)(e));
+				console.log("Data: " + e.data);
+				this.props.navigation.navigate("Switch");
+			}
+		}, {
+			key: "render",
+			value: function render() {
+				return _react3.default.createElement(_reactNativeQrcodeScanner2.default, {
+					onRead: this.onSuccess.bind(this),
+					topContent: _react3.default.createElement(
+						_reactNative.Text,
+						{
+							style: styles.centerText,
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 24
+							}
+						},
+						"Go to ",
+						_react3.default.createElement(
+							_reactNative.Text,
+							{
+								style: styles.textBold,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 25
+								}
+							},
+							"wikipedia.org/wiki/QR_code"
+						),
+						" on your computer and scan the QR code."
+					),
+					bottomContent: _react3.default.createElement(
+						_reactNative.TouchableOpacity,
+						{
+							style: styles.buttonTouchable,
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 29
+							}
+						},
+						_react3.default.createElement(
+							_reactNative.Text,
+							{
+								style: styles.buttonText,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 30
+								}
+							},
+							"OK. Got it!"
+						)
+					),
+					__source: {
+						fileName: _jsxFileName,
+						lineNumber: 21
+					}
+				});
+			}
+		}]);
+
+		return _ScanScreen;
+	}(_react2.Component));
+
+	var ScanScreen = (0, _reactNavigation.withNavigation)(_ScanScreen);
+	exports.default = ScanScreen;
+
+	var styles = _reactNative.StyleSheet.create({
+		centerText: {
+			flex: 1,
+			fontSize: 18,
+			padding: 32,
+			color: "#777"
+		},
+		textBold: {
+			fontWeight: "500",
+			color: "#000"
+		},
+		buttonText: {
+			fontSize: 21,
+			color: "rgb(0,122,255)"
+		},
+		buttonTouchable: {
+			padding: 16
+		}
+	});
+},678,[118,179,657,12,494,574],"src/js/account/barcode_scanner.js");
 require(44);
 require(11);
 //# sourceMappingURL=index.map

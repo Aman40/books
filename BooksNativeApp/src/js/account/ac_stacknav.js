@@ -10,6 +10,7 @@ import {StackNavigator} from "react-navigation";
 import SignIn from "./view_signin";
 import Switch from "./ac_switch";
 import TitleBar from "./titlebar";
+import ScanScreen from "./barcode_scanner";
 
 let AccountStack = StackNavigator(
 	{
@@ -33,6 +34,12 @@ let AccountStack = StackNavigator(
 			screen: SignIn,
 			navigationOptions: {
 				title: "Sign In",
+			}
+		},
+		BarcodeScanner: {
+			screen: ScanScreen,
+			navigationOptions: {
+				//todo
 			}
 		}
 	},
