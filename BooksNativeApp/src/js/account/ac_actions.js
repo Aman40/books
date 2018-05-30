@@ -11,3 +11,6 @@ export const ERROR_FETCHING_MY_BOOKS = "error fetching my books";
 export const IS_FETCHING_MY_BOOKS = "started fetching my books";
 export const SHOW_METHOD_SELECT_MENU = "show book add method select menu";
 export const HIDE_METHOD_SELECT_MENU = "hide book add method select menu";
+export const ISBN_META_FETCH_START = "started fetching isbn meta";
+export const ISBN_TO_META_SUCCESS = "successfully fetched isbn meta";
+export const ISBN_TO_META_ERROR = "A problem or another occurred";

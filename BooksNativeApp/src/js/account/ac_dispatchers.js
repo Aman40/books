@@ -5,6 +5,7 @@ const host = univ_const.server_url;
 import {AsyncStorage} from "react-native";
 import {objectToString} from "../shared_components/shared_utilities";
 import RNRestart from "react-native-restart";
+const ISBN = require("simple-isbn").isbn;
 
 export /**/ function login(dispatch, payload) {
 	//Payload must be {email, password}
@@ -448,6 +449,106 @@ export function hideAddMethodSelectorMenu(dispatch){
 		payload: "",
 	});
 }
+
+export function getMetaFromIsbn(dispatch, isbn) {
+	/**
+	 * 1. Check that it's a string.
+	 * 2. Check that there aren't any hyphenes
+	 * 3. Check if valid isbn10 then 13
+	 * if 10, OK. if 13, convert to 10. if invalid isbn, error, enter manually.
+	 * Use bookmooch api to get meta data as object
+	 */
+	
+	if(ISBN.isValidIsbn13(isbn)) {
+		//Convert to isbn10
+		isbn = ISBN.toIsbn10(isbn);
+	} else if(!ISBN.isValidIsbn10(isbn)) {
+		//Report reasons and return. RETURN!!
+		//Check if it has hyphenes
+		if(isbn.includes("-")) {
+			dispatch({
+				type: actions.ISBN_TO_META_ERROR,
+				payload: {
+					code: 0,
+					msg: "ISBN must not include a hyphene (-)",
+				}
+			});
+			return;
+		} else {
+			dispatch({
+				type: actions.ISBN_TO_META_ERROR,
+				payload: {
+					code: 0,
+					msg: "Invalid ISBN",
+				}
+			});
+			return;
+		}
+	}
+	//By this point, the ISBN is solid.
+	let xhr = new XMLHttpRequest();
+	xhr.responseType = "text";
+	xhr.timeout = 5000;
+	xhr.ontimeout = function() {
+		//Find out the problem
+		console.log("Caught a problem with xhr.open()");
+		dispatch({
+			type: actions.ISBN_TO_META_ERROR,
+			payload: {
+				code: 1,
+				msg: "Request timeout. Check your network",
+			}
+		});
+	};
+	xhr.onreadystatechange = function() {
+		if(this.readyState===4 && this.status===200) {
+			//OK! Proceed to extract data and invoke callback.
+			//TODO: PICKUP
+			//Network problem??
+			console.log(this.responseText);
+			const resultObj = JSON.parse(this.responseText);
+			if(resultObj.hasOwnProperty("result_code")) {
+				//Problems. No data found
+				dispatch({
+					type: actions.ISBN_TO_META_ERROR,
+					payload: {
+						code: 3,
+						msg: "No meta data in the database",
+					}
+				});
+			} else {
+				//Call the callback.
+				console.log("Success fetching meta:");
+				console.log(objectToString(resultObj));
+				console.log(resultObj);
+				dispatch({
+					type: actions.ISBN_TO_META_SUCCESS,
+					payload: resultObj
+				});
+			}
+		} else if(this.readyState===4) {
+			//Server problem
+			console.log("Server Error");
+			dispatch({
+				type: actions.ISBN_TO_META_ERROR,
+				payload: {
+					code: 2,
+					msg: "Server Error. Try again later!",
+				}
+			});
+		}
+	};
+
+	xhr.open("GET", `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=AIzaSyCY-8-Rey7EZEmEacYR0RCMu9KapTItAOU`, true);
+
+	xhr.send();
+	dispatch({
+		type: actions.ISBN_META_FETCH_START,
+		payload: "Fetching meta data",
+	});
+}
+
+
 /*
 TODO
 1. Check for session check!

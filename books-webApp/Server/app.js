@@ -141,3 +141,4 @@ function send_session_data(req, res){
 //if res.getHeader('Set-Cookie') is called too quickly, it returns undefined, which is promptly written
 //to the output. Solution: write something first as some kind of async timeout. By the time it's done,
 //The cookie header is ready, the session has been generated. Async Astyncs.
+//"http://api.bookmooch.com/api/asin?asins=4563022373&inc=Edition+ISBN+Binding+Title+Author+NumberOfPages+Publisher+PublicationDate&o=json"

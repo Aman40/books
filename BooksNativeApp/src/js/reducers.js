@@ -23,6 +23,7 @@ export function books(
 			...state,
 			isFetching: true,
 			searchStatusString: "Fetching books. Please wait...",
+			fetchErrorString: "",
 		};
 	case booksActions.SUCCESS_FETCHING_BOOKS:
 		return {
@@ -139,6 +140,7 @@ export function session(state={
 			isLoggedIn: false,
 			userData: "",
 			logoutSuccess: false,
+			loginErrorMsg: null,
 		};
 	case accountActions.LOGIN_SUCCESS:
 		console.log("We are logged in yo!");
@@ -224,6 +226,64 @@ export function guiControl(
 		return {
 			...state,
 		};
+	}
+}
+export function booksToAdd(
+	state={
+		fetchingWait: false,
+		fetchMetaSuccess: false,
+		fetchMetaFail: false,
+		fetchMetaError: {
+			code: null,
+			msg: "",
+			/**
+			 * Error codes: Solution
+			 * 0. Invalid ISBN: Rescan or type
+			 * 1. Network fail: Check your network
+			 * 2. Server error: Try again later
+			 * 3. No data: Skip For Later Manual Entry
+			 */
+		},
+		addedBooksList: [],
+	},
+	action
+) {
+	switch(action.type) {
+	case accountActions.ISBN_META_FETCH_START:
+		return {
+			...state,
+			fetchingWait: true,
+			fetchMetaSuccess: false,
+			fetchMetaFail: false,
+			fetchMetaError: {
+				code: null,
+				msg: "",
+			}
+		};
+	case accountActions.ISBN_TO_META_SUCCESS:
+		return {
+			...state,
+			fetchingWait: false,
+			fetchMetaSuccess: true,
+			fetchMetaFail: false,
+			addedBooksList: ()=>{
+				return state.addedBooksList.push(action.payload);
+			}
+		};
+	case accountActions.ISBN_TO_META_FAIL:
+		return {
+			...state,
+			fetchingWait: false,
+			fetchMetaSuccess: false,
+			fetchMetaFail: true,
+			fetchMetaError: {
+				code: action.payload.code,
+				msg: action.payload.msg,
+			}
+
+		};
+	default: 
+		return state;
 	}
 }
 //NOTES: Async functions should always dispatch 3 types of actions.

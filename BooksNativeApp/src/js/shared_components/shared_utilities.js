@@ -13,3 +13,9 @@ export function objectToString(Obj) {
 	}
 	return returnString+=`${arr[arr.length-1]}=${Obj[arr[arr.length-1]]}`; //The comma at the end
 }
+export function isbnToMeta(isbn) {
+	/**
+	 * Scrape several web pages for book meta data
+	 * and return it as an object.
+	 */
+}
