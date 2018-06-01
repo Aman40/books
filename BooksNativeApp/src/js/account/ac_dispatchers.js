@@ -473,6 +473,7 @@ export function getMetaFromIsbn(dispatch, isbn) {
 					msg: "ISBN must not include a hyphene (-)",
 				}
 			});
+			console.log("Invalid isbn. Has -");
 			return;
 		} else {
 			dispatch({
@@ -482,6 +483,7 @@ export function getMetaFromIsbn(dispatch, isbn) {
 					msg: "Invalid ISBN",
 				}
 			});
+			console.log("Invalid isbn");
 			return;
 		}
 	}
@@ -505,9 +507,8 @@ export function getMetaFromIsbn(dispatch, isbn) {
 			//OK! Proceed to extract data and invoke callback.
 			//TODO: PICKUP
 			//Network problem??
-			console.log(this.responseText);
 			const resultObj = JSON.parse(this.responseText);
-			if(resultObj.hasOwnProperty("result_code")) {
+			if(!resultObj.totalItems) {
 				//Problems. No data found
 				dispatch({
 					type: actions.ISBN_TO_META_ERROR,
@@ -518,12 +519,10 @@ export function getMetaFromIsbn(dispatch, isbn) {
 				});
 			} else {
 				//Call the callback.
-				console.log("Success fetching meta:");
-				console.log(objectToString(resultObj));
 				console.log(resultObj);
 				dispatch({
 					type: actions.ISBN_TO_META_SUCCESS,
-					payload: resultObj
+					payload: {isbn, resultObj:resultObj.items[0].volumeInfo},
 				});
 			}
 		} else if(this.readyState===4) {
@@ -547,7 +546,18 @@ export function getMetaFromIsbn(dispatch, isbn) {
 		payload: "Fetching meta data",
 	});
 }
-
+export function showScanPreview(dispatch) {
+	dispatch ({
+		type: actions.SHOW_SCAN_PREVIEW,
+		payload: null,
+	});
+}
+export function hideScanPreview(dispatch) {
+	dispatch({
+		type: actions.HIDE_SCAN_PREVIEW,
+		payload: null,
+	});
+}
 
 /*
 TODO

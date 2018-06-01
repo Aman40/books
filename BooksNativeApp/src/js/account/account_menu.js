@@ -63,8 +63,6 @@ class _Menu extends Component {
 									</Text>
 								</View>
 							</TouchableOpacity>
-							
-							
 						</View>
 					</View>
 					

@@ -6,26 +6,44 @@ import {
 	StyleSheet,
 } from "react-native";
 import {withNavigation} from "react-navigation";
-import {objectToString} from "../shared_components/shared_utilities";
+//import {objectToString} from "../shared_components/shared_utilities";
 import { getMetaFromIsbn } from "./ac_dispatchers";
 import store from "../store";
 import {
 	connect,
 	Provider
 } from "react-redux";
+import {showScanPreview} from "./ac_dispatchers";
+import ScanPreview from "./scanned_preview_modal";
 
 class _ScanScreen extends Component {
+
 	onSuccess(e) {
 		//Data is in e.data. Scrape the web for the meta data
 		//Use this api: "http://api.bookmooch.com/api/asin?asins=4563022373&inc=Edition+ISBN+Binding+Title+Author+NumberOfPages+Publisher+PublicationDate&o=json"
 		//Only replacing the isbn after conversion to ISBN-10
 		//Get the meta for each book and put it in the redux store before moving on to the next book
-		this.props.getMetaFromIsbn(e.data);
+		//Check if this has been scanned before before getting meta data
+		if(this.props.scannedIsbnList.includes(e.data)) {
+			//Already scanned
+			//Display a modal or something.
+			console.log("You already scanned that book. Idiot!");
+		} else {
+			//scan
+			this.props.getMetaFromIsbn(e.data);
+			this.props.showScanPreview();
+		}
 		//There should be a waiting system for one to finish before the next
 	}
 
+	componentDidUpdate=()=>{
+		if(!this.props.wait && !this.props.show) {
+			console.log("Reactivating");
+			this.scanner&&this.scanner.reactivate();
+		}
+	}
+
 	render() {
-		console.log(objectToString(this.props.addedBooks[0]));
 		return (
 			<QRCodeScanner
 				onRead={this.onSuccess.bind(this)}
@@ -43,10 +61,11 @@ class _ScanScreen extends Component {
 						style={styles.buttonTouchable}
 						onPress={()=>this.props.navigation.navigate("Switch")}
 					>
+						{this.props.show&&!this.props.wait?<ScanPreview/>:[]}
 						<Text style={styles.buttonText}>{this.props.wait?"Wait": "Ready"}</Text>
 					</TouchableOpacity>
 				}
-				reactivate={true}
+				ref={(node)=>{this.scanner=node;}}
 			/>
 		);
 	}
@@ -61,13 +80,18 @@ function mapStateToProps(state) {
 		errCode: state.booksToAdd.fetchMetaError.code,
 		errMsg: state.booksToAdd.fetchMetaError.msg,
 		addedBooks: state.booksToAdd.addedBooksList,
+		scannedIsbnList: state.booksToAdd.scannedIsbnList,
+		show: state.guiControl.showScanPreview,
 	};
 }
 function mapDispatchToProps(dispatch) {
 	return {
 		getMetaFromIsbn: (isbn)=>{
 			getMetaFromIsbn(dispatch, isbn);
-		}
+		},
+		showScanPreview: ()=>{
+			showScanPreview(dispatch);
+		},
 	};
 }
 const ConnScanScreen = connect(
@@ -85,7 +109,11 @@ export default class ScanScreen extends Component {
 		);
 	}
 }
-   
+ 
+//Define the modal here.
+
+
+
 const styles = StyleSheet.create({
 	centerText: {
 		flex: 1,

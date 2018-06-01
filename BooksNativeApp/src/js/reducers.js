@@ -1,6 +1,6 @@
 import * as booksActions from "./books/books_actions";
 import * as accountActions from "./account/ac_actions";
-
+import {objectToString} from "./shared_components/shared_utilities";
 export function books(
 	state={
 		isFetching: false, //Started fetching?
@@ -193,6 +193,7 @@ export function guiControl(
 		showAccountHeaderMenu: false,
 		searchMode: false,
 		showBookAddMethodSelectorMenu: false,
+		showScanPreview: false,
 	},
 	action
 ){
@@ -222,6 +223,16 @@ export function guiControl(
 			...state,
 			showBookAddMethodSelectorMenu: false,
 		};
+	case accountActions.SHOW_SCAN_PREVIEW:
+		return {
+			...state,
+			showScanPreview: true,
+		};
+	case accountActions.HIDE_SCAN_PREVIEW:
+		return {
+			...state,
+			showScanPreview: false,
+		};
 	default:
 		return {
 			...state,
@@ -242,8 +253,10 @@ export function booksToAdd(
 			 * 1. Network fail: Check your network
 			 * 2. Server error: Try again later
 			 * 3. No data: Skip For Later Manual Entry
+			 * //Send a reset action to clear this data at start and end of the session
 			 */
 		},
+		scannedIsbnList: [],
 		addedBooksList: [],
 	},
 	action
@@ -266,9 +279,16 @@ export function booksToAdd(
 			fetchingWait: false,
 			fetchMetaSuccess: true,
 			fetchMetaFail: false,
-			addedBooksList: ()=>{
-				return state.addedBooksList.push(action.payload);
-			}
+			scannedIsbnList: (()=>{
+				let new_arr = state.scannedIsbnList.slice(0, state.scannedIsbnList.length);
+				new_arr.push(action.payload.isbn);
+				return new_arr;
+			})(),
+			addedBooksList: (()=>{
+				let new_arr = state.addedBooksList.slice(0, state.addedBooksList.length);
+				new_arr.push(action.payload.resultObj);
+				return new_arr;
+			})(),
 		};
 	case accountActions.ISBN_TO_META_FAIL:
 		return {

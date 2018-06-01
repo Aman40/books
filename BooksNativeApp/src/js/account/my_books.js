@@ -105,7 +105,6 @@ class BookView extends Component {
 	render() {
 		return (
 			<TouchableOpacity
-				onPress={console.log("Touched.")}
 				style={styles.bk_wrapper}
 			>
 				<View style={styles.bk_imageWrapper}>

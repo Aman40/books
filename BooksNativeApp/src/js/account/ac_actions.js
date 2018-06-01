@@ -14,3 +14,5 @@ export const HIDE_METHOD_SELECT_MENU = "hide book add method select menu";
 export const ISBN_META_FETCH_START = "started fetching isbn meta";
 export const ISBN_TO_META_SUCCESS = "successfully fetched isbn meta";
 export const ISBN_TO_META_ERROR = "A problem or another occurred";
+export const SHOW_SCAN_PREVIEW = "Show preview of scanned book";
+export const HIDE_SCAN_PREVIEW = "Hide preview of scanned book";

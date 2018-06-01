@@ -11,11 +11,5 @@ export function objectToString(Obj) {
 	for(let i=0;i<arr.length-1; i++) {
 		returnString+=`${arr[i]}<${typeof(Obj[arr[i]])}> => ${Obj[arr[i]]}, `;	
 	}
-	return returnString+=`${arr[arr.length-1]}=${Obj[arr[arr.length-1]]}`; //The comma at the end
-}
-export function isbnToMeta(isbn) {
-	/**
-	 * Scrape several web pages for book meta data
-	 * and return it as an object.
-	 */
+	return returnString+=`${arr[arr.length-1]}<${typeof(Obj[arr.length-1])}> =>${Obj[arr[arr.length-1]]}`; //The comma at the end
 }
