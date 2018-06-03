@@ -18,6 +18,7 @@ const host = univ_const.server_url;
 //import {objectToString} from "../shared_components/shared_utilities";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MethodSelectorMenu from "./slct_bk_add_method";
+import {showGenericMessageModal} from "../shared_components/err_msg_display_modal";
 
 class _MyBooks /*to ac_tabnav.js*/ extends Component {
 	componentDidMount = ()=>{
@@ -106,6 +107,10 @@ class BookView extends Component {
 		return (
 			<TouchableOpacity
 				style={styles.bk_wrapper}
+				onPress={()=>{showGenericMessageModal({
+					type: "message",
+					text: "It's working!",
+				});}}
 			>
 				<View style={styles.bk_imageWrapper}>
 					<Image

@@ -1,6 +1,7 @@
 import * as booksActions from "./books/books_actions";
 import * as accountActions from "./account/ac_actions";
-import {objectToString} from "./shared_components/shared_utilities";
+import {genericErrorModalActions} from "./shared_components/err_msg_display_modal";
+//import {objectToString} from "./shared_components/shared_utilities";
 export function books(
 	state={
 		isFetching: false, //Started fetching?
@@ -194,6 +195,11 @@ export function guiControl(
 		searchMode: false,
 		showBookAddMethodSelectorMenu: false,
 		showScanPreview: false,
+		genericMessageModal: {
+			visible: false,
+			type: "message", //enum("message", "warning", "text")
+			text: "",
+		}
 	},
 	action
 ){
@@ -232,6 +238,24 @@ export function guiControl(
 		return {
 			...state,
 			showScanPreview: false,
+		};
+	case genericErrorModalActions.OPEN_GENERIC_ERROR:
+		return {
+			...state,
+			genericMessageModal: {
+				visible: true,
+				type: action.payload.type,
+				text: action.payload.text,
+			},
+		};
+	case genericErrorModalActions.CLOSE_GENERIC_ERROR:
+		return {
+			...state,
+			genericMessageModal: {
+				visible: false,
+				type: "message",
+				text: "",
+			}
 		};
 	default:
 		return {

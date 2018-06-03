@@ -11,6 +11,7 @@ import SignIn from "./view_signin";
 import Switch from "./ac_switch";
 import TitleBar from "./titlebar";
 import ScanScreen from "./barcode_scanner";
+import AddBook from "./add_book";
 
 let AccountStack = StackNavigator(
 	{
@@ -41,6 +42,9 @@ let AccountStack = StackNavigator(
 			navigationOptions: {
 				//todo
 			}
+		},
+		AddBook: {
+			screen: AddBook,
 		}
 	},
 );

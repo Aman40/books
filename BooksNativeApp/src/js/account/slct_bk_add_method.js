@@ -36,6 +36,8 @@ class _Menu extends Component {
 	}
 	useManual=()=>{
 		console.log("Using Manual");
+		this.props.closeMenu();
+		this.props.navigation.navigate("AddBook");
 	}
 	render() {
 		return (
@@ -56,7 +58,7 @@ class _Menu extends Component {
 								onPress={this.useBarcodeScanner}
 							>
 								<View style={styles.menuitem}>
-									<Text>
+									<Text style={styles.menu_item_text}>
 Barcode Scanner
 									</Text>
 								</View>
@@ -70,7 +72,7 @@ Barcode Scanner
 									borderTopWidth: 1,
 									borderTopColor: "#999",
 								}} >
-									<Text>
+									<Text style={styles.menu_item_text}>
 Manual input
 									</Text>
 								</View>
@@ -123,14 +125,18 @@ const styles = StyleSheet.create({
 		width: "100%",
 		justifyContent: "center",
 		alignItems: "center",
+		backgroundColor: "rgba(255,255,255,0.7)"
 	},
 	menu: {
 		width: 180,
-		backgroundColor: "#EEE",
+		backgroundColor: "#222",
 		zIndex: 10,
 		elevation: 10,
 		justifyContent: "center",
 		alignItems: "stretch",
+		borderColor: "teal",
+		borderWidth: 3,
+		borderRadius: 10,
 	},
 	menuitem: {
 		height: 48,
@@ -138,6 +144,6 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	menu_item_text: {
-		color: "gray",
+		color: "#EEE",
 	},
 });

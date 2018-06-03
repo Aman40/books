@@ -74007,7 +74007,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 },570,[118,179,12,571,572],"src/js/books/books_view.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
     module.exports = {
-        "server_url": "http://192.168.0.14:8000"
+        "server_url": "http://10.4.142.56:8000"
     };
 },571,[],"univ_const.json");
 __d(function (global, _require, module, exports, _dependencyMap) {
@@ -74023,6 +74023,8 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 	exports.showAddMethodSelectorMenu = showAddMethodSelectorMenu;
 	exports.hideAddMethodSelectorMenu = hideAddMethodSelectorMenu;
 	exports.getMetaFromIsbn = getMetaFromIsbn;
+	exports.showScanPreview = showScanPreview;
+	exports.hideScanPreview = hideScanPreview;
 
 	var _ac_actions = _require(_dependencyMap[0], "./ac_actions");
 
@@ -74426,6 +74428,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						msg: "ISBN must not include a hyphene (-)"
 					}
 				});
+				console.log("Invalid isbn. Has -");
 				return;
 			} else {
 				dispatch({
@@ -74435,6 +74438,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						msg: "Invalid ISBN"
 					}
 				});
+				console.log("Invalid isbn");
 				return;
 			}
 		}
@@ -74458,7 +74462,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			if (this.readyState === 4 && this.status === 200) {
 				var resultObj = JSON.parse(this.responseText);
 
-				if (resultObj.hasOwnProperty("result_code")) {
+				if (!resultObj.totalItems) {
 					dispatch({
 						type: actions.ISBN_TO_META_ERROR,
 						payload: {
@@ -74467,14 +74471,17 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						}
 					});
 				} else {
-					console.log("Success fetching meta:");
-					console.log((0, _shared_utilities.objectToString)(resultObj));
+					console.log(resultObj);
 					dispatch({
 						type: actions.ISBN_TO_META_SUCCESS,
-						payload: resultObj
+						payload: {
+							isbn: isbn,
+							resultObj: resultObj.items[0].volumeInfo
+						}
 					});
 				}
 			} else if (this.readyState === 4) {
+				console.log("Server Error");
 				dispatch({
 					type: actions.ISBN_TO_META_ERROR,
 					payload: {
@@ -74485,11 +74492,25 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			}
 		};
 
-		xhr.open("GET", "http://api.bookmooch.com/api/asin?asins=" + isbn + "&inc=Edition+ISBN+Binding+Title+Author+NumberOfPages+Publisher+PublicationDate&o=json", true);
+		xhr.open("GET", "https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn + "&key=AIzaSyCY-8-Rey7EZEmEacYR0RCMu9KapTItAOU", true);
 		xhr.send();
 		dispatch({
 			type: actions.ISBN_META_FETCH_START,
 			payload: "Fetching meta data"
+		});
+	}
+
+	function showScanPreview(dispatch) {
+		dispatch({
+			type: actions.SHOW_SCAN_PREVIEW,
+			payload: null
+		});
+	}
+
+	function hideScanPreview(dispatch) {
+		dispatch({
+			type: actions.HIDE_SCAN_PREVIEW,
+			payload: null
 		});
 	}
 },572,[573,571,12,574,575,576,579],"src/js/account/ac_dispatchers.js");
@@ -74513,13 +74534,14 @@ __d(function (global, _require, module, exports, _dependencyMap) {
   var ISBN_META_FETCH_START = exports.ISBN_META_FETCH_START = "started fetching isbn meta";
   var ISBN_TO_META_SUCCESS = exports.ISBN_TO_META_SUCCESS = "successfully fetched isbn meta";
   var ISBN_TO_META_ERROR = exports.ISBN_TO_META_ERROR = "A problem or another occurred";
+  var SHOW_SCAN_PREVIEW = exports.SHOW_SCAN_PREVIEW = "Show preview of scanned book";
+  var HIDE_SCAN_PREVIEW = exports.HIDE_SCAN_PREVIEW = "Hide preview of scanned book";
 },573,[],"src/js/account/ac_actions.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
 	exports.objectToString = objectToString;
-	exports.isbnToMeta = isbnToMeta;
 
 	function objectToString(Obj) {
 		if (!Obj) return "Not an object: Null or undefined.";
@@ -74530,10 +74552,8 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			returnString += arr[i] + "<" + typeof Obj[arr[i]] + "> => " + Obj[arr[i]] + ", ";
 		}
 
-		return returnString += arr[arr.length - 1] + "=" + Obj[arr[arr.length - 1]];
+		return returnString += arr[arr.length - 1] + "<" + typeof Obj[arr.length - 1] + "> =>" + Obj[arr[arr.length - 1]];
 	}
-
-	function isbnToMeta(isbn) {}
 },574,[],"src/js/shared_components/shared_utilities.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
   'use strict';
@@ -78935,7 +78955,8 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 		var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
 			showAccountHeaderMenu: false,
 			searchMode: false,
-			showBookAddMethodSelectorMenu: false
+			showBookAddMethodSelectorMenu: false,
+			showScanPreview: false
 		};
 		var action = arguments[1];
 
@@ -78965,6 +78986,16 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 					showBookAddMethodSelectorMenu: false
 				});
 
+			case accountActions.SHOW_SCAN_PREVIEW:
+				return _extends({}, state, {
+					showScanPreview: true
+				});
+
+			case accountActions.HIDE_SCAN_PREVIEW:
+				return _extends({}, state, {
+					showScanPreview: false
+				});
+
 			default:
 				return _extends({}, state);
 		}
@@ -78979,6 +79010,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 				code: null,
 				msg: ""
 			},
+			scannedIsbnList: [],
 			addedBooksList: []
 		};
 		var action = arguments[1];
@@ -79000,9 +79032,16 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 					fetchingWait: false,
 					fetchMetaSuccess: true,
 					fetchMetaFail: false,
-					addedBooksList: function addedBooksList() {
-						return state.addedBooksList.push(action.payload);
-					}
+					scannedIsbnList: function () {
+						var new_arr = state.scannedIsbnList.slice(0, state.scannedIsbnList.length);
+						new_arr.push(action.payload.isbn);
+						return new_arr;
+					}(),
+					addedBooksList: function () {
+						var new_arr = state.addedBooksList.slice(0, state.addedBooksList.length);
+						new_arr.push(action.payload.resultObj);
+						return new_arr;
+					}()
 				});
 
 			case accountActions.ISBN_TO_META_FAIL:
@@ -84965,6 +85004,10 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
 	var _barcode_scanner2 = _interopRequireDefault(_barcode_scanner);
 
+	var _add_book = _require(_dependencyMap[6], "./add_book");
+
+	var _add_book2 = _interopRequireDefault(_add_book);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var AccountStack = (0, _reactNavigation.StackNavigator)({
@@ -84981,7 +85024,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							headerProps: headerProps,
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 24
+								lineNumber: 25
 							}
 						});
 					}
@@ -84997,10 +85040,13 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 		BarcodeScanner: {
 			screen: _barcode_scanner2.default,
 			navigationOptions: {}
+		},
+		AddBook: {
+			screen: _add_book2.default
 		}
 	});
 	exports.default = AccountStack;
-},658,[118,494,659,660,667,669],"src/js/account/ac_stacknav.js");
+},658,[118,494,659,660,667,669,681],"src/js/account/ac_stacknav.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -85768,7 +85814,6 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 				return _react3.default.createElement(
 					_reactNative.TouchableOpacity,
 					{
-						onPress: console.log("Touched."),
 						style: styles.bk_wrapper,
 						__source: {
 							fileName: _jsxFileName,
@@ -85781,7 +85826,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							style: styles.bk_imageWrapper,
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 111
+								lineNumber: 110
 							}
 						},
 						_react3.default.createElement(_reactNative.Image, {
@@ -85793,7 +85838,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							},
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 112
+								lineNumber: 111
 							}
 						})
 					),
@@ -85803,7 +85848,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							style: styles.bk_contentWrapper,
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 119
+								lineNumber: 118
 							}
 						},
 						_react3.default.createElement(
@@ -85812,7 +85857,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								style: styles.bk_contentRow,
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 120
+									lineNumber: 119
 								}
 							},
 							_react3.default.createElement(
@@ -85823,7 +85868,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									}),
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 121
+										lineNumber: 120
 									}
 								},
 								this.props.book.Title
@@ -85834,7 +85879,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.bk_contentValue,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 129
+										lineNumber: 128
 									}
 								},
 								"by: ",
@@ -85846,7 +85891,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.bk_contentValue,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 132
+										lineNumber: 131
 									}
 								},
 								this.props.book.Language === "english" ? "English" : "Japanese"
@@ -85859,7 +85904,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									}),
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 135
+										lineNumber: 134
 									}
 								},
 								this.props.book.Cover === "paper_back" ? "Paperback" : "Hardcover"
@@ -85873,7 +85918,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									}),
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 143
+										lineNumber: 142
 									}
 								},
 								"JPY " + this.props.book.Price
@@ -85884,7 +85929,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.bk_contentValue,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 152
+										lineNumber: 151
 									}
 								},
 								"Pages: " + this.props.book.PageNo
@@ -86009,13 +86054,13 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						store: _store2.default,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 262
+							lineNumber: 261
 						}
 					},
 					_react3.default.createElement(ConnectedMyBooks, {
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 265
+							lineNumber: 264
 						}
 					})
 				);
@@ -86106,6 +86151,10 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
 			_this.useManual = function () {
 				console.log("Using Manual");
+
+				_this.props.closeMenu();
+
+				_this.props.navigation.navigate("AddBook");
 			};
 
 			return _this;
@@ -86123,7 +86172,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						onRequestClose: this.props.closeMenu,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 42
+							lineNumber: 44
 						}
 					},
 					_react3.default.createElement(
@@ -86132,7 +86181,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							onPress: this.props.closeMenu,
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 48
+								lineNumber: 50
 							}
 						},
 						_react3.default.createElement(
@@ -86141,7 +86190,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								style: styles.touchable,
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 51
+									lineNumber: 53
 								}
 							},
 							_react3.default.createElement(
@@ -86150,7 +86199,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 									style: styles.menu,
 									__source: {
 										fileName: _jsxFileName,
-										lineNumber: 54
+										lineNumber: 56
 									}
 								},
 								_react3.default.createElement(
@@ -86159,7 +86208,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 										onPress: this.useBarcodeScanner,
 										__source: {
 											fileName: _jsxFileName,
-											lineNumber: 55
+											lineNumber: 57
 										}
 									},
 									_react3.default.createElement(
@@ -86168,15 +86217,16 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 											style: styles.menuitem,
 											__source: {
 												fileName: _jsxFileName,
-												lineNumber: 58
+												lineNumber: 60
 											}
 										},
 										_react3.default.createElement(
 											_reactNative.Text,
 											{
+												style: styles.menu_item_text,
 												__source: {
 													fileName: _jsxFileName,
-													lineNumber: 59
+													lineNumber: 61
 												}
 											},
 											"Barcode Scanner"
@@ -86189,7 +86239,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 										onPress: this.useManual,
 										__source: {
 											fileName: _jsxFileName,
-											lineNumber: 65
+											lineNumber: 67
 										}
 									},
 									_react3.default.createElement(
@@ -86201,15 +86251,16 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 											}),
 											__source: {
 												fileName: _jsxFileName,
-												lineNumber: 68
+												lineNumber: 70
 											}
 										},
 										_react3.default.createElement(
 											_reactNative.Text,
 											{
+												style: styles.menu_item_text,
 												__source: {
 													fileName: _jsxFileName,
-													lineNumber: 73
+													lineNumber: 75
 												}
 											},
 											"Manual input"
@@ -86263,13 +86314,13 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						store: _store2.default,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 107
+							lineNumber: 109
 						}
 					},
 					_react3.default.createElement(ConnectedMenu, {
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 110
+							lineNumber: 112
 						}
 					})
 				);
@@ -86291,15 +86342,19 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			flex: 1,
 			width: "100%",
 			justifyContent: "center",
-			alignItems: "center"
+			alignItems: "center",
+			backgroundColor: "rgba(255,255,255,0.8)"
 		},
 		menu: {
 			width: 180,
-			backgroundColor: "#EEE",
+			backgroundColor: "#222",
 			zIndex: 10,
 			elevation: 10,
 			justifyContent: "center",
-			alignItems: "stretch"
+			alignItems: "stretch",
+			borderColor: "teal",
+			borderWidth: 3,
+			borderRadius: 10
 		},
 		menuitem: {
 			height: 48,
@@ -86307,7 +86362,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			alignItems: "center"
 		},
 		menu_item_text: {
-			color: "gray"
+			color: "#EEE"
 		}
 	});
 },663,[118,179,12,580,603,572,494],"src/js/account/slct_bk_add_method.js");
@@ -87711,13 +87766,13 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						store: _store2.default,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 104
+							lineNumber: 102
 						}
 					},
 					_react3.default.createElement(ConnectedMenu, {
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 107
+							lineNumber: 105
 						}
 					})
 				);
@@ -87784,15 +87839,17 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
 	var _reactNavigation = _require(_dependencyMap[4], "react-navigation");
 
-	var _shared_utilities = _require(_dependencyMap[5], "../shared_components/shared_utilities");
+	var _ac_dispatchers = _require(_dependencyMap[5], "./ac_dispatchers");
 
-	var _ac_dispatchers = _require(_dependencyMap[6], "./ac_dispatchers");
-
-	var _store = _require(_dependencyMap[7], "../store");
+	var _store = _require(_dependencyMap[6], "../store");
 
 	var _store2 = _interopRequireDefault(_store);
 
-	var _reactRedux = _require(_dependencyMap[8], "react-redux");
+	var _reactRedux = _require(_dependencyMap[7], "react-redux");
+
+	var _scanned_preview_modal = _require(_dependencyMap[8], "./scanned_preview_modal");
+
+	var _scanned_preview_modal2 = _interopRequireDefault(_scanned_preview_modal);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -87828,22 +87885,39 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 		_inherits(_ScanScreen, _Component);
 
 		function _ScanScreen() {
+			var _ref;
+
+			var _temp, _this, _ret;
+
 			_classCallCheck(this, _ScanScreen);
 
-			return _possibleConstructorReturn(this, (_ScanScreen.__proto__ || Object.getPrototypeOf(_ScanScreen)).apply(this, arguments));
+			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+				args[_key] = arguments[_key];
+			}
+
+			return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = _ScanScreen.__proto__ || Object.getPrototypeOf(_ScanScreen)).call.apply(_ref, [this].concat(args))), _this), _this.componentDidUpdate = function () {
+				if (!_this.props.wait && !_this.props.show) {
+					console.log("Reactivating");
+					_this.scanner && _this.scanner.reactivate();
+				}
+			}, _temp), _possibleConstructorReturn(_this, _ret);
 		}
 
 		_createClass(_ScanScreen, [{
 			key: "onSuccess",
 			value: function onSuccess(e) {
-				this.props.getMetaFromIsbn(e.data);
+				if (this.props.scannedIsbnList.includes(e.data)) {
+					console.log("You already scanned that book. Idiot!");
+				} else {
+					this.props.getMetaFromIsbn(e.data);
+					this.props.showScanPreview();
+				}
 			}
 		}, {
 			key: "render",
 			value: function render() {
 				var _this2 = this;
 
-				console.log((0, _shared_utilities.objectToString)(this.props.addedBooks));
 				return _react3.default.createElement(_reactNativeQrcodeScanner2.default, {
 					onRead: this.onSuccess.bind(this),
 					topContent: _react3.default.createElement(
@@ -87852,7 +87926,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							style: styles.centerText,
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 33
+								lineNumber: 51
 							}
 						},
 						"Go to ",
@@ -87862,10 +87936,10 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 								style: styles.textBold,
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 34
+									lineNumber: 54
 								}
 							},
-							"wikipedia.org/wiki/QR_code"
+							" wikipedia.org / wiki / QR_code "
 						),
 						" on your computer and scan the QR code."
 					),
@@ -87878,24 +87952,33 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 							},
 							__source: {
 								fileName: _jsxFileName,
-								lineNumber: 38
+								lineNumber: 60
 							}
 						},
+						this.props.show && !this.props.wait ? _react3.default.createElement(_scanned_preview_modal2.default, {
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 64
+							}
+						}) : [],
 						_react3.default.createElement(
 							_reactNative.Text,
 							{
 								style: styles.buttonText,
 								__source: {
 									fileName: _jsxFileName,
-									lineNumber: 42
+									lineNumber: 65
 								}
 							},
 							this.props.wait ? "Wait" : "Ready"
 						)
 					),
+					ref: function ref(node) {
+						_this2.scanner = node;
+					},
 					__source: {
 						fileName: _jsxFileName,
-						lineNumber: 30
+						lineNumber: 48
 					}
 				});
 			}
@@ -87913,7 +87996,9 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			error: state.booksToAdd.fetchMetaFail,
 			errCode: state.booksToAdd.fetchMetaError.code,
 			errMsg: state.booksToAdd.fetchMetaError.msg,
-			addedBooks: state.booksToAdd.addedBooksList
+			addedBooks: state.booksToAdd.addedBooksList,
+			scannedIsbnList: state.booksToAdd.scannedIsbnList,
+			show: state.guiControl.showScanPreview
 		};
 	}
 
@@ -87921,6 +88006,9 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 		return {
 			getMetaFromIsbn: function getMetaFromIsbn(isbn) {
 				(0, _ac_dispatchers.getMetaFromIsbn)(dispatch, isbn);
+			},
+			showScanPreview: function showScanPreview() {
+				(0, _ac_dispatchers.showScanPreview)(dispatch);
 			}
 		};
 	}
@@ -87945,13 +88033,13 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 						store: _store2.default,
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 75
+							lineNumber: 104
 						}
 					},
 					_react3.default.createElement(ConnScanScreen, {
 						__source: {
 							fileName: _jsxFileName,
-							lineNumber: 78
+							lineNumber: 107
 						}
 					})
 				);
@@ -87982,7 +88070,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 			padding: 16
 		}
 	});
-},669,[118,179,670,12,494,574,572,603,580],"src/js/account/barcode_scanner.js");
+},669,[118,179,670,12,494,572,603,580,680],"src/js/account/barcode_scanner.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
   'use strict';
 
@@ -96874,6 +96962,1628 @@ __d(function (global, _require, module, exports, _dependencyMap) {
   exports.default = FaceDetector;
   var Constants = exports.Constants = FaceDetector.Constants;
 },678,[12],"node_modules/react-native-camera/src/FaceDetector.js");
+__d(function (global, _require, module, exports, _dependencyMap) {
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _react2 = _require(_dependencyMap[0], "react");
+
+	var _react3 = _interopRequireDefault(_react2);
+
+	var _index = _require(_dependencyMap[1], "./../../../node_modules/react-transform-hmr/lib/index.js");
+
+	var _index2 = _interopRequireDefault(_index);
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _jsxFileName = "/var/www/html/books/BooksNativeApp/src/js/account/scanned_preview_modal.js";
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _reactNative = _require(_dependencyMap[2], "react-native");
+
+	var _reactRedux = _require(_dependencyMap[3], "react-redux");
+
+	var _store = _require(_dependencyMap[4], "../store");
+
+	var _store2 = _interopRequireDefault(_store);
+
+	var _ac_dispatchers = _require(_dependencyMap[5], "./ac_dispatchers");
+
+	var _univ_const = _require(_dependencyMap[6], "/var/www/html/books/BooksNativeApp/univ_const.json");
+
+	var _univ_const2 = _interopRequireDefault(_univ_const);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _components = {
+		_ScanPreview: {
+			displayName: "_ScanPreview"
+		},
+		ScanPreview: {
+			displayName: "ScanPreview"
+		}
+	};
+
+	var _node_modulesReactTransformHmrLibIndexJs2 = (0, _index2.default)({
+		filename: "/var/www/html/books/BooksNativeApp/src/js/account/scanned_preview_modal.js",
+		components: _components,
+		locals: [module],
+		imports: [_react3.default]
+	});
+
+	function _wrapComponent(id) {
+		return function (Component) {
+			return _node_modulesReactTransformHmrLibIndexJs2(Component, id);
+		};
+	}
+
+	var host = _univ_const2.default.server_url;
+
+	var _ScanPreview = _wrapComponent("_ScanPreview")(function (_Component) {
+		_inherits(_ScanPreview, _Component);
+
+		function _ScanPreview(props) {
+			_classCallCheck(this, _ScanPreview);
+
+			var _this = _possibleConstructorReturn(this, (_ScanPreview.__proto__ || Object.getPrototypeOf(_ScanPreview)).call(this, props));
+
+			_this.closeModal = function () {
+				_this.props.hideScanPreview();
+			};
+
+			return _this;
+		}
+
+		_createClass(_ScanPreview, [{
+			key: "render",
+			value: function render() {
+				var _this2 = this;
+
+				return _react3.default.createElement(
+					_reactNative.Modal,
+					{
+						animationType: "fade",
+						transparent: true,
+						visible: true,
+						onRequestClose: this.closeModal,
+						__source: {
+							fileName: _jsxFileName,
+							lineNumber: 34
+						}
+					},
+					_react3.default.createElement(
+						_reactNative.TouchableWithoutFeedback,
+						{
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 40
+							}
+						},
+						_react3.default.createElement(
+							_reactNative.View,
+							{
+								style: styles.wrapper,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 41
+								}
+							},
+							_react3.default.createElement(
+								_reactNative.View,
+								{
+									style: styles.summary,
+									__source: {
+										fileName: _jsxFileName,
+										lineNumber: 42
+									}
+								},
+								_react3.default.createElement(
+									_reactNative.View,
+									{
+										style: styles.bk_imageWrapper,
+										__source: {
+											fileName: _jsxFileName,
+											lineNumber: 43
+										}
+									},
+									_react3.default.createElement(_reactNative.Image, {
+										resizeMode: "contain",
+										style: styles.bk_image,
+										source: {
+											uri: function () {
+												return _this2.props.book.imageLinks ? _this2.props.book.imageLinks.thumbnail : host + "/images/placeholder.jpg";
+											}()
+										},
+										__source: {
+											fileName: _jsxFileName,
+											lineNumber: 44
+										}
+									})
+								),
+								_react3.default.createElement(
+									_reactNative.View,
+									{
+										style: styles.bk_contentWrapper,
+										__source: {
+											fileName: _jsxFileName,
+											lineNumber: 52
+										}
+									},
+									_react3.default.createElement(
+										_reactNative.View,
+										{
+											style: styles.bk_contentRow,
+											__source: {
+												fileName: _jsxFileName,
+												lineNumber: 53
+											}
+										},
+										_react3.default.createElement(
+											_reactNative.Text,
+											{
+												style: _extends({}, _reactNative.StyleSheet.flatten(styles.bk_title), {
+													color: "black"
+												}),
+												__source: {
+													fileName: _jsxFileName,
+													lineNumber: 54
+												}
+											},
+											this.props.book.title
+										),
+										_react3.default.createElement(
+											_reactNative.Text,
+											{
+												style: styles.bk_contentValue,
+												__source: {
+													fileName: _jsxFileName,
+													lineNumber: 62
+												}
+											},
+											"by: ",
+											this.props.book.authors.toString()
+										),
+										_react3.default.createElement(
+											_reactNative.Text,
+											{
+												style: styles.bk_contentValue,
+												__source: {
+													fileName: _jsxFileName,
+													lineNumber: 65
+												}
+											},
+											this.props.book.language === "en" ? "English" : "Japanese"
+										),
+										_react3.default.createElement(
+											_reactNative.Text,
+											{
+												style: _extends({}, _reactNative.StyleSheet.flatten(styles.bk_title), {
+													color: "black"
+												}),
+												__source: {
+													fileName: _jsxFileName,
+													lineNumber: 68
+												}
+											},
+											this.props.book.hasOwnProperty("binding") ? this.props.book.binding : "Unknown"
+										),
+										_react3.default.createElement(
+											_reactNative.Text,
+											{
+												style: styles.bk_contentValue,
+												__source: {
+													fileName: _jsxFileName,
+													lineNumber: 77
+												}
+											},
+											"Pages: " + this.props.book.pageCount
+										)
+									)
+								)
+							),
+							_react3.default.createElement(
+								_reactNative.View,
+								{
+									style: styles.details,
+									__source: {
+										fileName: _jsxFileName,
+										lineNumber: 85
+									}
+								},
+								_react3.default.createElement(
+									_reactNative.View,
+									{
+										style: styles.bk_contentWrapper,
+										__source: {
+											fileName: _jsxFileName,
+											lineNumber: 86
+										}
+									},
+									_react3.default.createElement(
+										_reactNative.View,
+										{
+											style: styles.bk_row,
+											__source: {
+												fileName: _jsxFileName,
+												lineNumber: 88
+											}
+										},
+										_react3.default.createElement(
+											_reactNative.View,
+											{
+												style: styles.bk_head,
+												__source: {
+													fileName: _jsxFileName,
+													lineNumber: 89
+												}
+											},
+											_react3.default.createElement(
+												_reactNative.Text,
+												{
+													style: styles.bk_headText,
+													__source: {
+														fileName: _jsxFileName,
+														lineNumber: 90
+													}
+												},
+												"Edition: "
+											)
+										),
+										_react3.default.createElement(
+											_reactNative.View,
+											{
+												style: styles.bk_value,
+												__source: {
+													fileName: _jsxFileName,
+													lineNumber: 92
+												}
+											},
+											_react3.default.createElement(
+												_reactNative.Text,
+												{
+													style: styles.bk_valueText,
+													__source: {
+														fileName: _jsxFileName,
+														lineNumber: 93
+													}
+												},
+												this.props.book.edition
+											)
+										)
+									),
+									_react3.default.createElement(
+										_reactNative.View,
+										{
+											style: styles.bk_row,
+											__source: {
+												fileName: _jsxFileName,
+												lineNumber: 99
+											}
+										},
+										_react3.default.createElement(
+											_reactNative.View,
+											{
+												style: styles.bk_head,
+												__source: {
+													fileName: _jsxFileName,
+													lineNumber: 100
+												}
+											},
+											_react3.default.createElement(
+												_reactNative.Text,
+												{
+													style: styles.bk_headText,
+													__source: {
+														fileName: _jsxFileName,
+														lineNumber: 101
+													}
+												},
+												"Language: "
+											)
+										),
+										_react3.default.createElement(
+											_reactNative.View,
+											{
+												style: styles.bk_value,
+												__source: {
+													fileName: _jsxFileName,
+													lineNumber: 103
+												}
+											},
+											_react3.default.createElement(
+												_reactNative.Text,
+												{
+													style: styles.bk_valueText,
+													__source: {
+														fileName: _jsxFileName,
+														lineNumber: 104
+													}
+												},
+												this.props.book.language === "en" ? "English" : "Japanese"
+											)
+										)
+									),
+									_react3.default.createElement(
+										_reactNative.View,
+										{
+											style: styles.bk_row,
+											__source: {
+												fileName: _jsxFileName,
+												lineNumber: 110
+											}
+										},
+										_react3.default.createElement(
+											_reactNative.View,
+											{
+												style: styles.bk_head,
+												__source: {
+													fileName: _jsxFileName,
+													lineNumber: 111
+												}
+											},
+											_react3.default.createElement(
+												_reactNative.Text,
+												{
+													style: styles.bk_headText,
+													__source: {
+														fileName: _jsxFileName,
+														lineNumber: 112
+													}
+												},
+												"Number of Pages: "
+											)
+										),
+										_react3.default.createElement(
+											_reactNative.View,
+											{
+												style: styles.bk_value,
+												__source: {
+													fileName: _jsxFileName,
+													lineNumber: 114
+												}
+											},
+											_react3.default.createElement(
+												_reactNative.Text,
+												{
+													style: styles.bk_valueText,
+													__source: {
+														fileName: _jsxFileName,
+														lineNumber: 115
+													}
+												},
+												this.props.book.pageCount
+											)
+										)
+									),
+									_react3.default.createElement(
+										_reactNative.View,
+										{
+											style: styles.bk_row,
+											__source: {
+												fileName: _jsxFileName,
+												lineNumber: 121
+											}
+										},
+										_react3.default.createElement(
+											_reactNative.View,
+											{
+												style: styles.bk_head,
+												__source: {
+													fileName: _jsxFileName,
+													lineNumber: 122
+												}
+											},
+											_react3.default.createElement(
+												_reactNative.Text,
+												{
+													style: styles.bk_headText,
+													__source: {
+														fileName: _jsxFileName,
+														lineNumber: 123
+													}
+												},
+												"Publisher: "
+											)
+										),
+										_react3.default.createElement(
+											_reactNative.View,
+											{
+												style: styles.bk_value,
+												__source: {
+													fileName: _jsxFileName,
+													lineNumber: 125
+												}
+											},
+											_react3.default.createElement(
+												_reactNative.Text,
+												{
+													style: styles.bk_valueText,
+													__source: {
+														fileName: _jsxFileName,
+														lineNumber: 126
+													}
+												},
+												this.props.book.hasOwnProperty("publisher") ? this.props.book.publisher : "Unknown"
+											)
+										)
+									),
+									_react3.default.createElement(
+										_reactNative.View,
+										{
+											style: styles.bk_row,
+											__source: {
+												fileName: _jsxFileName,
+												lineNumber: 132
+											}
+										},
+										_react3.default.createElement(
+											_reactNative.View,
+											{
+												style: styles.bk_head,
+												__source: {
+													fileName: _jsxFileName,
+													lineNumber: 133
+												}
+											},
+											_react3.default.createElement(
+												_reactNative.Text,
+												{
+													style: styles.bk_headText,
+													__source: {
+														fileName: _jsxFileName,
+														lineNumber: 134
+													}
+												},
+												"Published: "
+											)
+										),
+										_react3.default.createElement(
+											_reactNative.View,
+											{
+												style: styles.bk_value,
+												__source: {
+													fileName: _jsxFileName,
+													lineNumber: 136
+												}
+											},
+											_react3.default.createElement(
+												_reactNative.Text,
+												{
+													style: styles.bk_valueText,
+													__source: {
+														fileName: _jsxFileName,
+														lineNumber: 137
+													}
+												},
+												this.props.book.published
+											)
+										)
+									),
+									_react3.default.createElement(
+										_reactNative.View,
+										{
+											style: styles.bk_row,
+											__source: {
+												fileName: _jsxFileName,
+												lineNumber: 143
+											}
+										},
+										_react3.default.createElement(
+											_reactNative.View,
+											{
+												style: styles.bk_head,
+												__source: {
+													fileName: _jsxFileName,
+													lineNumber: 144
+												}
+											},
+											_react3.default.createElement(
+												_reactNative.Text,
+												{
+													style: styles.bk_headText,
+													__source: {
+														fileName: _jsxFileName,
+														lineNumber: 145
+													}
+												},
+												"Description: "
+											)
+										),
+										_react3.default.createElement(
+											_reactNative.View,
+											{
+												style: styles.bk_value,
+												__source: {
+													fileName: _jsxFileName,
+													lineNumber: 147
+												}
+											},
+											_react3.default.createElement(
+												_reactNative.Text,
+												{
+													style: styles.bk_valueText,
+													__source: {
+														fileName: _jsxFileName,
+														lineNumber: 148
+													}
+												},
+												this.props.book.description
+											)
+										)
+									)
+								)
+							),
+							_react3.default.createElement(
+								_reactNative.TouchableOpacity,
+								{
+									style: styles.buttonTouchable,
+									onPress: this.closeModal,
+									__source: {
+										fileName: _jsxFileName,
+										lineNumber: 156
+									}
+								},
+								_react3.default.createElement(
+									_reactNative.Text,
+									{
+										style: styles.buttonText,
+										__source: {
+											fileName: _jsxFileName,
+											lineNumber: 160
+										}
+									},
+									"OK. Continue."
+								)
+							)
+						)
+					)
+				);
+			}
+		}]);
+
+		return _ScanPreview;
+	}(_react2.Component));
+
+	function mapStateToProps(state) {
+		return {
+			show: state.guiControl.showScanPreview,
+			book: state.booksToAdd.addedBooksList[state.booksToAdd.addedBooksList.length - 1]
+		};
+	}
+
+	function mapDispatchToProps(dispatch) {
+		return {
+			hideScanPreview: function hideScanPreview() {
+				(0, _ac_dispatchers.hideScanPreview)(dispatch);
+			}
+		};
+	}
+
+	var ConnectedScanPreview = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_ScanPreview);
+
+	var ScanPreview = _wrapComponent("ScanPreview")(function (_Component2) {
+		_inherits(ScanPreview, _Component2);
+
+		function ScanPreview() {
+			_classCallCheck(this, ScanPreview);
+
+			return _possibleConstructorReturn(this, (ScanPreview.__proto__ || Object.getPrototypeOf(ScanPreview)).apply(this, arguments));
+		}
+
+		_createClass(ScanPreview, [{
+			key: "render",
+			value: function render() {
+				return _react3.default.createElement(
+					_reactRedux.Provider,
+					{
+						store: _store2.default,
+						__source: {
+							fileName: _jsxFileName,
+							lineNumber: 191
+						}
+					},
+					_react3.default.createElement(ConnectedScanPreview, {
+						__source: {
+							fileName: _jsxFileName,
+							lineNumber: 194
+						}
+					})
+				);
+			}
+		}]);
+
+		return ScanPreview;
+	}(_react2.Component));
+
+	exports.default = ScanPreview;
+
+	var styles = _reactNative.StyleSheet.create({
+		summary: {
+			flex: 1
+		},
+		details: {
+			flex: 1,
+			backgroundColor: "#AAA"
+		},
+		text: {
+			color: "white",
+			fontSize: 20,
+			fontWeight: "bold"
+		},
+		container: {
+			flex: 1,
+			justifyContent: "flex-start",
+			alignItems: "stretch",
+			backgroundColor: "#FEFEFE"
+		},
+		scrollview: {
+			flex: 1
+		},
+		bk_wrapper: {
+			height: 144,
+			flexDirection: "row",
+			justifyContent: "center",
+			alignItems: "stretch"
+		},
+		bk_imageWrapper: {
+			flex: 1,
+			flexDirection: "row",
+			justifyContent: "flex-start",
+			alignItems: "flex-start",
+			backgroundColor: "white"
+		},
+		bk_image: {
+			flex: 1,
+			width: 100,
+			height: 100
+		},
+		bk_contentWrapper: {
+			flexDirection: "column",
+			justifyContent: "center",
+			alignItems: "center",
+			flex: 1
+		},
+		bk_contentRow: {
+			flex: 1
+		},
+		bk_contentLabel: {},
+		bk_title: {
+			fontSize: 16,
+			fontWeight: "bold"
+		},
+		bk_contentValue: {},
+		wrapper: {
+			flex: 1,
+			width: "100%",
+			padding: 5,
+			paddingHorizontal: 5,
+			alignItems: "center",
+			backgroundColor: "white"
+		},
+		location: {
+			flexDirection: "row",
+			justifyContent: "center",
+			alignItems: "center"
+		},
+		owner: {},
+		head: {
+			flexDirection: "row",
+			justifyContent: "flex-start"
+		},
+		imageWrapper: {
+			flex: 1,
+			justifyContent: "center",
+			alignItems: "center",
+			backgroundColor: "white"
+		},
+		image: {
+			flex: 1,
+			width: "100%",
+			height: 400
+		},
+		bk_row: {
+			flexDirection: "row",
+			justifyContent: "center",
+			alignItems: "center"
+		},
+		bk_head: {
+			flex: 1
+		},
+		bk_headText: {
+			color: "#111",
+			fontWeight: "bold"
+		},
+		bk_value: {
+			flex: 4
+		},
+		bk_valueText: {
+			color: "#222"
+		},
+		buttonText: {
+			fontSize: 21,
+			color: "rgb(0,122,255)"
+		},
+		buttonTouchable: {
+			padding: 16
+		}
+	});
+},680,[118,179,12,580,603,572,571],"src/js/account/scanned_preview_modal.js");
+__d(function (global, _require, module, exports, _dependencyMap) {
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _react2 = _require(_dependencyMap[0], "react");
+
+	var _react3 = _interopRequireDefault(_react2);
+
+	var _index = _require(_dependencyMap[1], "./../../../node_modules/react-transform-hmr/lib/index.js");
+
+	var _index2 = _interopRequireDefault(_index);
+
+	var _jsxFileName = "/var/www/html/books/BooksNativeApp/src/js/account/add_book.js";
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _reactNative = _require(_dependencyMap[2], "react-native");
+
+	var _store = _require(_dependencyMap[3], "../store");
+
+	var _store2 = _interopRequireDefault(_store);
+
+	var _reactRedux = _require(_dependencyMap[4], "react-redux");
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _components = {
+		_AddBookForm: {
+			displayName: "_AddBookForm"
+		},
+		AddBook: {
+			displayName: "AddBook"
+		}
+	};
+
+	var _node_modulesReactTransformHmrLibIndexJs2 = (0, _index2.default)({
+		filename: "/var/www/html/books/BooksNativeApp/src/js/account/add_book.js",
+		components: _components,
+		locals: [module],
+		imports: [_react3.default]
+	});
+
+	function _wrapComponent(id) {
+		return function (Component) {
+			return _node_modulesReactTransformHmrLibIndexJs2(Component, id);
+		};
+	}
+
+	var _AddBookForm = _wrapComponent("_AddBookForm")(function (_Component) {
+		_inherits(_AddBookForm, _Component);
+
+		function _AddBookForm(props) {
+			_classCallCheck(this, _AddBookForm);
+
+			var _this = _possibleConstructorReturn(this, (_AddBookForm.__proto__ || Object.getPrototypeOf(_AddBookForm)).call(this, props));
+
+			_this.submit = function () {};
+
+			_this.handleEmailChange = function () {};
+
+			_this.state = {};
+			return _this;
+		}
+
+		_createClass(_AddBookForm, [{
+			key: "render",
+			value: function render() {
+				var _this2 = this;
+
+				return _react3.default.createElement(
+					_reactNative.ScrollView,
+					{
+						style: styles.container,
+						__source: {
+							fileName: _jsxFileName,
+							lineNumber: 30
+						}
+					},
+					_react3.default.createElement(
+						_reactNative.View,
+						{
+							style: styles.inputGroup,
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 32
+							}
+						},
+						_react3.default.createElement(
+							_reactNative.View,
+							{
+								style: styles.label,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 33
+								}
+							},
+							_react3.default.createElement(
+								_reactNative.Text,
+								{
+									style: styles.inputPromptText,
+									__source: {
+										fileName: _jsxFileName,
+										lineNumber: 34
+									}
+								},
+								"Title:"
+							)
+						),
+						_react3.default.createElement(
+							_reactNative.View,
+							{
+								style: styles.input,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 38
+								}
+							},
+							_react3.default.createElement(_reactNative.TextInput, {
+								style: styles.textInput,
+								onChangeText: function onChangeText(text) {
+									return _this2.handleEmailChange(text);
+								},
+								value: this.state.email,
+								underlineColorAndroid: "transparent",
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 39
+								}
+							})
+						)
+					),
+					_react3.default.createElement(
+						_reactNative.View,
+						{
+							style: styles.inputGroup,
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 49
+							}
+						},
+						_react3.default.createElement(
+							_reactNative.View,
+							{
+								style: styles.label,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 50
+								}
+							},
+							_react3.default.createElement(
+								_reactNative.Text,
+								{
+									style: styles.inputPromptText,
+									__source: {
+										fileName: _jsxFileName,
+										lineNumber: 51
+									}
+								},
+								"Authors:"
+							)
+						),
+						_react3.default.createElement(
+							_reactNative.View,
+							{
+								style: styles.input,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 55
+								}
+							},
+							_react3.default.createElement(_reactNative.TextInput, {
+								placeholder: "E.g Aman Haman, Rajesh Kumar, Hay...",
+								style: styles.textInput,
+								onChangeText: function onChangeText(text) {
+									return _this2.handleEmailChange(text);
+								},
+								value: this.state.email,
+								underlineColorAndroid: "transparent",
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 56
+								}
+							})
+						)
+					),
+					_react3.default.createElement(
+						_reactNative.View,
+						{
+							style: styles.inputGroup,
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 67
+							}
+						},
+						_react3.default.createElement(
+							_reactNative.View,
+							{
+								style: styles.label,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 68
+								}
+							},
+							_react3.default.createElement(
+								_reactNative.Text,
+								{
+									style: styles.inputPromptText,
+									__source: {
+										fileName: _jsxFileName,
+										lineNumber: 69
+									}
+								},
+								"Edition:"
+							)
+						),
+						_react3.default.createElement(
+							_reactNative.View,
+							{
+								style: styles.input,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 73
+								}
+							},
+							_react3.default.createElement(_reactNative.TextInput, {
+								style: styles.textInput,
+								onChangeText: function onChangeText(text) {
+									return _this2.handleEmailChange(text);
+								},
+								value: this.state.email,
+								underlineColorAndroid: "transparent",
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 74
+								}
+							})
+						)
+					),
+					_react3.default.createElement(
+						_reactNative.View,
+						{
+							style: styles.inputGroup,
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 84
+							}
+						},
+						_react3.default.createElement(
+							_reactNative.View,
+							{
+								style: styles.label,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 85
+								}
+							},
+							_react3.default.createElement(
+								_reactNative.Text,
+								{
+									style: styles.inputPromptText,
+									__source: {
+										fileName: _jsxFileName,
+										lineNumber: 86
+									}
+								},
+								"Language:"
+							)
+						),
+						_react3.default.createElement(
+							_reactNative.View,
+							{
+								style: styles.input,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 90
+								}
+							},
+							_react3.default.createElement(_reactNative.TextInput, {
+								style: styles.textInput,
+								onChangeText: function onChangeText(text) {
+									return _this2.handleEmailChange(text);
+								},
+								value: this.state.email,
+								underlineColorAndroid: "transparent",
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 91
+								}
+							})
+						)
+					),
+					_react3.default.createElement(
+						_reactNative.View,
+						{
+							style: styles.inputGroup,
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 101
+							}
+						},
+						_react3.default.createElement(
+							_reactNative.View,
+							{
+								style: styles.label,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 102
+								}
+							},
+							_react3.default.createElement(
+								_reactNative.Text,
+								{
+									style: styles.inputPromptText,
+									__source: {
+										fileName: _jsxFileName,
+										lineNumber: 103
+									}
+								},
+								"Publisher:"
+							)
+						),
+						_react3.default.createElement(
+							_reactNative.View,
+							{
+								style: styles.input,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 107
+								}
+							},
+							_react3.default.createElement(_reactNative.TextInput, {
+								style: styles.textInput,
+								onChangeText: function onChangeText(text) {
+									return _this2.handleEmailChange(text);
+								},
+								value: this.state.email,
+								underlineColorAndroid: "transparent",
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 108
+								}
+							})
+						)
+					),
+					_react3.default.createElement(
+						_reactNative.View,
+						{
+							style: styles.inputGroup,
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 118
+							}
+						},
+						_react3.default.createElement(
+							_reactNative.View,
+							{
+								style: styles.label,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 119
+								}
+							},
+							_react3.default.createElement(
+								_reactNative.Text,
+								{
+									style: styles.inputPromptText,
+									__source: {
+										fileName: _jsxFileName,
+										lineNumber: 120
+									}
+								},
+								"Published:"
+							)
+						),
+						_react3.default.createElement(
+							_reactNative.View,
+							{
+								style: styles.input,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 124
+								}
+							},
+							_react3.default.createElement(_reactNative.TextInput, {
+								style: styles.textInput,
+								onChangeText: function onChangeText(text) {
+									return _this2.handleEmailChange(text);
+								},
+								value: this.state.email,
+								underlineColorAndroid: "transparent",
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 125
+								}
+							})
+						)
+					),
+					_react3.default.createElement(
+						_reactNative.View,
+						{
+							style: styles.inputGroup,
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 135
+							}
+						},
+						_react3.default.createElement(
+							_reactNative.View,
+							{
+								style: styles.label,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 136
+								}
+							},
+							_react3.default.createElement(
+								_reactNative.Text,
+								{
+									style: styles.inputPromptText,
+									__source: {
+										fileName: _jsxFileName,
+										lineNumber: 137
+									}
+								},
+								"ISBN 13:"
+							)
+						),
+						_react3.default.createElement(
+							_reactNative.View,
+							{
+								style: styles.input,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 141
+								}
+							},
+							_react3.default.createElement(_reactNative.TextInput, {
+								style: styles.textInput,
+								onChangeText: function onChangeText(text) {
+									return _this2.handleEmailChange(text);
+								},
+								value: this.state.email,
+								underlineColorAndroid: "transparent",
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 142
+								}
+							})
+						)
+					),
+					_react3.default.createElement(
+						_reactNative.View,
+						{
+							style: styles.inputGroup,
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 152
+							}
+						},
+						_react3.default.createElement(
+							_reactNative.View,
+							{
+								style: styles.label,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 153
+								}
+							},
+							_react3.default.createElement(
+								_reactNative.Text,
+								{
+									style: styles.inputPromptText,
+									__source: {
+										fileName: _jsxFileName,
+										lineNumber: 154
+									}
+								},
+								"New:"
+							)
+						),
+						_react3.default.createElement(
+							_reactNative.View,
+							{
+								style: styles.input,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 158
+								}
+							},
+							_react3.default.createElement(_reactNative.TextInput, {
+								style: styles.textInput,
+								onChangeText: function onChangeText(text) {
+									return _this2.handleEmailChange(text);
+								},
+								value: this.state.email,
+								underlineColorAndroid: "transparent",
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 159
+								}
+							})
+						)
+					),
+					_react3.default.createElement(
+						_reactNative.View,
+						{
+							style: styles.inputGroup,
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 169
+							}
+						},
+						_react3.default.createElement(
+							_reactNative.View,
+							{
+								style: styles.label,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 170
+								}
+							},
+							_react3.default.createElement(
+								_reactNative.Text,
+								{
+									style: styles.inputPromptText,
+									__source: {
+										fileName: _jsxFileName,
+										lineNumber: 171
+									}
+								},
+								"Condition:"
+							)
+						),
+						_react3.default.createElement(
+							_reactNative.View,
+							{
+								style: styles.input,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 175
+								}
+							},
+							_react3.default.createElement(_reactNative.TextInput, {
+								style: styles.textInput,
+								onChangeText: function onChangeText(text) {
+									return _this2.handleEmailChange(text);
+								},
+								value: this.state.email,
+								underlineColorAndroid: "transparent",
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 176
+								}
+							})
+						)
+					),
+					_react3.default.createElement(
+						_reactNative.View,
+						{
+							style: styles.inputGroup,
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 186
+							}
+						},
+						_react3.default.createElement(
+							_reactNative.View,
+							{
+								style: styles.label,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 187
+								}
+							},
+							_react3.default.createElement(
+								_reactNative.Text,
+								{
+									style: styles.inputPromptText,
+									__source: {
+										fileName: _jsxFileName,
+										lineNumber: 188
+									}
+								},
+								"Location:"
+							)
+						),
+						_react3.default.createElement(
+							_reactNative.View,
+							{
+								style: styles.input,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 192
+								}
+							},
+							_react3.default.createElement(_reactNative.TextInput, {
+								style: styles.textInput,
+								onChangeText: function onChangeText(text) {
+									return _this2.handleEmailChange(text);
+								},
+								value: this.state.email,
+								underlineColorAndroid: "transparent",
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 193
+								}
+							})
+						)
+					),
+					_react3.default.createElement(
+						_reactNative.View,
+						{
+							style: styles.inputGroup,
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 203
+							}
+						},
+						_react3.default.createElement(
+							_reactNative.View,
+							{
+								style: styles.label,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 204
+								}
+							},
+							_react3.default.createElement(
+								_reactNative.Text,
+								{
+									style: styles.inputPromptText,
+									__source: {
+										fileName: _jsxFileName,
+										lineNumber: 205
+									}
+								},
+								"I can deliver it:"
+							)
+						),
+						_react3.default.createElement(
+							_reactNative.View,
+							{
+								style: styles.input,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 209
+								}
+							},
+							_react3.default.createElement(_reactNative.TextInput, {
+								style: styles.textInput,
+								onChangeText: function onChangeText(text) {
+									return _this2.handleEmailChange(text);
+								},
+								value: this.state.email,
+								underlineColorAndroid: "transparent",
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 210
+								}
+							})
+						)
+					),
+					_react3.default.createElement(
+						_reactNative.View,
+						{
+							style: styles.inputGroup,
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 220
+							}
+						},
+						_react3.default.createElement(
+							_reactNative.View,
+							{
+								style: styles.label,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 221
+								}
+							},
+							_react3.default.createElement(
+								_reactNative.Text,
+								{
+									style: styles.inputPromptText,
+									__source: {
+										fileName: _jsxFileName,
+										lineNumber: 222
+									}
+								},
+								"Description:"
+							)
+						),
+						_react3.default.createElement(
+							_reactNative.View,
+							{
+								style: styles.input,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 226
+								}
+							},
+							_react3.default.createElement(_reactNative.TextInput, {
+								style: styles.textInput,
+								onChangeText: function onChangeText(text) {
+									return _this2.handleEmailChange(text);
+								},
+								value: this.state.email,
+								underlineColorAndroid: "transparent",
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 227
+								}
+							})
+						)
+					),
+					_react3.default.createElement(
+						_reactNative.View,
+						{
+							style: styles.inputGroup,
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 237
+							}
+						},
+						_react3.default.createElement(
+							_reactNative.View,
+							{
+								style: styles.label,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 238
+								}
+							},
+							_react3.default.createElement(
+								_reactNative.Text,
+								{
+									style: styles.inputPromptText,
+									__source: {
+										fileName: _jsxFileName,
+										lineNumber: 239
+									}
+								},
+								"Available Until:"
+							)
+						),
+						_react3.default.createElement(
+							_reactNative.View,
+							{
+								style: styles.input,
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 243
+								}
+							},
+							_react3.default.createElement(_reactNative.TextInput, {
+								style: styles.textInput,
+								onChangeText: function onChangeText(text) {
+									return _this2.handleEmailChange(text);
+								},
+								value: this.state.email,
+								underlineColorAndroid: "transparent",
+								__source: {
+									fileName: _jsxFileName,
+									lineNumber: 244
+								}
+							})
+						)
+					)
+				);
+			}
+		}]);
+
+		return _AddBookForm;
+	}(_react2.Component));
+
+	var styles = _reactNative.StyleSheet.create({
+		container: {
+			flex: 1,
+			paddingHorizontal: 10,
+			paddingVertical: 10
+		},
+		inputGroup: {
+			height: 75,
+			paddingBottom: 5,
+			borderBottomColor: "#AAA",
+			borderBottomWidth: 1
+		},
+		label: {
+			flex: 1
+		},
+		input: {
+			flex: 1
+		},
+		inputPromptText: {
+			textAlign: "left",
+			color: "#777",
+			fontSize: 20
+		},
+		textInput: {
+			height: 40,
+			borderColor: "gray",
+			borderWidth: 1,
+			borderRadius: 5,
+			backgroundColor: "#FBFFC7",
+			paddingHorizontal: 10,
+			fontSize: 18,
+			marginBottom: 10
+		}
+	});
+
+	function mapStateToProps(state) {
+		return {
+			todo: "todo"
+		};
+	}
+
+	function mapDispatchToProps(dispatch) {
+		return {
+			todo: "todo"
+		};
+	}
+
+	var ConnectedAddBookForm = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_AddBookForm);
+
+	var AddBook = _wrapComponent("AddBook")(function (_Component2) {
+		_inherits(AddBook, _Component2);
+
+		function AddBook() {
+			_classCallCheck(this, AddBook);
+
+			return _possibleConstructorReturn(this, (AddBook.__proto__ || Object.getPrototypeOf(AddBook)).apply(this, arguments));
+		}
+
+		_createClass(AddBook, [{
+			key: "render",
+			value: function render() {
+				return _react3.default.createElement(
+					_reactRedux.Provider,
+					{
+						store: _store2.default,
+						__source: {
+							fileName: _jsxFileName,
+							lineNumber: 315
+						}
+					},
+					_react3.default.createElement(ConnectedAddBookForm, {
+						navigation: this.props.navigation,
+						__source: {
+							fileName: _jsxFileName,
+							lineNumber: 316
+						}
+					})
+				);
+			}
+		}]);
+
+		return AddBook;
+	}(_react2.Component));
+
+	exports.default = AddBook;
+},681,[118,179,12,603,580],"src/js/account/add_book.js");
 require(44);
 require(11);
 //# sourceMappingURL=index.map
