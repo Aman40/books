@@ -9,6 +9,13 @@ export function fetchBooks(dispatch) {
 	//Fetches all the books (closest to user's location)
 	let xhr = new XMLHttpRequest();
 	xhr.responseType = "text";
+	xhr.timeout = 10000;
+	xhr.ontimeout = function(){
+		dispatch({
+			type: booksActions.ERROR_FETCHING,
+			payload: "Request timeout. Check your network.",
+		});
+	};
 	xhr.onreadystatechange = function(){
 		if(this.readyState===4 && this.status===200) {
 			//console.log(this.responseText);
@@ -112,6 +119,7 @@ export function searchBook(dispatch, payload){
 	 */
 	let xhr = new XMLHttpRequest();
 	xhr.responseType = "text";
+	xhr.timeout = 10000;
 	xhr.onreadystatechange = function() {
 		if(this.readyState===4 && this.status===200) {
 			//OK. Get the srv_res_status

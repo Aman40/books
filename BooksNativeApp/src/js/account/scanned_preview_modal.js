@@ -3,9 +3,10 @@ import {
 	Text,
 	StyleSheet,
 	Modal,
-	TouchableWithoutFeedback,
 	Image,
+	ScrollView,
 	TouchableOpacity,
+	ImageBackground
 } from "react-native";
 import React, {Component} from "react";
 import {
@@ -37,9 +38,15 @@ class _ScanPreview extends Component {
 				visible={true}
 				onRequestClose={this.closeModal}
 			>
-				<TouchableWithoutFeedback>
-					<View style={styles.wrapper}>
-						<View style={styles.summary}>
+				<View style={styles.wrapper}>
+					<ImageBackground 
+						style={styles.bgImage}
+						resizeMode={"cover"}
+						source={{uri: (()=>{
+							return this.props.book.imageLinks?this.props.book.imageLinks.thumbnail:`${host}/images/placeholder.jpg`;
+						})()}}
+					>
+						<View style={styles.content}>
 							<View style={styles.bk_imageWrapper}>
 								<Image
 									resizeMode={"contain"}
@@ -49,119 +56,109 @@ class _ScanPreview extends Component {
 									})()}}
 								/>
 							</View>
-							<View style={styles.bk_contentWrapper}>
-								<View style={styles.bk_contentRow}>
-									< Text style = {
-										{ 
-											...StyleSheet.flatten(styles.bk_title),
-											color: "black"
-										}
-									} >
-										{this.props.book.title}
-									</Text>
-									<Text style={styles.bk_contentValue}>
-										by: {this.props.book.authors.toString()}
-									</Text>
-									<Text style={styles.bk_contentValue}>
-										{this.props.book.language==="en"?"English":"Japanese"}
-									</Text>
-									<Text style = {
-										{ 
-											...StyleSheet.flatten(styles.bk_title),
-											color: "black"
-										}
-									} >
-										{this.props.book.hasOwnProperty("binding")?this.props.book.binding:"Unknown"}
-									</Text>
 
-									<Text style={styles.bk_contentValue}>
-										{"Pages: "+this.props.book.pageCount}
-									</Text>
-								</View>
-							</View>
-						</View>
-
-
-						<View style={styles.details}>
-							<View style={styles.bk_contentWrapper}>
-								{ /*Other details*/ }
-								<View style={styles.bk_row}>
-									<View style={styles.bk_head}>
-										<Text style={styles.bk_headText}>Edition: </Text>
-									</View>
-									<View style={styles.bk_value}>
-										<Text style={styles.bk_valueText}>
-											{this.props.book.edition}
+							<View style={styles.details}>
+								<ScrollView style={{flex: 1}}>
+									<View style={styles.bk_contentRow}>
+										< Text style = {
+											{ 
+												...StyleSheet.flatten(styles.bk_title),
+												color: "black"
+											}
+										} >
+											{this.props.book.title}
 										</Text>
-									</View>
-								</View>
-
-								<View style={styles.bk_row}>
-									<View style={styles.bk_head}>
-										<Text style={styles.bk_headText}>Language: </Text>
-									</View>
-									<View style={styles.bk_value}>
-										<Text style={styles.bk_valueText}>
+										<Text>
+									By: <Text style = {{
+												...StyleSheet.flatten(styles.bk_contentValue),
+												color: "blue",
+											}} >
+												{this.props.book.authors.toString()}
+											</Text>
+										</Text>
+								
+										<Text style={styles.bk_contentValue}>
 											{this.props.book.language==="en"?"English":"Japanese"}
 										</Text>
-									</View>
-								</View>
-
-								<View style={styles.bk_row}>
-									<View style={styles.bk_head}>
-										<Text style={styles.bk_headText}>Number of Pages: </Text>
-									</View>
-									<View style={styles.bk_value}>
-										<Text style={styles.bk_valueText}>
-											{this.props.book.pageCount}
+										<Text style = {
+											{ 
+												color: "black"
+											}
+										} >
+											{this.props.book.hasOwnProperty("binding")?this.props.book.binding:""}
 										</Text>
 									</View>
-								</View>
+									<View style={styles.bk_contentWrapper}>
+										{ /*Other details*/ }
+										<View style={styles.bk_row}>
+											<View style={styles.bk_head}>
+												<Text style={styles.bk_headText}>#Pages: </Text>
+											</View>
+											<View style={styles.bk_value}>
+												<Text style={styles.bk_valueText}>
+													{"Pages: "+this.props.book.pageCount?this.props.book.pageCount:""}
+												</Text>
+											</View>
+										</View>
 
-								<View style={styles.bk_row}>
-									<View style={styles.bk_head}>
-										<Text style={styles.bk_headText}>Publisher: </Text>
-									</View>
-									<View style={styles.bk_value}>
-										<Text style={styles.bk_valueText}>
-											{this.props.book.hasOwnProperty("publisher")?this.props.book.publisher:"Unknown"}
-										</Text>
-									</View>
-								</View>
+										<View style={styles.bk_row}>
+											<View style={styles.bk_head}>
+												<Text style={styles.bk_headText}>Edition: </Text>
+											</View>
+											<View style={styles.bk_value}>
+												<Text style={styles.bk_valueText}>
+													{this.props.book.edition}
+												</Text>
+											</View>
+										</View>
 
-								<View style={styles.bk_row}>
-									<View style={styles.bk_head}>
-										<Text style={styles.bk_headText}>Published: </Text>
-									</View>
-									<View style={styles.bk_value}>
-										<Text style={styles.bk_valueText}>
-											{this.props.book.published}
-										</Text>
-									</View>
-								</View>
+										<View style={styles.bk_row}>
+											<View style={styles.bk_head}>
+												<Text style={styles.bk_headText}>Publisher: </Text>
+											</View>
+											<View style={styles.bk_value}>
+												<Text style={styles.bk_valueText}>
+													{this.props.book.hasOwnProperty("publisher")?this.props.book.publisher:""}
+												</Text>
+											</View>
+										</View>
 
-								<View style={styles.bk_row}>
-									<View style={styles.bk_head}>
-										<Text style={styles.bk_headText}>Description: </Text>
-									</View>
-									<View style={styles.bk_value}>
-										<Text style={styles.bk_valueText}>
-											{this.props.book.description}
-										</Text>
-									</View>
-								</View>
+										<View style={styles.bk_row}>
+											<View style={styles.bk_head}>
+												<Text style={styles.bk_headText}>Published: </Text>
+											</View>
+											<View style={styles.bk_value}>
+												<Text style={styles.bk_valueText}>
+													{this.props.book.publishedDate}
+												</Text>
+											</View>
+										</View>
 
+										<View style={styles.bk_row}>
+											<View style={styles.bk_head}>
+												<Text style={styles.bk_headText}>Description: </Text>
+											</View>
+											<View style={styles.bk_value}>
+												<Text style={styles.bk_valueText}>
+													{this.props.book.description}
+												</Text>
+											</View>
+										</View>
+
+									</View>
+								</ScrollView>	
 							</View>
 						</View>
+						
 						<TouchableOpacity
 							style={styles.buttonTouchable}
 							onPress={this.closeModal}
 						>
-							<Text style={styles.buttonText}>OK. Continue.</Text>
+							<Text style={styles.buttonText}>Continue.</Text>
 						</TouchableOpacity>
-					</View>
-				</TouchableWithoutFeedback>
-				
+					</ImageBackground>	
+				</View>
+							
 			</Modal>	
 		);
 	}
@@ -198,59 +195,27 @@ export default class ScanPreview extends Component {
 }
 
 const styles = StyleSheet.create({
-	summary: {
+	bk_imageWrapper: {
+		flex: 2,
+		flexDirection: "row",
+		justifyContent: "flex-start",
+		alignItems: "flex-start",
+	},
+	bk_image: {
 		flex: 1,
+		height: "100%",
+		width: "auto",
 	},
 	details: {
-		flex: 1,
-		backgroundColor: "#AAA"
-	},
-	text: {
-		color: "white",
-		fontSize: 20,
-		fontWeight: "bold",
-	},
-	container: {
-		flex: 1,
-		justifyContent: "flex-start",
-		alignItems: "stretch",
-		backgroundColor: "#FEFEFE",
+		flex: 3,
+		paddingTop: 10,
+		backgroundColor: "rgba(220,220,220,0.5)",
 	},
 	scrollview: {
 		flex: 1,
 	},
-	bk_wrapper: {
-		height: 144,
-		flexDirection: "row",
-		justifyContent: "center",
-		alignItems: "stretch",
-	},
-	bk_imageWrapper: {
-		flex: 1,
-		flexDirection: "row",
-		justifyContent: "flex-start",
-		alignItems: "flex-start",
-		backgroundColor: "white",
-	},
-	bk_image: {
-		flex: 1,
-		width: "100%",
-		height: 400,
-	},
-	bk_contentWrapper: {
-		flexDirection: "column",
-		justifyContent: "center",
-		alignItems: "center",
-		flex: 1,
-	},
-	bk_contentRow: {
-		flex: 1,
-	},
-	bk_contentLabel: {
-
-	},
 	bk_title: {
-		fontSize: 16,
+		fontSize: 18,
 		fontWeight: "bold",
 	},
 	bk_contentValue: {
@@ -259,18 +224,16 @@ const styles = StyleSheet.create({
 	wrapper: {
 		flex: 1,
 		width: "100%",
-		padding: 5,
-		paddingHorizontal: 5,
-		alignItems: "center",
-		backgroundColor: "white",
+		alignItems: "stretch",
+		backgroundColor: "#777"
+	},
+	bgImage: {
+		flex: 1,
 	},
 	location: {
 		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "center",
-	},
-	owner: {
-
 	},
 	head: {
 		flexDirection: "row",
@@ -280,12 +243,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: "center",
 		alignItems: "center",
-		backgroundColor: "white",
-	},
-	image: {
-		flex: 1,
-		width: "100%",
-		height: 400,
 	},
 	bk_row: {
 		flexDirection: "row",
@@ -300,16 +257,23 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 	},
 	bk_value: {
-		flex: 4,
+		flex: 3,
 	},
 	bk_valueText: {
-		color: "#222",
 	},
 	buttonText: {
 		fontSize: 21,
 		color: "rgb(0,122,255)",
 	},
+	content: {
+		flex: 11,
+		backgroundColor: "rgba(240,240,240,0.8)",
+		paddingVertical: 5,
+		paddingHorizontal: 10,
+	},
 	buttonTouchable: {
-		padding: 16,
+		flex: 1,
+		padding: 8,
+		backgroundColor: "rgba(240,240,240,0.8)",
 	},
 });

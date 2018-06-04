@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import univ_const from "/var/www/html/books/BooksNativeApp/univ_const.json";
 import * as accountDispatchers from "../account/ac_dispatchers";
+import { showGenericMessageModal } from "../shared_components/err_msg_display_modal";
 /*
 	//import {objectToString} from "../shared_components/shared_utilities";
 
@@ -26,7 +27,6 @@ const host = univ_const.server_url;
 export default class BooksView extends Component {
 	componentDidMount=()=>{
 		//Fetch book data from db. Dispatch action
-		
 		if(!this.props.session.isLoggedIn) {
 			//If not logged, in, check for stored credentials and login automatically.
 			let context = {
@@ -39,6 +39,14 @@ export default class BooksView extends Component {
 			this.props.fetchBooks();
 		}
 		//Subscribe to the store for rerenderings whenever the store changes.
+	}
+	componentDidUpdate=()=>{
+		if(!this.props.successFetching && !this.props.books.isFetching) {
+			showGenericMessageModal({
+				type: "error",
+				text: this.props.books.fetchErrorString,
+			});
+		}
 	}
 
 	render() {
@@ -72,7 +80,7 @@ export default class BooksView extends Component {
 					//Report an error.
 				}
 			} else {
-				//Error is implied
+				//Error is implied. Shown in modal
 			}
 		} else {
 			//Display all results
@@ -100,7 +108,8 @@ export default class BooksView extends Component {
 				//Report an error.
 				}
 			} else {
-			//Error is implied
+			//Error is implied. Error fetching. Network, server, e.t.c
+			//Check in the store's fetchErrorString
 			}
 		}
 

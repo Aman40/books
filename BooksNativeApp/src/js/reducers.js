@@ -1,7 +1,8 @@
 import * as booksActions from "./books/books_actions";
 import * as accountActions from "./account/ac_actions";
-import {genericErrorModalActions} from "./shared_components/err_msg_display_modal";
-//import {objectToString} from "./shared_components/shared_utilities";
+//import {genericErrorModalActions, test} from "./shared_components/err_msg_display_modal";
+import {objectToString} from "./shared_components/shared_utilities";
+
 export function books(
 	state={
 		isFetching: false, //Started fetching?
@@ -239,7 +240,8 @@ export function guiControl(
 			...state,
 			showScanPreview: false,
 		};
-	case genericErrorModalActions.OPEN_GENERIC_ERROR:
+	case "show the error":
+		console.log("Action.payload: "+objectToString(action.payload));
 		return {
 			...state,
 			genericMessageModal: {
@@ -248,7 +250,7 @@ export function guiControl(
 				text: action.payload.text,
 			},
 		};
-	case genericErrorModalActions.CLOSE_GENERIC_ERROR:
+	case "close the error":
 		return {
 			...state,
 			genericMessageModal: {

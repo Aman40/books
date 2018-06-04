@@ -15,19 +15,20 @@ import {
 } from "react-redux";
 import {showScanPreview} from "./ac_dispatchers";
 import ScanPreview from "./scanned_preview_modal";
+import { showGenericMessageModal } from "../shared_components/err_msg_display_modal";
+const ISBN = require("simple-isbn").isbn;
 
 class _ScanScreen extends Component {
-
 	onSuccess(e) {
-		//Data is in e.data. Scrape the web for the meta data
-		//Use this api: "http://api.bookmooch.com/api/asin?asins=4563022373&inc=Edition+ISBN+Binding+Title+Author+NumberOfPages+Publisher+PublicationDate&o=json"
-		//Only replacing the isbn after conversion to ISBN-10
 		//Get the meta for each book and put it in the redux store before moving on to the next book
 		//Check if this has been scanned before before getting meta data
-		if(this.props.scannedIsbnList.includes(e.data)) {
+		if(this.props.scannedIsbnList.includes(ISBN.toIsbn10(e.data))) {
 			//Already scanned
 			//Display a modal or something.
-			console.log("You already scanned that book. Idiot!");
+			showGenericMessageModal({
+				type: "error",
+				text: "Already scanned that book!",
+			});
 		} else {
 			//scan
 			this.props.getMetaFromIsbn(e.data);

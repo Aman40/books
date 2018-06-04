@@ -13,7 +13,6 @@ import {
 	Text,
 	StyleSheet,
 	Modal,
-	TouchableWithoutFeedback,
 	TouchableOpacity,
 	ScrollView,
 } from "react-native";
@@ -35,24 +34,24 @@ class _GenMsgDisp extends Component {
 					visible={true}
 					onRequestClose={this.props.hideModal}
 				>
-					<TouchableWithoutFeedback onPress = {this.props.hideModal}>
-						<View style={styles.touchable}>
-							<View style={styles.container}>
-								<ScrollView style={styles.scrollView}>
+					<View style={styles.touchable}>
+						<View style={styles.container}>
+							<View style={styles.scrollViewContainer}>
+								<ScrollView style={{flex: 1}}>
 									<Text style={styles.msgText}>
 										{this.props.text}
 									</Text>
 								</ScrollView>
-								<View style={styles.btnContainer}>
-									<TouchableOpacity
-										onPress={this.props.hideModal}
-									>
-										<Text style={styles.ok}>OK</Text>
-									</TouchableOpacity>
-								</View>
+							</View>
+							<View style={styles.btnContainer}>
+								<TouchableOpacity onPress={this.props.hideModal}>
+									<View style={styles.okBtn}>
+										<Text style={styles.okText}>OK</Text>
+									</View>
+								</TouchableOpacity>
 							</View>
 						</View>
-					</TouchableWithoutFeedback>
+					</View>
 				</Modal>	
 			);
 		} else {
@@ -72,7 +71,8 @@ const genericErrorModalActions = {
 	OPEN_GENERIC_ERROR: "show the error",
 	CLOSE_GENERIC_ERROR: "close the error",
 };
-module.exports.genericErrorModalActions = genericErrorModalActions; //To reducers
+const _genericErrorModalActions = genericErrorModalActions;
+export { _genericErrorModalActions as genericErrorModalActions }; //To reducers
 export function showGenericMessageModal(payload) {
 //payload={type: enum("message", "warning", "error"), text}
 	store.dispatch({
@@ -80,6 +80,8 @@ export function showGenericMessageModal(payload) {
 		payload,
 	});
 }
+const _test = "TEST EXPORT"; //todo delete
+export {_test as test}; //todo delete
 function hideModal(dispatch) {
 	dispatch({
 		type: genericErrorModalActions.CLOSE_GENERIC_ERROR,
@@ -117,7 +119,7 @@ const styles = StyleSheet.create({
 		width: "100%",
 		justifyContent: "center",
 		alignItems: "center",
-		backgroundColor: "rgba(255,255,255,0.8)"
+		backgroundColor: "rgba(255,255,255,0.7)",
 	},
 	container: {
 		width: "60%",
@@ -127,17 +129,18 @@ const styles = StyleSheet.create({
 		elevation: 10,
 		justifyContent: "center",
 		alignItems: "stretch",
-		borderColor: "teal",
-		borderWidth: 3,
 		borderRadius: 10,
 	},
-	scrollView: {
+	scrollViewContainer: {
 		flex: 4,
 		width: "100%",
+		borderColor: "transparent",
 		backgroundColor: "#CCC",
 	},
 	msgText: {
 		color: "grey",
+		padding: 10,
+		fontSize: 14
 	},
 	errText: {
 		color: "red",
@@ -147,6 +150,17 @@ const styles = StyleSheet.create({
 	},
 	btnContainer: {
 		flex: 1,
-		color: "teal",
+		backgroundColor: "teal",
+		justifyContent: "center",
+		alignItems: "stretch",
+	},
+	okBtn: {
+		height: "100%",
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	okText: {
+		color: "white",
+		fontSize: 18,
 	}
 });

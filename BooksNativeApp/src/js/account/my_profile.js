@@ -8,6 +8,7 @@ import {
 import {connect, Provider} from "react-redux";
 import store from "../store";
 //import {objectToString} from "../shared_components/shared_utilities";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 class _MyProfile /*to ac_tabnav.js*/ extends Component {
 	render() {
@@ -15,25 +16,17 @@ class _MyProfile /*to ac_tabnav.js*/ extends Component {
 			<View style={styles.wrapper}>
 				<View style={styles.statsBar}>
 					<View style={styles.num_books}>
-						<Text
-							style={styles.tbtext}
-						>
-							#books
-						</Text>
+
 					</View>
 					<View style={styles.num_papers}>
-						<Text
-							style={styles.tbtext}
-						>
-							#papers
-						</Text>
+
 					</View>
 					<View style={styles.num_notifs}>
-						<Text
-							style={styles.tbtext}
-						>
-							#notifs
-						</Text>
+						<Ionicons
+							name={"md-notifications"}
+							size={28}
+							color={"#333"}
+						/>
 					</View>
 				</View>
 
