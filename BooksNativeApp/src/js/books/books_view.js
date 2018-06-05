@@ -9,6 +9,7 @@ import {
 	ScrollView,
 	TouchableOpacity,
 	Image,
+	ImageBackground,
 } from "react-native";
 import univ_const from "/var/www/html/books/BooksNativeApp/univ_const.json";
 import * as accountDispatchers from "../account/ac_dispatchers";
@@ -115,15 +116,30 @@ export default class BooksView extends Component {
 
 		return (
 			<View style={styles.container}>
-				<ScrollView 
-					style={styles.scrollview}
-					contentContainerStyle={{
-						justifyContent:"flex-start",
-						alignItems: "stretch"
-					}}
+				<ImageBackground
+					style={styles.bgImage}
+					resizeMode={"cover"}
+					source={require("../../images/cat-in-books-7.jpg")}
 				>
-					{books}
-				</ScrollView>
+					<View
+						style={{
+							flex: 1,
+							backgroundColor: "rgba(255,255,255,0.8)",
+						}}
+					>
+						<ScrollView 
+							style={styles.scrollview}
+							contentContainerStyle={{
+								justifyContent:"flex-start",
+								alignItems: "stretch"
+							}}
+						>
+							{books}
+						</ScrollView>
+					</View>
+					
+				</ImageBackground>
+				
 			</View>
 		);
 	}
@@ -171,15 +187,6 @@ class BookView extends Component {
 						} >
 							{this.props.book.Cover==="paper_back"?"Paperback":"Hardcover"}
 						</Text>
-						<Text style = {
-							{ 
-								...StyleSheet.flatten(styles.bk_title),
-								color: "red",
-								fontSize: 16,
-							}
-						} >
-							{"JPY "+this.props.book.Price}
-						</Text>
 						<Text style={styles.bk_contentValue}>
 							{"Pages: "+this.props.book.PageNo}
 						</Text>
@@ -197,6 +204,9 @@ const styles = StyleSheet.create({
 		alignItems: "stretch",
 		backgroundColor: "#FEFEFE",
 	},
+	bgImage: {
+		flex: 1,
+	},
 	scrollview: {
 		flex: 1,
 	},
@@ -211,7 +221,6 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "flex-start",
 		alignItems: "flex-start",
-		backgroundColor: "white",
 	},
 	bk_image: {
 		flex: 1,
