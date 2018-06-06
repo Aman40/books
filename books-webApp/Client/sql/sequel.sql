@@ -23,27 +23,22 @@ CREATE TABLE IF NOT EXISTS Books
 (
   UserID CHAR(14) NOT NULL,
   BookID VARCHAR(14), /*Unique ID starting with B*/
-  Title VARCHAR(50) NOT NULL, /*Comma separated list of authors*/
-  Edition SMALLINT DEFAULT 1,
+  Title VARCHAR(255) NOT NULL, /*Comma separated list of authors*/
+  Edition VARCHAR(50),
   Authors VARCHAR(255),
-  Language VARCHAR(64),
+  Language VARCHAR(8),
   Description TEXT,
   Cover ENUM('paper_back', 'hard_back'),
   PageNo SMALLINT UNSIGNED DEFAULT 0,
   Publisher VARCHAR(30),
   Published INT(4) NOT NULL,
   ISBN VARCHAR(15),
-  New BOOL,
   `Condition` TEXT, /*If it's used*/
   Location VARCHAR(30), /*In case of University, specify the name of the University*/
   Price MEDIUMINT UNSIGNED DEFAULT 0,
-  Deliverable BOOL,
   DateAdded DATETIME NOT NULL ,
   OfferExpiry DATETIME NOT NULL,
   BookSerial SERIAL,
-  ZipCode CHAR(7),
-  Latitude DECIMAL(10, 8),
-  Longitude DECIMAL(10, 8),
   PRIMARY KEY (BookID),
   FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );

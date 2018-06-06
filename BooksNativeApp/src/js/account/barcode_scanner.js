@@ -13,8 +13,6 @@ import {
 	connect,
 	Provider
 } from "react-redux";
-import {showScanPreview} from "./ac_dispatchers";
-import ScanPreview from "./scanned_preview_modal";
 import { showGenericMessageModal } from "../shared_components/err_msg_display_modal";
 const ISBN = require("simple-isbn").isbn;
 
@@ -31,8 +29,9 @@ class _ScanScreen extends Component {
 			});
 		} else {
 			//scan
-			this.props.getMetaFromIsbn(e.data);
-			this.props.showScanPreview();
+			this.props.getMetaFromIsbn(e.data, ()=>{
+				this.props.navigation.navigate("ScanPreview");
+			});
 		}
 		//There should be a waiting system for one to finish before the next
 	}
@@ -62,7 +61,6 @@ class _ScanScreen extends Component {
 						style={styles.buttonTouchable}
 						onPress={()=>this.props.navigation.navigate("Switch")}
 					>
-						{this.props.show&&!this.props.wait?<ScanPreview/>:[]}
 						<Text style={styles.buttonText}>{this.props.wait?"Wait": "Ready"}</Text>
 					</TouchableOpacity>
 				}
@@ -82,16 +80,12 @@ function mapStateToProps(state) {
 		errMsg: state.booksToAdd.fetchMetaError.msg,
 		addedBooks: state.booksToAdd.addedBooksList,
 		scannedIsbnList: state.booksToAdd.scannedIsbnList,
-		show: state.guiControl.showScanPreview,
 	};
 }
 function mapDispatchToProps(dispatch) {
 	return {
-		getMetaFromIsbn: (isbn)=>{
-			getMetaFromIsbn(dispatch, isbn);
-		},
-		showScanPreview: ()=>{
-			showScanPreview(dispatch);
+		getMetaFromIsbn: (isbn, callback)=>{
+			getMetaFromIsbn(dispatch, isbn, callback);
 		},
 	};
 }

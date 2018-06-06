@@ -13,17 +13,21 @@ The purpose of this is to show the closest items to the user first
 	as a fallback for items' location when not provided.
 
 BOOKS LOCATION
-1. 	For each book added, a default location, based on the user's, will be auto-filled.
-	Users can then change this, should it differ from the real one.
-	Using this, the latitude and longitude of each will be triangulated. From these, and
-	the user's location, materials can be shown from closest first.
+1. 	The default is the user's University
 
 IMPLEMENTATION:
-1. Edit the sequel.sql 
-2. Edit the Client book addition form and signup from.
-3. Add the columns to the db table. Try not to erase the already existing data.
-4. Test by adding another book.
-5. Sign up for a google id
-6. Display a map in the app and show the locations of the books.
-7. Create the user signup form and book addition form.
-8. GOOD LUCK!!
+1. Remove "New". They're all old by default. If new, User should specifically describe
+	in "Condition"
+
+DELIVERY:
+1. Have a common room (like IRIS in Osaka University) where the givers bring books for
+	completed transactions and the receivers can pick them up from there. 
+	When the givers bring the books, they also bring proof of confirmed transaction to
+	avoid people dumping their books there. The transaction confirmation should be 
+	in form of a QR code containing the giver's id, receiver's id, date of confirmation,
+	date of pickup, bookID. The confirmer scans the QR code, checking the transaction 
+	database for the transaction's existence.
+	The receiver has their own QR code to confirm their identity. This should also
+	include time of generation to guard against identity spoofing.
+	How about having BSP members volunteer as agents. Receiving and giving.
+2. 

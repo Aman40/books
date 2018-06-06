@@ -1,7 +1,7 @@
 import * as booksActions from "./books/books_actions";
 import * as accountActions from "./account/ac_actions";
 //import {genericErrorModalActions, test} from "./shared_components/err_msg_display_modal";
-import {objectToString} from "./shared_components/shared_utilities";
+//import {objectToString} from "./shared_components/shared_utilities";
 
 export function books(
 	state={
@@ -241,7 +241,6 @@ export function guiControl(
 			showScanPreview: false,
 		};
 	case "show the error":
-		console.log("Action.payload: "+objectToString(action.payload));
 		return {
 			...state,
 			genericMessageModal: {
@@ -282,8 +281,8 @@ export function booksToAdd(
 			 * //Send a reset action to clear this data at start and end of the session
 			 */
 		},
+		scannedBookMetaObject: {},
 		scannedIsbnList: [],
-		addedBooksList: [],
 	},
 	action
 ) {
@@ -297,7 +296,8 @@ export function booksToAdd(
 			fetchMetaError: {
 				code: null,
 				msg: "",
-			}
+			},
+			scannedBookMetaObject: {},
 		};
 	case accountActions.ISBN_TO_META_SUCCESS:
 		return {
@@ -310,11 +310,7 @@ export function booksToAdd(
 				new_arr.push(action.payload.isbn);
 				return new_arr;
 			})(),
-			addedBooksList: (()=>{
-				let new_arr = state.addedBooksList.slice(0, state.addedBooksList.length);
-				new_arr.push(action.payload.resultObj);
-				return new_arr;
-			})(),
+			scannedBookMetaObject: action.payload.resultObj,
 		};
 	case accountActions.ISBN_TO_META_FAIL:
 		return {
@@ -325,8 +321,8 @@ export function booksToAdd(
 			fetchMetaError: {
 				code: action.payload.code,
 				msg: action.payload.msg,
-			}
-
+			},
+			scannedBookMetaObject: {}
 		};
 	default: 
 		return state;

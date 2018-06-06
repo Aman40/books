@@ -450,7 +450,7 @@ export function hideAddMethodSelectorMenu(dispatch){
 	});
 }
 
-export function getMetaFromIsbn(dispatch, isbn) {
+export function getMetaFromIsbn(dispatch, isbn, callback) {
 	/**
 	 * 1. Check that it's a string.
 	 * 2. Check that there aren't any hyphenes
@@ -458,7 +458,6 @@ export function getMetaFromIsbn(dispatch, isbn) {
 	 * if 10, OK. if 13, convert to 10. if invalid isbn, error, enter manually.
 	 * Use bookmooch api to get meta data as object
 	 */
-	
 	if(ISBN.isValidIsbn13(isbn)) {
 		//Convert to isbn10
 		isbn = ISBN.toIsbn10(isbn);
@@ -524,6 +523,7 @@ export function getMetaFromIsbn(dispatch, isbn) {
 					type: actions.ISBN_TO_META_SUCCESS,
 					payload: {isbn, resultObj:resultObj.items[0].volumeInfo},
 				});
+				callback(); 
 			}
 		} else if(this.readyState===4) {
 			//Server problem
@@ -546,19 +546,10 @@ export function getMetaFromIsbn(dispatch, isbn) {
 		payload: "Fetching meta data",
 	});
 }
-export function showScanPreview(dispatch) {
-	dispatch ({
-		type: actions.SHOW_SCAN_PREVIEW,
-		payload: null,
-	});
-}
-export function hideScanPreview(dispatch) {
-	dispatch({
-		type: actions.HIDE_SCAN_PREVIEW,
-		payload: null,
-	});
-}
 
+export function submitNewBook(dispatch, callback) {
+	
+}
 /*
 TODO
 1. Check for session check!

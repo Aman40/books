@@ -12,6 +12,7 @@ import Switch from "./ac_switch";
 import TitleBar from "./titlebar";
 import ScanScreen from "./barcode_scanner";
 import AddBook from "./add_book";
+import ScanPreview from "./scanned_preview";
 
 let AccountStack = StackNavigator(
 	{
@@ -45,6 +46,20 @@ let AccountStack = StackNavigator(
 		},
 		AddBook: {
 			screen: AddBook,
+		},
+		ScanPreview: {
+			screen: ScanPreview,
+			navigationOptions: ({navigation, screenProps})=>{
+				return {
+					header: (headerProps)=>{
+						return (<TitleBar
+							navigation={navigation}
+							screenProps={screenProps}
+							headerProps={headerProps}
+						/>);
+					}
+				};
+			}
 		}
 	},
 );
