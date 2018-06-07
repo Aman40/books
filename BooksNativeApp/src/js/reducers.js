@@ -2,6 +2,7 @@ import * as booksActions from "./books/books_actions";
 import * as accountActions from "./account/ac_actions";
 //import {genericErrorModalActions, test} from "./shared_components/err_msg_display_modal";
 //import {objectToString} from "./shared_components/shared_utilities";
+import { isbn as ISBN } from "simple-isbn";
 
 export function books(
 	state={
@@ -310,7 +311,10 @@ export function booksToAdd(
 				new_arr.push(action.payload.isbn);
 				return new_arr;
 			})(),
-			scannedBookMetaObject: action.payload.resultObj,
+			scannedBookMetaObject: {
+				...action.payload.resultObj,
+				isbn: ISBN.toIsbn13(action.payload.isbn),
+			},
 		};
 	case accountActions.ISBN_TO_META_FAIL:
 		return {
@@ -328,7 +332,50 @@ export function booksToAdd(
 		return state;
 	}
 }
+export function addNewBook(state={
+	isAddingNewBook: false,
+	addSuccess: false,
+	addError: {},
+}, action) {
+	switch(action.type) {
+	case accountActions.IS_ADDING_BOOK:
+		return {
+			...state,
+			isAddingNewBook: true,
+			addSuccess: false,
+			addError: {},
+		};
+	case accountActions.ADD_BOOK_SUCCESS:
+		return {
+			...state,
+			isAddingNewBook: false,
+			addSuccess: true,
+			addError: {},
+		};
+	case accountActions.ADD_BOOK_ERROR:
+		return {
+			...state,
+			isAddingNewBook: false,
+			addSuccess: false,
+			addError: action.payload,
+			/**
+			 * addError: {
+			 * 		errCode: <Number>,
+			 * 		errMsg: if(errCode==4) {
+			 * 					return err_obj<Object>
+			 * 				} else {
+			 * 					return <String>
+			 * 				}
+			 * 		}
+			 */
+		};
+	default:
+		return state;
+	}
+
+}
 //NOTES: Async functions should always dispatch 3 types of actions.
 //1. When the action starts and the result is pending
 //2. When the action ends successfully
 //3. When the action ends in failure/an error.
+//TODO 180606: Map ISO 639-1 Alpha-2 to language names

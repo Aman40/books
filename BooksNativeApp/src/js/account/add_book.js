@@ -11,7 +11,9 @@ import {
 } from "react-native";
 import store from "../store";
 import {connect, Provider,} from "react-redux";
-import {objectToString} from "../shared_components/shared_utilities";
+//import {objectToString} from "../shared_components/shared_utilities";
+import { submitNewBook } from "./ac_dispatchers";
+import { langISO6391 } from "../shared_components/shared_utilities";
 
 class _AddBookForm extends Component {
 	constructor(props) {
@@ -26,20 +28,24 @@ class _AddBookForm extends Component {
 			published: "",
 			binding: "",
 			pages: "",
-			isbn13: "",
+			isbn: "",
 			condition: "",
 			location: "",
 			description: "",
-			expirydate: ""
+			offer_expiry: "",
+			thumbnail: "",
 		};
 	}
 	componentDidMount=()=>{
 		//Initialize
-		//this.init();
-		this.props.book&&console.log("Book: "+objectToString(this.props.book));
+		Object.getOwnPropertyNames(this.props.book).length&&this.init();
 	}
 	submit = ()=>{
 		//Submit the form data
+		this.props.submit(this.state, ()=>{
+			//Display toast and go back
+			this.props.navigation.navigate("BarcodeScanner");
+		});
 	}
 	init=()=>{
 		let state_copy;
@@ -51,10 +57,12 @@ class _AddBookForm extends Component {
 				edition: this.props.book.edition?this.props.book.edition:"",
 				language: this.props.book.language?this.props.book.language:"",
 				publisher: this.props.book.publisher?this.props.book.publisher:"",
+				isbn: this.props.book.isbn?this.props.book.isbn:"",
 				//TODO. Format the date and find a better default than ""
 				published: this.props.book.publishedDate?this.props.book.publishedDate:"", 
 				description: this.props.book.description?this.props.book.description:"",
 				pages: this.props.book.pageCount?this.props.book.pageCount:"",
+				thumbnail: this.props.book.imageLinks.thumbnail?this.props.book.imageLinks.thumbnail:"",
 			};
 		}
 		//TODO: Then set the location as the user's session's university
@@ -69,7 +77,7 @@ class _AddBookForm extends Component {
 					<View style={styles.inputGroup}>
 						<View style={styles.label}>
 							<Text style={styles.inputPromptText}>
-			Title:
+					Title:
 							</Text>
 						</View>
 						<View style={styles.input}>
@@ -86,7 +94,7 @@ class _AddBookForm extends Component {
 					<View style={styles.inputGroup}>
 						<View style={styles.label}>
 							<Text style={styles.inputPromptText}>
-			Authors:
+					Authors:
 							</Text>
 						</View>
 						<View style={styles.input}>
@@ -104,7 +112,7 @@ class _AddBookForm extends Component {
 					<View style={styles.inputGroup}>
 						<View style={styles.label}>
 							<Text style={styles.inputPromptText}>
-			Edition:
+					Edition:
 							</Text>
 						</View>
 						<View style={styles.input}>
@@ -121,16 +129,26 @@ class _AddBookForm extends Component {
 					<View style={styles.inputGroup}>
 						<View style={styles.label}>
 							<Text style={styles.inputPromptText}>
-			Language:
+					Language:
 							</Text>
 						</View>
 						<View style={styles.input}>
-							<TextInput
-								style={styles.textInput}
-								onChangeText={(text)=>this.setState({language: text})}
-								value={this.state.language}
-								underlineColorAndroid={"transparent"}
-							/>
+							<Picker
+								onValueChange={(val, )=>this.setState({language: val})}
+								selectedValue={this.state.language} //TODO LATER: Set default according to user's default language
+								style={styles.bindingPicker}
+								itemStyle={styles.bindingPickerText}
+							>
+								{(()=>{
+									let items=[];
+									for(let lab in langISO6391) {
+										items.push(
+											<Picker.Item key={lab} value={lab} label={langISO6391[lab]}/>
+										);
+									}
+									return items;
+								})()}
+							</Picker>
 						</View>
 					</View>
 
@@ -138,7 +156,7 @@ class _AddBookForm extends Component {
 					<View style={styles.inputGroup}>
 						<View style={styles.label}>
 							<Text style={styles.inputPromptText}>
-			Publisher:
+					Publisher:
 							</Text>
 						</View>
 						<View style={styles.input}>
@@ -155,7 +173,7 @@ class _AddBookForm extends Component {
 					<View style={styles.inputGroup}>
 						<View style={styles.label}>
 							<Text style={styles.inputPromptText}>
-			Published:
+					Published:
 							</Text>
 						</View>
 						<View style={styles.datePicker}>
@@ -203,7 +221,7 @@ class _AddBookForm extends Component {
 					<View style={styles.inputGroup}>
 						<View style={styles.label}>
 							<Text style={styles.inputPromptText}>
-			Binding:
+					Binding:
 							</Text>
 						</View>
 						<View style={styles.input}>
@@ -223,14 +241,14 @@ class _AddBookForm extends Component {
 					<View style={styles.inputGroup}>
 						<View style={styles.label}>
 							<Text style={styles.inputPromptText}>
-			ISBN 13:
+					ISBN 13:
 							</Text>
 						</View>
 						<View style={styles.input}>
 							<TextInput
 								style={styles.textInput}
-								onChangeText={(text)=>this.setState({isbn13: text})}
-								value={this.state.isbn13}
+								onChangeText={(text)=>this.setState({isbn: text})}
+								value={this.state.isbn}
 								underlineColorAndroid={"transparent"}
 							/>
 						</View>
@@ -240,7 +258,7 @@ class _AddBookForm extends Component {
 					<View style={styles.inputGroup}>
 						<View style={styles.label}>
 							<Text style={styles.inputPromptText}>
-			Condition:
+					Condition:
 							</Text>
 						</View>
 						<View style={styles.input}>
@@ -257,7 +275,7 @@ class _AddBookForm extends Component {
 					<View style={styles.inputGroup}>
 						<View style={styles.label}>
 							<Text style={styles.inputPromptText}>
-			Location:
+					Location:
 							</Text>
 						</View>
 						<View style={styles.input}>
@@ -275,7 +293,7 @@ class _AddBookForm extends Component {
 					<View style={styles.inputGroup}>
 						<View style={styles.label}>
 							<Text style={styles.inputPromptText}>
-			Description:
+					Description:
 							</Text>
 						</View>
 						<View style={styles.input}>
@@ -292,7 +310,7 @@ class _AddBookForm extends Component {
 					<View style={styles.inputGroup}>
 						<View style={styles.label}>
 							<Text style={styles.inputPromptText}>
-			Available Until:
+					Available Until:
 							</Text>
 						</View>
 						<View style={styles.datePicker}>
@@ -318,7 +336,7 @@ class _AddBookForm extends Component {
 													day="0"+day.toString();
 												}
 												let dateString = `${obj.year}-${month}-${day}`;
-												this.setState({expirydate: dateString});
+												this.setState({offer_expiry: dateString});
 											}
 										});
 
@@ -330,7 +348,7 @@ class _AddBookForm extends Component {
 							>
 								<View style={{flex: 1, width: "100%",}}>
 									<Text style={styles.dateText} ref={(node)=>{this.datepicker = node;}}>
-										{this.state.expirydate?this.state.expirydate:getDefaultExpiryDate()}
+										{this.state.offer_expiry?this.state.offer_expiry:getDefaultExpiryDate()}
 									</Text>
 								</View>
 							</TouchableOpacity>
@@ -338,6 +356,22 @@ class _AddBookForm extends Component {
 					</View>
 
 				</ScrollView>
+				<View style={styles.controls}>
+					<TouchableOpacity 
+						style={styles.cancel} 
+						onPress={this.props.navigation.goBack}>
+						<Text style={styles.cancelText}>
+							Cancel
+						</Text>
+					</TouchableOpacity>
+					<TouchableOpacity 
+						style={styles.submit}
+						onPress={this.submit}>
+						<Text style={styles.submitText}>
+							Submit
+						</Text>
+					</TouchableOpacity>
+				</View>
 			</View>
 			
 		);
@@ -393,19 +427,45 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 		color: "#777",
 		fontSize: 20,
+	},
+	controls: {
+		flexDirection: "row",
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	cancel: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	submit: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	cancelText: {
+		fontSize: 20,
+		color: "rgb(0,122,255)",
+		padding: 5,
+	},
+	submitText: {
+		fontSize: 20,
+		color: "rgb(0,122,255)",
+		padding: 5,
 	}
 });
 
 function mapStateToProps(state){
 	return {
-		todo: "todo",
 		book: state.booksToAdd.scannedBookMetaObject,
 	};
 }
 function mapDispatchToProps(dispatch){
 	//todo
 	return {
-		todo: "todo",
+		submit: (data, callback)=>{
+			submitNewBook(dispatch, data, callback);
+		}
 	};
 }
 //connect

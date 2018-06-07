@@ -27,44 +27,34 @@ router.post("/alter/*", [ /*Validate form*/
 		.escape(),
 	check("description")
 		.optional({nullable: true, checkFalsy: true})
-		.isLength({max: 255})
+		.isLength({max: 1024})
 		.withMessage("ER_DES_LEN") //Description too long
 		.trim()
 		.escape(),
 	check("published")
-		.not()
-		.isEmpty()
-		.withMessage("ER_NO_PUBYR"),
+		.isLength({max: 16})
+		.withMessage("ER_PUBYR"),
 	check("language")
 		.not()
 		.isEmpty()
 		.withMessage("ER_NO_LANG"),
 	check("edition")
 		.optional({nullable: true, checkFalsy: true})
+		.isLength({max: 128})
+		.withMessage("ER_ILLEGAL_OP"),
+	check("binding")
+		.withMessage("ER_NO_BINDING")
+		.isIn(["paperback", "hardBinding"])
+		.withMessage("ER_ILLEGAL_OP"),
+	check("pages")
 		.isNumeric()
-		.withMessage("ER_ILLEGAL_OP"),
-	check("cover")
-		.not()
-		.isEmpty()
-		.withMessage("ER_NO_COVER")
-		.isIn(["paper_back", "hard_back"])
-		.withMessage("ER_ILLEGAL_OP"),
-	check("page_no")
-		.not()
-		.isEmpty()
-		.withMessage("ER_NO_PAGES"),
+		.withMessage("ER_PAGES"),
 	check("publisher")
-		.not()
-		.isEmpty()
-		.withMessage("ER_NO_PUB")
 		.isLength({max: 255})
 		.withMessage("ER_PUB_LEN")
 		.trim()
 		.escape(),
 	check("isbn")
-		.not()
-		.isEmpty()
-		.withMessage("ER_NO_ISBN")
 		.isLength({min: 10,max: 13})
 		.trim()
 		.escape(),
@@ -80,29 +70,16 @@ router.post("/alter/*", [ /*Validate form*/
 		.withMessage("ER_LOC_LEN")
 		.trim()
 		.escape(),
-	check("zipcode")
-		.isNumeric()
-		.withMessage("ERR_NUMERIC")
-		.isLength({min: 7, max: 7})
-		.withMessage("ERR_LENGTH"),
-	check("price")
-		.not()
-		.isEmpty()
-		.withMessage("ER_NO_PRICE")
-		.isNumeric()
-		.withMessage("ER_ILLEGAL_OP")
-		.isLength({max: 10})
-		.withMessage("ER_PRICE_LEN"),
-	check("deliverable")
-		.not()
-		.isEmpty()
-		.withMessage("ER_NO_DELIV")
-		.isIn(["true", "false"])
-		.withMessage("ER_ILLEGAL_OP"),
 	check("offer_expiry")
 		.not()
 		.isEmpty()
-		.withMessage("ER_NO_EXP")
+		.withMessage("ER_NO_EXP"),
+	check("thumbnail")
+		.optional({nullable: true, checkFalsy: true})
+		.isLength({max: 255})
+		.withMessage("ER_THUMB")
+		.trim()
+		.escape(),
 ], (req, res, next)=>{
 	/*res.writeHead(200, {'Content-Type':'text/html', 'Access-Control-Allow-Origin': 'http://localhost:3000'});*/
 	res.write("<?xml version='1.0' encoding='UTF-8' ?>");
@@ -172,8 +149,8 @@ router.post("/alter/add", function (req, res) {
 		if(err) throw err; //Replace with a solution that won't crash the app
 		let sql = "INSERT INTO Books(`UserID`,`BookID`, `Title`, `Edition`, `Authors`, `Language`," +
             " `Description`," +
-            "`Cover`, `PageNo`, `Publisher`, `Published`, `ISBN`, `New`, `Condition`," +
-            "`ZipCode`,`Location` , `Price`, `Deliverable`, `DateAdded`, `OfferExpiry`) VALUES ?";
+            "`Binding`, `PageNo`, `Publisher`, `Published`, `ISBN`, `Condition`," +
+            "`Location` , `DateAdded`, `OfferExpiry`, `OfferExpiry`) VALUES ?";
 
 		let book_id = genUid("B");
 
@@ -190,19 +167,16 @@ router.post("/alter/add", function (req, res) {
 			fields.authors,
 			fields.language,
 			fields.description,
-			fields.cover,
-			fields.page_no,
+			fields.binding,
+			fields.pages,
 			fields.publisher,
 			fields.published,
 			fields.isbn,
-			fields.is_new,
 			fields.condition,
-			fields.zipcode,
 			fields.location,
-			fields.price,
-			fields.deliverable,
 			fields.curr_date,
-			fields.offer_expiry
+			fields.offer_expiry,
+			fields.thumbnail,
 		]];
 
 		con.query(sql, [form_fields], (err, result)=>{
@@ -229,18 +203,16 @@ router.post("/alter/add", function (req, res) {
 				edition: fields.edition,
 				authors: fields.authors,
 				description: fields.description,
-				cover:  fields.cover,
-				page_no: fields.page_no,
+				binding:  fields.binding,
+				pages: fields.pages,
 				publisher: fields.publisher,
+				dublished: fields.published,
 				isbn: fields.isbn,
-				is_new: fields.is_new,
 				condition: fields.condition,
-				zipcode: fields.zipcode,
 				location: fields.location,
-				price: fields.price,
-				deliverable: fields.deliverable,
 				date_added: fields.curr_date,
-				offer_expiry: fields.offer_expiry
+				offer_expiry: fields.offer_expiry,
+				thumbnail: fields.thumbnail,
 			};
 
 			//Return JSON string of names and values to be parsed into an obj
@@ -273,8 +245,8 @@ router.post("/alter/edit", function (req, res) {
 		let book_id = fields.book_id;
 
 		let sql = "UPDATE Books SET `Title`=?, `Edition`=?, `Authors`=?, `Language`=?, `Description`=?," +
-            "`Cover`=?, `PageNo`=?, `Publisher`=?, `Published`=?, `ISBN`=?, `New`=?, `Condition`=?," +
-            "`ZipCode`=?, `Location`=?, `Price`=?, `Deliverable`=?, `DateAdded`=?, `OfferExpiry`=? WHERE `UserID`=? AND `BookID`=?";
+            "`Binding`=?, `PageNo`=?, `Publisher`=?, `Published`=?, `ISBN`=?, `Condition`=?," +
+            "Location`=?, `DateAdded`=?, `OfferExpiry`=?, `Thumbnail`=? WHERE `UserID`=? AND `BookID`=?";
 
 		let form_fields = [
 			fields.title,
@@ -282,19 +254,16 @@ router.post("/alter/edit", function (req, res) {
 			fields.authors,
 			fields.language,
 			fields.description,
-			fields.cover,
-			fields.page_no,
+			fields.binding,
+			fields.pages,
 			fields.publisher,
 			fields.published,
 			fields.isbn,
-			fields.is_new,
 			fields.condition,
-			fields.zipcode,
 			fields.location,
-			fields.price,
-			fields.deliverable,
 			fields.curr_date,
 			fields.offer_expiry,
+			fields.thumbnail,
 			req.session.uid,
 			book_id
 		];
@@ -325,18 +294,16 @@ router.post("/alter/edit", function (req, res) {
 				edition: fields.edition,
 				authors: fields.authors,
 				description: fields.description,
-				cover:  fields.cover,
-				page_no: fields.page_no,
+				binding:  fields.binding,
+				pages: fields.pages,
 				publisher: fields.publisher,
 				isbn: fields.isbn,
 				is_new: fields.is_new,
 				condition: fields.condition,
-				zipcode: fields.zipcode,
 				location: fields.location,
-				price: fields.price,
-				deliverable: fields.deliverable,
 				date_added: fields.curr_date,
-				offer_expiry: fields.offer_expiry
+				offer_expiry: fields.offer_expiry,
+				thumbnail: fields.thumbnail,
 			};
 
 			//Return JSON string of names and values to be parsed into an obj
@@ -374,22 +341,17 @@ router.use("/fetch", (req,res)=>{
             "Transient.Authors AS Authors," +
             "Transient.Description AS Description," +
             "Transient.Language as Language,"+
-            "Transient.Cover AS Cover," +
+            "Transient.Binding AS Binding," +
             "Transient.PageNo AS PageNo," +
             "Transient.Publisher AS Publisher," +
             "Transient.Published AS Published," +
-            "Transient.ISBN as ISBN," +
-            "Transient.New AS `New`," +
+			"Transient.ISBN as ISBN," +
 			"Transient.Condition AS `Condition`," +
-			"Transient.ZipCode AS `ZipCode`,"+
-			"Transient.Latitude AS `Latitude`,"+
-			"Transient.Longitude AS `Longitude`,"+
-			"Transient.Location AS `Location`," +
-            "Transient.Price AS `Price`," +
-            "Transient.Deliverable AS Deliverable," +
+			"Transient.Location AS Location," +
             "Transient.DateAdded AS DateAdded," +
             "Transient.OfferExpiry AS OfferExpiry," +
-            "Transient.BookSerial AS BookSerial," +
+			"Transient.BookSerial AS BookSerial," +
+			"Transient.Thumbnail AS Thumbnail," +
             "BookImgs.ImageURI AS ImageURI," +
             "BookImgs.ImgID AS ImgID FROM (SELECT * FROM (SELECT * FROM `Books` " +
             "WHERE `UserID`='"+req.session.uid+"') AS TempTable ORDER BY `BookSerial` " +
@@ -398,7 +360,12 @@ router.use("/fetch", (req,res)=>{
 		con.query(sql, (err, result)=>{
 			if(err) {
 				//Errors unrelated to the user
-				console.log(err.msg);
+				console.log("An error with the sql");
+				console.log("Err Name: "+err.name);
+				console.log("Err Msg: "+err.msg);
+				for(let i in err) {
+					console.log(`Err.${i} = ${err[i]}`)
+				}
 				res.write("<srv_res_status>4</srv_res_status>");
 				res.write(`<err>${err.name}</err>`);
 				res.end(`<err>${err.message}</err>`); //Perhaps attempted SQL injection?
@@ -406,6 +373,7 @@ router.use("/fetch", (req,res)=>{
 			}
 			if(result.length===0) {
 				//User has no books to show :(
+				console.log("/fetch is empty!");
 				res.write("<srv_res_status>3</srv_res_status>");
 				res.end("<msg>No results found</msg>");
 				return;
@@ -574,22 +542,17 @@ router.use("/all", (req, res, next)=>{
             "Transient.Authors AS Authors," +
             "Transient.Description AS Description," +
             "Transient.Language as Language,"+
-            "Transient.Cover AS Cover," +
+            "Transient.Binding AS Binding," +
             "Transient.PageNo AS PageNo," +
             "Transient.Publisher AS Publisher," +
             "Transient.Published AS Published," +
             "Transient.ISBN as ISBN," +
-            "Transient.New AS `New`," +
 			"Transient.Condition AS `Condition`," +
-			"Transient.ZipCode AS `ZipCode`," +
-			"Transient.Latitude AS `Latitude`,"+
-			"Transient.Longitude AS `Longitude`,"+
-            "Transient.Location AS `Location`," +
-            "Transient.Price AS `Price`," +
-            "Transient.Deliverable AS Deliverable," +
+			"Transient.Location AS `Location`," +
             "Transient.DateAdded AS DateAdded," +
             "Transient.OfferExpiry AS OfferExpiry," +
-            "Transient.BookSerial AS BookSerial," +
+			"Transient.BookSerial AS BookSerial," +
+			"Transient.Thumbnail AS Thumbnail," +
             "BookImgs.ImageURI AS ImageURI," +
             "BookImgs.ImgID AS ImgID FROM (SELECT * FROM `Books`  ORDER BY `BookSerial` " +
             "DESC LIMIT "+fetch_max+") AS Transient LEFT JOIN " +
@@ -606,6 +569,7 @@ router.use("/all", (req, res, next)=>{
 			}
 			if(result.length===0) {
 				//The entire db is empty!
+				console.log("/all is empty");
 				res.write("<srv_res_status>3</srv_res_status>");
 				res.end("<msg>No results found</msg>");
 				return;
@@ -652,25 +616,20 @@ router.use("/search", (req, res)=>{
             "Transient.Authors AS Authors," +
             "Transient.Description AS Description," +
             "Transient.Language as Language,"+
-            "Transient.Cover AS Cover," +
+            "Transient.Binding AS Binding," +
             "Transient.PageNo AS PageNo," +
             "Transient.Publisher AS Publisher," +
             "Transient.Published AS Published," +
             "Transient.ISBN as ISBN," +
-            "Transient.New AS `New`," +
 			"Transient.Condition AS `Condition`," +
-			"Transient.ZipCode AS `ZipCode`," +
-			"Transient.Latitude AS `Latitude`,"+
-			"Transient.Longitude AS `Longitude`,"+
-            "Transient.Location AS `Location`," +
-            "Transient.Price AS `Price`," +
-            "Transient.Deliverable AS Deliverable," +
+			"Transient.Location AS `Location`," +
             "Transient.DateAdded AS DateAdded," +
             "Transient.OfferExpiry AS OfferExpiry," +
-            "Transient.BookSerial AS BookSerial," +
+			"Transient.BookSerial AS BookSerial," +
+			"Transient.Thumbnail AS Thumbnail," +
             "BookImgs.ImageURI AS ImageURI," +
 			"BookImgs.ImgID AS ImgID FROM (SELECT * FROM `Books`"+
-			"WHERE MATCH(Title, Authors, Description) AGAINST('"+query+"')"+
+			"WHERE MATCH(Title, Edition, Authors, Description) AGAINST('"+query+"')"+
 			" ORDER BY `BookSerial` " +
             "DESC LIMIT "+fetch_max+") AS Transient LEFT JOIN " +
             "BookImgs ON Transient.BookID=BookImgs.BookID ORDER BY `BookSerial`";

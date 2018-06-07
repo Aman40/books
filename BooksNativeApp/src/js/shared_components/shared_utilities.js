@@ -13,7 +13,7 @@ export function objectToString(Obj) {
 	}
 	return returnString+=`${arr[arr.length-1]}<${typeof(Obj[arr[arr.length-1]])}> =>${Obj[arr[arr.length-1]]}`; //The comma at the end
 }
-function getCurrDate() {
+export function getCurrDate() {
 	let date = new Date();
 	//YYYY:MM:DD HH:MM:SS Unix datetime string, mysql compatible
 	let month = date.getMonth();
@@ -39,3 +39,53 @@ function getCurrDate() {
 	}
 	return `${date.getFullYear()}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
+
+export function MyFormData() {
+	this._urlenc = ""; //The URL encoded formdata
+	this.append = (key, val)=>{
+		if(this._urlenc==="") {
+			//The first appending. Don't prepend the "&"
+			this._urlenc=`${key}=${val}`;
+		} else {
+			this._urlenc+=`&${key}=${val}`;
+		}
+	};
+	this.toString = ()=>{
+		return this._urlenc;
+	};
+}
+
+export const langISO6391 = {
+	af: "Afrikaans",
+	ar: "Arabic",
+	zh: "Chinese",
+	hr: "Croatian",
+	cs: "Czech",
+	da: "Danish",
+	nl: "Dutch",
+	en: "English",
+	fi: "Finnish",
+	fr: "French",
+	de: "German",
+	el: "Greek",
+	hi: "Hindi",
+	hu: "Hungarian",
+	id: "Indonesian",
+	it: "Italian",
+	ja: "Japanese",
+	ko: "Korean",
+	la: "Latin",
+	ms: "Malay",
+	ne: "Nepali",
+	pa: "Panjabi",
+	fa: "Persian (Farsi)",
+	pl: "Polish",
+	pt: "Portuguese",
+	ru: "Russian",
+	es: "Spanish",
+	sw: "Swahili",
+	sv: "Swedish",
+	th: "Thai",
+	tr: "Turkish",
+	vi: "Vietnamese",
+};

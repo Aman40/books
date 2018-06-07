@@ -36,7 +36,11 @@ export function fetchBooks(dispatch) {
 				//TODO
 			} else if(srv_res_status===3) {
 				//No results
-				//TODO
+				console.log("No results for all books");
+				dispatch({
+					type: booksActions.ERROR_FETCHING,
+					payload: "No results",
+				});
 			} else if(srv_res_status===9) {
 				/*
 					User is not logged in. The magic begins. 

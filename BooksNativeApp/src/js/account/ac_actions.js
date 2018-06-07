@@ -6,13 +6,21 @@ export const HIDE_AC_MENU = "hide_account_menu";
 export const IS_LOGGING_OUT = "started_logging_out";
 export const LOGOUT_ERROR = "error_logging_out";
 export const LOGOUT_SUCCESS = "successfully_logged_out";
+//Fetching my books
 export const SUCCESS_FETCHING_MY_BOOKS = "success fetching my books";
 export const ERROR_FETCHING_MY_BOOKS = "error fetching my books";
 export const IS_FETCHING_MY_BOOKS = "started fetching my books";
+//Account control
 export const SHOW_METHOD_SELECT_MENU = "show book add method select menu";
 export const HIDE_METHOD_SELECT_MENU = "hide book add method select menu";
+//Fetching ISBN data after barcode scan
 export const ISBN_META_FETCH_START = "started fetching isbn meta";
 export const ISBN_TO_META_SUCCESS = "successfully fetched isbn meta";
 export const ISBN_TO_META_ERROR = "A problem or another occurred";
 export const SHOW_SCAN_PREVIEW = "Show preview of scanned book";
 export const HIDE_SCAN_PREVIEW = "Hide preview of scanned book";
+//For submitting new book data
+export const IS_ADDING_BOOK = "submitting new book"; //Wait
+export const ADD_BOOK_SUCCESS = "successfully added new book";
+export const ADD_BOOK_ERROR = "failed to add a new book";
+//

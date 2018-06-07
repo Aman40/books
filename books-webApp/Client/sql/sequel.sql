@@ -14,9 +14,6 @@ CREATE TABLE IF NOT EXISTS Users
   UnreadMessages SMALLINT UNSIGNED DEFAULT 0,
   Student BOOL DEFAULT FALSE,
   School VARCHAR(30) DEFAULT FALSE,
-  SchoolZip CHAR(7),
-  Latitude DECIMAL(10, 8) NOT NULL,
-  Longitude DECIMAL(10, 8) NOT NULL,
   PRIMARY KEY (UserID)
 );
 CREATE TABLE IF NOT EXISTS Books
@@ -26,19 +23,19 @@ CREATE TABLE IF NOT EXISTS Books
   Title VARCHAR(255) NOT NULL, /*Comma separated list of authors*/
   Edition VARCHAR(50),
   Authors VARCHAR(255),
-  Language VARCHAR(8),
+  Language CHAR(2),
   Description TEXT,
-  Cover ENUM('paper_back', 'hard_back'),
+  Binding ENUM('paperback', 'hardcover'),
   PageNo SMALLINT UNSIGNED DEFAULT 0,
-  Publisher VARCHAR(30),
-  Published INT(4) NOT NULL,
+  Publisher VARCHAR(64),
+  Published VARCHAR(16),
   ISBN VARCHAR(15),
   `Condition` TEXT, /*If it's used*/
-  Location VARCHAR(30), /*In case of University, specify the name of the University*/
-  Price MEDIUMINT UNSIGNED DEFAULT 0,
+  Location VARCHAR(32), /*In case of University, specify the name of the University*/
   DateAdded DATETIME NOT NULL ,
   OfferExpiry DATETIME NOT NULL,
   BookSerial SERIAL,
+  Thumbnail VARCHAR(255),
   PRIMARY KEY (BookID),
   FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
@@ -83,4 +80,8 @@ CREATE TABLE IF NOT EXISTS BookImgs
   FOREIGN KEY (BookID) REFERENCES Books(BookID)
 );
 
-ALTER TABLE Books ADD FULLTEXT(Title, Authors, Description);
+ALTER TABLE Books ADD FULLTEXT(Title, Edition, Authors, Description);
+/*
+*TODO REQUIRED: Expand FULLTEXT parameters
+TODO SHOULD: Thumbnail url on books.
+*/

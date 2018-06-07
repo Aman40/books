@@ -1,11 +1,12 @@
 import * as actions from "./ac_actions";
-let DOMParser = require("xmldom").DOMParser;
+import { DOMParser } from "xmldom";
 import univ_const from "/var/www/html/books/BooksNativeApp/univ_const.json";
 const host = univ_const.server_url;
 import {AsyncStorage} from "react-native";
 import {objectToString} from "../shared_components/shared_utilities";
 import RNRestart from "react-native-restart";
-const ISBN = require("simple-isbn").isbn;
+import { isbn as ISBN } from "simple-isbn";
+import { getCurrDate, MyFormData } from "../shared_components/shared_utilities";
 
 export /**/ function login(dispatch, payload) {
 	//Payload must be {email, password}
@@ -33,9 +34,11 @@ export /**/ function login(dispatch, payload) {
 }
 
 const START_UP = "connect_at_start_up";
-module.exports.START_UP = START_UP;
+const _START_UP = START_UP;
+export { _START_UP as START_UP };
 const FAILED_REQ = "connect_on_failed_request";
-module.exports.FAILED_REQ = FAILED_REQ;
+const _FAILED_REQ = FAILED_REQ;
+export { _FAILED_REQ as FAILED_REQ };
 
 export /*to books_view*/ function createSession(context, dispatch) {
 	/*
@@ -372,10 +375,14 @@ export function fetchMyBooks(dispatch) {
 					type: actions.SUCCESS_FETCHING_MY_BOOKS,
 					payload: booksArr, //Array
 				});
-				//TODO
 			} else if(srv_res_status===3) {
 				//No results
-				//TODO
+				console.log("No results");
+				dispatch({
+					type: actions.ERROR_FETCHING_MY_BOOKS,
+					payload: "No results found",
+					//TODO NECESSARY: Use status codes depending on the error
+				});
 			} else if(srv_res_status===9) {
 				/*
 					User is not logged in. The magic begins. 
@@ -547,8 +554,119 @@ export function getMetaFromIsbn(dispatch, isbn, callback) {
 	});
 }
 
-export function submitNewBook(dispatch, callback) {
-	
+export function submitNewBook(dispatch, data, callback) {
+	/**
+	 * Error codes: 
+	 * 1: Timeout
+	 * 2: Network error?
+	 * 3: Unknown server error
+	 * 4: Failed form validation
+	 */
+	let fd = new MyFormData();
+	let keys = Object.getOwnPropertyNames(data);
+	for(let i=0;i<keys.length;i++) {
+		fd.append(keys[i], data[keys[i]]);
+	}
+	//Append current datetime
+	fd.append("curr_date_time", getCurrDate());
+
+	let xhr = new XMLHttpRequest();
+	xhr.timeout = 10000;
+	xhr.ontimeout = function(){
+		dispatch({
+			type: actions.ADD_BOOK_ERROR,
+			payload: {
+				errCode: 1,
+				errMsg: "Timeout. Network or Server error",
+			}
+		});
+	};
+	xhr.responseType = "text";
+	xhr.onreadystatechange = function(){
+		if(this.readyState===4 && this.status===200) {
+			let Parser = new DOMParser();
+			let xmlDoc = Parser.parseFromString(this.responseText);
+
+			let srv_res_status = xmlDoc.getElementsByTagName("srv_res_status")[0].childNodes[0].nodeValue;
+			srv_res_status = parseInt(srv_res_status);
+			if(srv_res_status===0) {
+				/**
+				 * Successfully added the book. Display a toast to show for it and
+				 * Provide an option to either finish or continue.
+				 * Finish should navigate back to MyBooks
+				 * Continue should navigate back straight to the scanner
+				 */
+				dispatch({
+					type: actions.ADD_BOOK_SUCCESS,
+					payload: null,
+				});
+				//What better time to call the callback?
+				callback();
+			} else if(srv_res_status===8) {
+				//Failed validation tests
+				let errArray = JSON.parse(xmlDoc.getElementsByTagName("err_arr")[0].childNodes[0].nodeValue);
+				let err_obj = { /*Reinitialize/empty the previous errors*/
+					title: "",
+					authors: "",
+					edition: "",
+					//TODO REQUIRED: Make language input into a select component
+					//returning ISO 639-1 Alpha-2 codes
+					language: "",
+					publisher: "",
+					published: "",
+					binding: "",
+					pages: "",
+					isbn: "",//TODO REQUIRED: Autofill ISBN13 in the form
+					condition: "",
+					location: "",
+					description: "",
+					offer_expiry: "",
+					thumbnail: "",
+				};
+				for(let i=0; i<errArray.length; i++) {
+					err_obj[errArray[i].param] = errArray[i].msg;
+				}
+				//Dispatch
+				dispatch({
+					type: actions.ADD_BOOK_ERROR,
+					payload: {
+						errCode: 4,
+						errMsg: err_obj,
+					}
+				});
+			} else {
+				//Unknown server error
+				dispatch({
+					type: actions.ADD_BOOK_ERROR,
+					payload: {
+						errCode: 3,
+						errMsg: "Unknown server error",
+					}
+				});
+			}
+		} else {
+			//Something happened
+			console.log("An error");
+			if(this.readyState===4) {
+				dispatch({
+					type: actions.ADD_BOOK_ERROR,
+					payload: {
+						errCode: 2,
+						errMsg: "Network Error? "
+					}
+				});
+			}
+			
+		}
+	};
+
+
+	xhr.open("POST", `${host}/books/alter/edit?${fd}`, true);
+	xhr.send();
+	dispatch({
+		type: actions.IS_ADDING_BOOK,
+		payload: null,
+	});
 }
 /*
 TODO
