@@ -13,7 +13,6 @@ import {
 } from "react-native";
 import univ_const from "/var/www/html/books/BooksNativeApp/univ_const.json";
 import * as accountDispatchers from "../account/ac_dispatchers";
-import { showGenericMessageModal } from "../shared_components/err_msg_display_modal";
 /*
 	//import {objectToString} from "../shared_components/shared_utilities";
 
@@ -40,14 +39,6 @@ export default class BooksView extends Component {
 			this.props.fetchBooks();
 		}
 		//Subscribe to the store for rerenderings whenever the store changes.
-	}
-	componentDidUpdate=()=>{
-		if(!this.props.successFetching && !this.props.books.isFetching) {
-			showGenericMessageModal({
-				type: "error",
-				text: this.props.books.fetchErrorString,
-			});
-		}
 	}
 
 	render() {
@@ -107,8 +98,14 @@ export default class BooksView extends Component {
 					}
 				} else {
 				//Report an error.
+					alert.alert(
+						"No books!",
+						this.props.books.fetchErrorString,
+						[{text: "OK", onPress: ()=>console.log("OK")}],
+						{cancelable: true}
+					);
 				}
-			} else {
+			} else if(!this.props.isFetching) {
 			//Error is implied. Error fetching. Network, server, e.t.c
 			//Check in the store's fetchErrorString
 			}
@@ -157,9 +154,11 @@ class BookView extends Component {
 			>
 				<View style={styles.bk_imageWrapper}>
 					<Image
+						resizeMode={"contain"}
 						style={styles.bk_image}
 						source={{uri: (()=>{
-							return this.props.book.images.length?`${host}/images/`+this.props.book.images[0].ImgID+".jpeg":`${host}/images/placeholder.jpg`;
+							console.log("THUMBNAIL: "+this.props.book.Thumbnail);
+							return this.props.book.Thumbnail?this.props.book.Thumbnail:`${host}/images/placeholder.jpg`;
 						})()}}
 					/>
 				</View>
@@ -185,7 +184,7 @@ class BookView extends Component {
 								color: "black"
 							}
 						} >
-							{this.props.book.Cover==="paper_back"?"Paperback":"Hardcover"}
+							{this.props.book.Binding==="paperback"?"Paperback":"Hardcover"}
 						</Text>
 						<Text style={styles.bk_contentValue}>
 							{"Pages: "+this.props.book.PageNo}
@@ -211,10 +210,11 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	bk_wrapper: {
-		height: 144,
+		height: 120,
 		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "stretch",
+		paddingVertical: 10,
 	},
 	bk_imageWrapper: {
 		flex: 1,
@@ -228,10 +228,11 @@ const styles = StyleSheet.create({
 		height: 100
 	},
 	bk_contentWrapper: {
+		flex: 2,
 		flexDirection: "column",
 		justifyContent: "center",
-		alignItems: "center",
-		flex: 1,
+		alignItems: "flex-start",
+		paddingLeft: 10,
 	},
 	bk_contentRow: {
 		flex: 1,

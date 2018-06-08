@@ -4,6 +4,7 @@ import {
 	Text,
 	TouchableOpacity,
 	StyleSheet,
+	Alert,
 } from "react-native";
 import {withNavigation} from "react-navigation";
 //import {objectToString} from "../shared_components/shared_utilities";
@@ -13,7 +14,6 @@ import {
 	connect,
 	Provider
 } from "react-redux";
-import { showGenericMessageModal } from "../shared_components/err_msg_display_modal";
 const ISBN = require("simple-isbn").isbn;
 
 class _ScanScreen extends Component {
@@ -23,10 +23,14 @@ class _ScanScreen extends Component {
 		if(this.props.scannedIsbnList.includes(ISBN.toIsbn10(e.data))) {
 			//Already scanned
 			//Display a modal or something.
-			showGenericMessageModal({
-				type: "error",
-				text: "Already scanned that book!",
-			});
+			alert(
+				"Error",
+				"Already scanned that book, idiot!",
+				[
+					{text: "OK", onPress: ()=>console.log("OK")}
+				],
+				{cancelable: true}
+			);
 		} else {
 			//scan
 			this.props.getMetaFromIsbn(e.data, ()=>{

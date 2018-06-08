@@ -6,6 +6,7 @@ import {
 	ScrollView,
 	TouchableOpacity,
 	Image,
+	Alert,
 } from "react-native";
 import {connect, Provider} from "react-redux";
 import store from "../store";
@@ -18,7 +19,6 @@ const host = univ_const.server_url;
 //import {objectToString} from "../shared_components/shared_utilities";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MethodSelectorMenu from "./slct_bk_add_method";
-import {showGenericMessageModal} from "../shared_components/err_msg_display_modal";
 
 class _MyBooks /*to ac_tabnav.js*/ extends Component {
 	componentDidMount = ()=>{
@@ -107,16 +107,24 @@ class BookView extends Component {
 		return (
 			<TouchableOpacity
 				style={styles.bk_wrapper}
-				onPress={()=>{showGenericMessageModal({
-					type: "message",
-					text: "It's working!",
-				});}}
+				onPress={()=>{
+					Alert.alert(
+						"Hey!",
+						"OK",
+						[
+							{text: "OK", onPress: ()=>console.log("OK")}
+						],
+						{cancelable: true}
+					);
+				}}
 			>
 				<View style={styles.bk_imageWrapper}>
 					<Image
+						resizeMode={"contain"}
 						style={styles.bk_image}
 						source={{uri: (()=>{
-							return this.props.book.images.length?`${host}/images/`+this.props.book.images[0].ImgID+".jpeg":`${host}/images/placeholder.jpg`;
+							console.log("THUMBNAIL: "+this.props.book.Thumbnail);
+							return this.props.book.Thumbnail?this.props.book.Thumbnail:`${host}/images/placeholder.jpg`;
 						})()}}
 					/>
 				</View>
@@ -175,10 +183,11 @@ const styles = StyleSheet.create({
 		paddingTop: 10,
 	},
 	bk_wrapper: {
-		height: 144,
+		height: 120,
 		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "stretch",
+		paddingVertical: 10,
 	},
 	bk_imageWrapper: {
 		flex: 1,
@@ -193,10 +202,11 @@ const styles = StyleSheet.create({
 		height: 100
 	},
 	bk_contentWrapper: {
+		flex: 2,
 		flexDirection: "column",
 		justifyContent: "center",
-		alignItems: "center",
-		flex: 1,
+		alignItems: "flex-start",
+		paddingLeft: 10,
 	},
 	bk_contentRow: {
 		flex: 1,

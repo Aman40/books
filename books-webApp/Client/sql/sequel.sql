@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS Books
   Authors VARCHAR(255),
   Language CHAR(2),
   Description TEXT,
-  Binding ENUM('paperback', 'hardcover'),
+  Binding CHAR(9), /*enum("paperback", "hardcover"*/
   PageNo SMALLINT UNSIGNED DEFAULT 0,
   Publisher VARCHAR(64),
   Published VARCHAR(16),

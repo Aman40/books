@@ -646,8 +646,8 @@ export function submitNewBook(dispatch, data, callback) {
 			}
 		} else {
 			//Something happened
-			console.log("An error");
 			if(this.readyState===4) {
+				console.log("Error. this.status = "+this.status);
 				dispatch({
 					type: actions.ADD_BOOK_ERROR,
 					payload: {
@@ -660,8 +660,8 @@ export function submitNewBook(dispatch, data, callback) {
 		}
 	};
 
-
-	xhr.open("POST", `${host}/books/alter/edit?${fd}`, true);
+	console.log(JSON.stringify(fd.toString()));
+	xhr.open("POST", `${host}/books/alter/add?${fd.toString()}`, true);
 	xhr.send();
 	dispatch({
 		type: actions.IS_ADDING_BOOK,

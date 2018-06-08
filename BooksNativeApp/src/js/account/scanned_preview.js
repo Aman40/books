@@ -76,7 +76,7 @@ class _ScanPreview extends Component {
 											...StyleSheet.flatten(styles.bk_contentValue),
 											color: "blue",
 										}} >
-											{this.props.book.authors.toString()}
+											{this.props.book.authors&&this.props.book.authors.toString()}
 										</Text>
 									</Text>
 								

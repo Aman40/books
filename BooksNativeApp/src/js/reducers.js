@@ -1,6 +1,5 @@
 import * as booksActions from "./books/books_actions";
 import * as accountActions from "./account/ac_actions";
-//import {genericErrorModalActions, test} from "./shared_components/err_msg_display_modal";
 //import {objectToString} from "./shared_components/shared_utilities";
 import { isbn as ISBN } from "simple-isbn";
 
@@ -197,11 +196,6 @@ export function guiControl(
 		searchMode: false,
 		showBookAddMethodSelectorMenu: false,
 		showScanPreview: false,
-		genericMessageModal: {
-			visible: false,
-			type: "message", //enum("message", "warning", "text")
-			text: "",
-		}
 	},
 	action
 ){
@@ -240,24 +234,6 @@ export function guiControl(
 		return {
 			...state,
 			showScanPreview: false,
-		};
-	case "show the error":
-		return {
-			...state,
-			genericMessageModal: {
-				visible: true,
-				type: action.payload.type,
-				text: action.payload.text,
-			},
-		};
-	case "close the error":
-		return {
-			...state,
-			genericMessageModal: {
-				visible: false,
-				type: "message",
-				text: "",
-			}
 		};
 	default:
 		return {

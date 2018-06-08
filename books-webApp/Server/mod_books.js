@@ -43,10 +43,12 @@ router.post("/alter/*", [ /*Validate form*/
 		.isLength({max: 128})
 		.withMessage("ER_ILLEGAL_OP"),
 	check("binding")
+		.optional({nullable: true, checkFalsy: true})
 		.withMessage("ER_NO_BINDING")
 		.isIn(["paperback", "hardBinding"])
 		.withMessage("ER_ILLEGAL_OP"),
 	check("pages")
+		.optional({nullable: true, checkFalsy: true})
 		.isNumeric()
 		.withMessage("ER_PAGES"),
 	check("publisher")
@@ -97,7 +99,7 @@ router.post("/alter/*", [ /*Validate form*/
 		//The query ends here
 		//Return an array of validation results/errors. Only the first error
 		let error_array = result.array({onlyFirstError: true});
-
+		console.log(JSON.stringify(error_array));
 		res.write(`<err_arr>${JSON.stringify(error_array)}</err_arr>`);
 		res.write("<msg>There was a problem with the form entries</msg>");
 		res.end("<srv_res_status>8</srv_res_status>");
@@ -150,7 +152,7 @@ router.post("/alter/add", function (req, res) {
 		let sql = "INSERT INTO Books(`UserID`,`BookID`, `Title`, `Edition`, `Authors`, `Language`," +
             " `Description`," +
             "`Binding`, `PageNo`, `Publisher`, `Published`, `ISBN`, `Condition`," +
-            "`Location` , `DateAdded`, `OfferExpiry`, `OfferExpiry`) VALUES ?";
+            "`Location` , `DateAdded`, `OfferExpiry`, `Thumbnail`) VALUES ?";
 
 		let book_id = genUid("B");
 
@@ -174,7 +176,7 @@ router.post("/alter/add", function (req, res) {
 			fields.isbn,
 			fields.condition,
 			fields.location,
-			fields.curr_date,
+			fields.curr_date, //
 			fields.offer_expiry,
 			fields.thumbnail,
 		]];

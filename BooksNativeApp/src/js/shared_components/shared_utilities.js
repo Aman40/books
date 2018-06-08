@@ -45,9 +45,9 @@ export function MyFormData() {
 	this.append = (key, val)=>{
 		if(this._urlenc==="") {
 			//The first appending. Don't prepend the "&"
-			this._urlenc=`${key}=${val}`;
+			this._urlenc=`${key}=${val.toString().replace(/&/g, "%26")}`;
 		} else {
-			this._urlenc+=`&${key}=${val}`;
+			this._urlenc+=`&${key}=${val.toString().replace(/&/g, "%26")}`;
 		}
 	};
 	this.toString = ()=>{

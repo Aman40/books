@@ -31,6 +31,7 @@ class _AddBookForm extends Component {
 			isbn: "",
 			condition: "",
 			location: "",
+			curr_date: getDateAfterMicroseconds(0),
 			description: "",
 			offer_expiry: "",
 			thumbnail: "",
@@ -62,6 +63,7 @@ class _AddBookForm extends Component {
 				published: this.props.book.publishedDate?this.props.book.publishedDate:"", 
 				description: this.props.book.description?this.props.book.description:"",
 				pages: this.props.book.pageCount?this.props.book.pageCount:"",
+				offer_expiry: getDateAfterMicroseconds(5184000000),//2 months from now
 				thumbnail: this.props.book.imageLinks.thumbnail?this.props.book.imageLinks.thumbnail:"",
 			};
 		}
@@ -348,7 +350,7 @@ class _AddBookForm extends Component {
 							>
 								<View style={{flex: 1, width: "100%",}}>
 									<Text style={styles.dateText} ref={(node)=>{this.datepicker = node;}}>
-										{this.state.offer_expiry?this.state.offer_expiry:getDefaultExpiryDate()}
+										{this.state.offer_expiry?this.state.offer_expiry:getDateAfterMicroseconds(5184000000)}
 									</Text>
 								</View>
 							</TouchableOpacity>
@@ -485,9 +487,9 @@ export default class AddBook extends Component {
 		);
 	}
 }
-
-function getDefaultExpiryDate() {  
-	let date = new Date(Date.now()+5184000000);
+//2 months = 5184000000
+function getDateAfterMicroseconds(microseconds) {  
+	let date = new Date(Date.now()+microseconds);
 	//YYYY:MM:DD HH:MM:SS Unix datetime string, mysql compatible
 	let month = date.getMonth();
 	month++; //Javascript month is 0 based. 0=January, 11=December

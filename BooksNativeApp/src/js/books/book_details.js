@@ -91,20 +91,48 @@ class _BookDetails extends Component {
 							autoplay={true}
 							pageInfo
 						>
-							<View style={styles.imageWrapper}>
-								<Image 
-									source={{uri: `${host}/images/${this.props.book.images[0].ImgID}.jpeg`}}
-									style={styles.image}
-									resizeMode={"contain"}
-								/>
-							</View>
-							<View style={styles.imageWrapper}>
-								<Image 
-									source={{uri: `${host}/images/${this.props.book.images[1].ImgID}.jpeg`}}
-									style={styles.image}
-									resizeMode={"contain"}
-								/>
-							</View>
+							{
+								(()=>{
+									let carouselImgs = [];
+									for(let i = 0; i<this.props.book.images;i++){
+										carouselImgs.push(
+											<View key={this.props.book.images[i].ImgID} 
+												style={styles.imageWrapper}>
+												<Image 
+													source={{uri: `${host}/images/${this.props.book.images[i].ImgID}.jpeg`}}
+													style={styles.image}
+													resizeMode={"contain"}
+												/>
+											</View>
+										);
+									}
+									if(this.props.book.Thumbnail) {
+										carouselImgs.push(
+											<View key={"thumbnail"} style={styles.imageWrapper}>
+												<Image 
+													source={{uri: this.props.book.Thumbnail}}
+													style={styles.image}
+													resizeMode={"contain"}
+												/>
+											</View>
+										);
+									}
+									if(!carouselImgs.length){
+										carouselImgs.push(
+											<View key={"default"} style={styles.imageWrapper}>
+												<Image 
+													source={{uri: `${host}/images/placeholder.jpg`}}
+													style={styles.image}
+													resizeMode={"contain"}
+												/>
+											</View>
+										);
+									}
+									return carouselImgs;
+								})()
+							}
+							
+						
 						</Carousel>
 					</View>
 
