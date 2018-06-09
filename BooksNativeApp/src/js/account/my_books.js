@@ -14,7 +14,7 @@ import {
 	fetchMyBooks,
 	showAddMethodSelectorMenu,
 } from "./ac_dispatchers";
-import univ_const from "/var/www/html/books/BooksNativeApp/univ_const.json";
+import univ_const from "../../../univ_const.json";
 const host = univ_const.server_url;
 //import {objectToString} from "../shared_components/shared_utilities";
 import Ionicons from "react-native-vector-icons/Ionicons";

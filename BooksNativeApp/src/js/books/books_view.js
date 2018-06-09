@@ -11,7 +11,7 @@ import {
 	Image,
 	ImageBackground,
 } from "react-native";
-import univ_const from "/var/www/html/books/BooksNativeApp/univ_const.json";
+import univ_const from "../../../univ_const.json";
 import * as accountDispatchers from "../account/ac_dispatchers";
 /*
 	//import {objectToString} from "../shared_components/shared_utilities";
