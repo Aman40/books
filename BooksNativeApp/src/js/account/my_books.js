@@ -124,7 +124,9 @@ class BookView extends Component {
 						style={styles.bk_image}
 						source={{uri: (()=>{
 							console.log("THUMBNAIL: "+this.props.book.Thumbnail);
-							return this.props.book.Thumbnail?this.props.book.Thumbnail:`${host}/images/placeholder.jpg`;
+							return this.props.book.Thumbnail?
+								this.props.book.Thumbnail.replace(/^http:/,"https:"):
+								`${host}/images/placeholder.jpg`;
 						})()}}
 					/>
 				</View>

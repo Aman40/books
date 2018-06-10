@@ -110,7 +110,7 @@ class _BookDetails extends Component {
 										carouselImgs.push(
 											<View key={"thumbnail"} style={styles.imageWrapper}>
 												<Image 
-													source={{uri: this.props.book.Thumbnail}}
+													source={{uri: this.props.book.Thumbnail.replace(/^http:/,"https:")}}
 													style={styles.image}
 													resizeMode={"contain"}
 												/>
