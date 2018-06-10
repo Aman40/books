@@ -19,8 +19,9 @@ export const ISBN_TO_META_SUCCESS = "successfully fetched isbn meta";
 export const ISBN_TO_META_ERROR = "A problem or another occurred";
 export const SHOW_SCAN_PREVIEW = "Show preview of scanned book";
 export const HIDE_SCAN_PREVIEW = "Hide preview of scanned book";
+export const RESET_SCANNED_BUFFER = "clean scanned buffer";
 //For submitting new book data
 export const IS_ADDING_BOOK = "submitting new book"; //Wait
 export const ADD_BOOK_SUCCESS = "successfully added new book";
 export const ADD_BOOK_ERROR = "failed to add a new book";
-//
+//Simulating singleton Screens/Routes.

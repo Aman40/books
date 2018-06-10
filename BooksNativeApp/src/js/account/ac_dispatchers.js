@@ -479,6 +479,7 @@ export function getMetaFromIsbn(dispatch, isbn, callback) {
 					msg: "ISBN must not include a hyphene (-)",
 				}
 			});
+			callback(false);
 			console.log("Invalid isbn. Has -");
 			return;
 		} else {
@@ -490,6 +491,7 @@ export function getMetaFromIsbn(dispatch, isbn, callback) {
 				}
 			});
 			console.log("Invalid isbn");
+			callback(false);
 			return;
 		}
 	}
@@ -507,6 +509,7 @@ export function getMetaFromIsbn(dispatch, isbn, callback) {
 				msg: "Request timeout. Check your network",
 			}
 		});
+		callback(false);
 	};
 	xhr.onreadystatechange = function() {
 		if(this.readyState===4 && this.status===200) {
@@ -530,7 +533,7 @@ export function getMetaFromIsbn(dispatch, isbn, callback) {
 					type: actions.ISBN_TO_META_SUCCESS,
 					payload: {isbn, resultObj:resultObj.items[0].volumeInfo},
 				});
-				callback(); 
+				callback(true);//The true=succeeded. false=failed. 
 			}
 		} else if(this.readyState===4) {
 			//Server problem
@@ -542,6 +545,7 @@ export function getMetaFromIsbn(dispatch, isbn, callback) {
 					msg: "Server Error. Try again later!",
 				}
 			});
+			callback(false);
 		}
 	};
 
@@ -580,6 +584,7 @@ export function submitNewBook(dispatch, data, callback) {
 				errMsg: "Timeout. Network or Server error",
 			}
 		});
+		callback(false);
 	};
 	xhr.responseType = "text";
 	xhr.onreadystatechange = function(){
@@ -601,7 +606,7 @@ export function submitNewBook(dispatch, data, callback) {
 					payload: null,
 				});
 				//What better time to call the callback?
-				callback();
+				callback(true);
 			} else if(srv_res_status===8) {
 				//Failed validation tests
 				let errArray = JSON.parse(xmlDoc.getElementsByTagName("err_arr")[0].childNodes[0].nodeValue);
@@ -634,6 +639,7 @@ export function submitNewBook(dispatch, data, callback) {
 						errMsg: err_obj,
 					}
 				});
+				callback(false);
 			} else {
 				//Unknown server error
 				dispatch({
@@ -643,6 +649,7 @@ export function submitNewBook(dispatch, data, callback) {
 						errMsg: "Unknown server error",
 					}
 				});
+				callback(false);
 			}
 		} else {
 			//Something happened
@@ -655,6 +662,7 @@ export function submitNewBook(dispatch, data, callback) {
 						errMsg: "Network Error? "
 					}
 				});
+				callback(false);
 			}
 			
 		}
@@ -665,6 +673,13 @@ export function submitNewBook(dispatch, data, callback) {
 	xhr.send();
 	dispatch({
 		type: actions.IS_ADDING_BOOK,
+		payload: null,
+	});
+}
+
+export function resetScannedBookBuffer(dispatch) {
+	dispatch({
+		type: actions.RESET_SCANNED_BUFFER,
 		payload: null,
 	});
 }

@@ -7,7 +7,8 @@ import {
 	ScrollView,
 	DatePickerAndroid,
 	TouchableOpacity,
-	Picker
+	Picker,
+	ToastAndroid,
 } from "react-native";
 import store from "../store";
 import {connect, Provider,} from "react-redux";
@@ -35,6 +36,7 @@ class _AddBookForm extends Component {
 			description: "",
 			offer_expiry: "",
 			thumbnail: "",
+			Alert,
 		};
 	}
 	componentDidMount=()=>{
@@ -43,9 +45,14 @@ class _AddBookForm extends Component {
 	}
 	submit = ()=>{
 		//Submit the form data
-		this.props.submit(this.state, ()=>{
+		this.props.submit(this.state, (succeeded)=>{
 			//Display toast and go back
-			this.props.navigation.navigate("BarcodeScanner");
+			if(succeeded) {
+				this.props.navigation.goBack("ScanPreview");
+			} else {
+				//Alert and do something. Check the store
+
+			}
 		});
 	}
 	init=()=>{

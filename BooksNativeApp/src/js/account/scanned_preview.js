@@ -15,6 +15,7 @@ import {
 import store from "../store";
 import {
 	hideScanPreview,
+	resetScannedBookBuffer,
 } from "./ac_dispatchers";
 import univ_const from "/var/www/html/books/BooksNativeApp/univ_const.json";
 //import { objectToString } from "../shared_components/shared_utilities";
@@ -29,6 +30,7 @@ class _ScanPreview extends Component {
 		/**
 		 * Navigate back AND Erase the data from the store
 		 */
+		this.props.resetScannedBookBuffer();
 		this.props.navigation.goBack();
 	}
 	next=()=>{
@@ -184,6 +186,7 @@ function mapDispatchToProps(dispatch) {
 		hideScanPreview: ()=>{
 			hideScanPreview(dispatch); //If show:false, also reactivate the scanner.
 		},
+		resetScannedBookBuffer: ()=>{resetScannedBookBuffer(dispatch);},
 	};
 }
 const ConnectedScanPreview = connect(

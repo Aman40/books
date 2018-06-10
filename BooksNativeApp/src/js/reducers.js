@@ -196,6 +196,18 @@ export function guiControl(
 		searchMode: false,
 		showBookAddMethodSelectorMenu: false,
 		showScanPreview: false,
+		/**
+		 * Managing the screens for adding books. A flag and string
+		 * var are used, i.e shouldPop<bool> and popTo<route>.
+		 * The screens BarcodeScanner, ScanPreview and AddBook will
+		 * receive the props and will navigation.goBack() in their
+		 * componentDidUpdate IF shouldPop: true and navigation.state
+		 * !=== popTo. ELSE, they'll reset shouldPop: false and 
+		 * popTo: "", TODO: If replace() and goBackFrom() work,
+		 * delete this.
+		 */
+		shouldPop: false,
+		popTo: ""
 	},
 	action
 ){

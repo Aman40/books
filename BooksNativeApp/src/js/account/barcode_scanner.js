@@ -23,7 +23,7 @@ class _ScanScreen extends Component {
 		if(this.props.scannedIsbnList.includes(ISBN.toIsbn10(e.data))) {
 			//Already scanned
 			//Display a modal or something.
-			alert(
+			Alert.alert(
 				"Error",
 				"Already scanned that book, idiot!",
 				[
@@ -33,8 +33,12 @@ class _ScanScreen extends Component {
 			);
 		} else {
 			//scan
-			this.props.getMetaFromIsbn(e.data, ()=>{
-				this.props.navigation.navigate("ScanPreview");
+			this.props.getMetaFromIsbn(e.data, (succeeded)=>{
+				if(succeeded) {
+					this.props.navigation.navigate("ScanPreview");
+				} else {
+					//Alert or something
+				}
 			});
 		}
 		//There should be a waiting system for one to finish before the next
@@ -65,7 +69,9 @@ class _ScanScreen extends Component {
 						style={styles.buttonTouchable}
 						onPress={()=>this.props.navigation.navigate("Switch")}
 					>
-						<Text style={styles.buttonText}>{this.props.wait?"Wait": "Ready"}</Text>
+						<Text style={styles.buttonText}>
+							{this.props.wait?"Processing... Wait": "Finish"}
+						</Text>
 					</TouchableOpacity>
 				}
 				ref={(node)=>{this.scanner=node;}}
