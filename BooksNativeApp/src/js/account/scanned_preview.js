@@ -17,7 +17,7 @@ import {
 	hideScanPreview,
 	resetScannedBookBuffer,
 } from "./ac_dispatchers";
-import univ_const from "/var/www/html/books/BooksNativeApp/univ_const.json";
+import univ_const from "../../../univ_const.json";
 //import { objectToString } from "../shared_components/shared_utilities";
 const host = univ_const.server_url;
 

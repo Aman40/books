@@ -14,7 +14,7 @@ import {
 	fetchMyBooks,
 	showAddMethodSelectorMenu,
 } from "./ac_dispatchers";
-import univ_const from "/var/www/html/books/BooksNativeApp/univ_const.json";
+import univ_const from "../../../univ_const.json";
 const host = univ_const.server_url;
 //import {objectToString} from "../shared_components/shared_utilities";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -123,7 +123,10 @@ class BookView extends Component {
 						resizeMode={"contain"}
 						style={styles.bk_image}
 						source={{uri: (()=>{
-							return this.props.book.Thumbnail?this.props.book.Thumbnail:`${host}/images/placeholder.jpg`;
+							console.log("THUMBNAIL: "+this.props.book.Thumbnail);
+							return this.props.book.Thumbnail?
+								this.props.book.Thumbnail.replace(/^http:/,"https:"):
+								`${host}/images/placeholder.jpg`;
 						})()}}
 					/>
 				</View>

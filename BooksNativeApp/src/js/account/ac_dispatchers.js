@@ -1,6 +1,6 @@
 import * as actions from "./ac_actions";
 import { DOMParser } from "xmldom";
-import univ_const from "/var/www/html/books/BooksNativeApp/univ_const.json";
+import univ_const from "../../../univ_const.json";
 const host = univ_const.server_url;
 import {AsyncStorage} from "react-native";
 import {objectToString} from "../shared_components/shared_utilities";
