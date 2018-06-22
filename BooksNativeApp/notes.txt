@@ -31,3 +31,15 @@ DELIVERY:
 	include time of generation to guard against identity spoofing.
 	How about having BSP members volunteer as agents. Receiving and giving.
 2. 
+
+CREATING CUSTOM NATIVE COMPONENTS
+A native module is a Java class 
+The class must extend ReactContextBaseJavaModule class.
+It implements the functionality required by JavaScript. (What you want the module to do)
+The super class requires implementing a function called getName()
+getName() returns a string that's the name of the module.
+The other implementation is getConstants() that exposes constants to JavaScript;
+The latter is not required
+To expose a method to JavaScript, a method must be annotated with @ReactMethod
+The last step within Java is to register the module.
+This happens in the createNativeModules() of your app's package.

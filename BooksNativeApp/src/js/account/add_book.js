@@ -8,7 +8,6 @@ import {
 	DatePickerAndroid,
 	TouchableOpacity,
 	Picker,
-	ToastAndroid,
 } from "react-native";
 import store from "../store";
 import {connect, Provider,} from "react-redux";
@@ -32,11 +31,10 @@ class _AddBookForm extends Component {
 			isbn: "",
 			condition: "",
 			location: "",
-			curr_date: getDateAfterMicroseconds(0),
+			curr_date: getDateAfterMilliseconds(0),
 			description: "",
 			offer_expiry: "",
 			thumbnail: "",
-			Alert,
 		};
 	}
 	componentDidMount=()=>{
@@ -70,7 +68,7 @@ class _AddBookForm extends Component {
 				published: this.props.book.publishedDate?this.props.book.publishedDate:"", 
 				description: this.props.book.description?this.props.book.description:"",
 				pages: this.props.book.pageCount?this.props.book.pageCount:"",
-				offer_expiry: getDateAfterMicroseconds(5184000000),//2 months from now
+				offer_expiry: getDateAfterMilliseconds(5184000000),//2 months from now
 				thumbnail: this.props.book.imageLinks.thumbnail?this.props.book.imageLinks.thumbnail:"",
 			};
 		}
@@ -80,6 +78,7 @@ class _AddBookForm extends Component {
 		this.setState({...this.state, ...state_copy});
 	}
 	render() {
+		
 		return (
 			<View style={styles.container}>
 				<ScrollView style={{flex: 1}}>	
@@ -357,7 +356,7 @@ class _AddBookForm extends Component {
 							>
 								<View style={{flex: 1, width: "100%",}}>
 									<Text style={styles.dateText} ref={(node)=>{this.datepicker = node;}}>
-										{this.state.offer_expiry?this.state.offer_expiry:getDateAfterMicroseconds(5184000000)}
+										{this.state.offer_expiry?this.state.offer_expiry:getDateAfterMilliseconds(5184000000)}
 									</Text>
 								</View>
 							</TouchableOpacity>
@@ -495,8 +494,8 @@ export default class AddBook extends Component {
 	}
 }
 //2 months = 5184000000
-function getDateAfterMicroseconds(microseconds) {  
-	let date = new Date(Date.now()+microseconds);
+function getDateAfterMilliseconds(milliseconds) {  
+	let date = new Date(Date.now()+milliseconds);
 	//YYYY:MM:DD HH:MM:SS Unix datetime string, mysql compatible
 	let month = date.getMonth();
 	month++; //Javascript month is 0 based. 0=January, 11=December
