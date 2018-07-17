@@ -584,7 +584,7 @@ export function submitNewBook(dispatch, data, callback) {
 				errMsg: "Timeout. Network or Server error",
 			}
 		});
-		callback(false);
+		callback("Timeout. Network or Server error");
 	};
 	xhr.responseType = "text";
 	xhr.onreadystatechange = function(){
@@ -609,6 +609,7 @@ export function submitNewBook(dispatch, data, callback) {
 				callback(true);
 			} else if(srv_res_status===8) {
 				//Failed validation tests
+				console.log("Failed the validation tests");
 				let errArray = JSON.parse(xmlDoc.getElementsByTagName("err_arr")[0].childNodes[0].nodeValue);
 				let err_obj = { /*Reinitialize/empty the previous errors*/
 					title: "",
@@ -631,21 +632,22 @@ export function submitNewBook(dispatch, data, callback) {
 				for(let i=0; i<errArray.length; i++) {
 					err_obj[errArray[i].param] = errArray[i].msg;
 				}
+				console.log("What went wrong: "+JSON.stringify(err_obj));
 				//Dispatch
 				dispatch({
 					type: actions.ADD_BOOK_ERROR,
 					payload: {
-						errCode: 4,
+						errCode: 4, //Failed the validation tests
 						errMsg: err_obj,
 					}
 				});
-				callback(false);
+				callback(err_obj);
 			} else {
 				//Unknown server error
 				dispatch({
 					type: actions.ADD_BOOK_ERROR,
 					payload: {
-						errCode: 3,
+						errCode: 3, //Unknown server error. Unlikely
 						errMsg: "Unknown server error",
 					}
 				});
@@ -659,7 +661,7 @@ export function submitNewBook(dispatch, data, callback) {
 					type: actions.ADD_BOOK_ERROR,
 					payload: {
 						errCode: 2,
-						errMsg: "Network Error? "
+						errMsg: "Network Error."
 					}
 				});
 				callback(false);

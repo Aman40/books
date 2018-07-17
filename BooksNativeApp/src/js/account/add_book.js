@@ -1,3 +1,7 @@
+/**
+ * Module type: View
+ * Purpose: A form for editing or adding new books
+ */
 import React, {Component} from "react";
 import {
 	View,
@@ -8,6 +12,7 @@ import {
 	DatePickerAndroid,
 	TouchableOpacity,
 	Picker,
+	Alert,
 } from "react-native";
 import store from "../store";
 import {connect, Provider,} from "react-redux";
@@ -20,21 +25,40 @@ class _AddBookForm extends Component {
 		super(props);
 		this.state = {
 			//Later on fill with results from scan
-			title: "",
-			authors: "",
-			edition: "",
-			language: "",
-			publisher: "",
-			published: "",
-			binding: "",
-			pages: "",
-			isbn: "",
-			condition: "",
-			location: "",
-			curr_date: getDateAfterMilliseconds(0),
-			description: "",
-			offer_expiry: "",
-			thumbnail: "",
+			values: {
+				title: "",
+				authors: "",
+				edition: "",
+				language: "",
+				publisher: "",
+				published: "",
+				binding: "",
+				pages: "",
+				isbn: "",
+				condition: "",
+				location: "",
+				curr_date: getDateAfterMilliseconds(0),
+				description: "",
+				offer_expiry: "",
+				thumbnail: "",
+			},
+			errors: {
+				title: "",
+				authors: "",
+				edition: "",
+				language: "",
+				publisher: "",
+				published: "",
+				binding: "",
+				pages: "",
+				isbn: "",
+				condition: "",
+				location: "",
+				curr_date: "",
+				description: "",
+				offer_expiry: "",
+				thumbnail: "",
+			}
 		};
 	}
 	componentDidMount=()=>{
@@ -43,13 +67,50 @@ class _AddBookForm extends Component {
 	}
 	submit = ()=>{
 		//Submit the form data
-		this.props.submit(this.state, (succeeded)=>{
+		this.props.submit(this.state.values, (response)=>{
 			//Display toast and go back
-			if(succeeded) {
+			console.log("Response: "+JSON.stringify(response));
+			if(response===true) {
 				this.props.navigation.goBack("ScanPreview");
 			} else {
-				//Alert and do something. Check the store
-
+				/**
+				 * Alert and do something. Check the store
+				 */
+				let _failReason = "";
+				//Get the reason for failure depending on the store
+				switch(this.props.submitStatus.addError.errCode) {
+				case 1: //Request Timeout. Network or server error
+					_failReason="Request timeout. Not your fault. Try again later.";
+					break;
+				case 2:
+					_failReason = "Network Error. Not your fault. Try again later";
+					break;
+				case 3:
+					_failReason = "A technical problem occurred. Not your fault. Try again later or contact the wizards";
+					break;
+				case 4:
+					_failReason = "Failed validation tests. Your fault. Check the form for details.";
+					this.setState({
+						errors: (()=>{
+							let errs =  {
+								...this.state.errors,
+								...this.props.submitStatus.addError.errMsg,
+							};
+							console.log("Errors: "+JSON.stringify(errs));
+							return errs;
+						})()});
+					break;
+				default:
+				}
+				Alert.alert(
+					"Error",
+					_failReason, 
+					//TODO: URGENT: Give reasons for failure
+					[
+						{text: "OK", onPress: ()=>console.log("OK")}
+					],
+					{cancelable: true}
+				);
 			}
 		});
 	}
@@ -75,7 +136,11 @@ class _AddBookForm extends Component {
 		//TODO: Then set the location as the user's session's university
 		state_copy.location = "The University, West of Imre";
 		//Then setState()
-		this.setState({...this.state, ...state_copy});
+		this.setState(
+			(()=>{
+				let new_values = { ...this.state.values, ...state_copy };
+				return {values: new_values};
+			})());
 	}
 	render() {
 		
@@ -85,14 +150,17 @@ class _AddBookForm extends Component {
 					<View style={styles.inputGroup}>
 						<View style={styles.label}>
 							<Text style={styles.inputPromptText}>
-					Title:
+					Title: <Text style={{color: "red"}}>{this.state.errors.title}</Text>
 							</Text>
 						</View>
 						<View style={styles.input}>
 							<TextInput
 								style={styles.textInput}
-								onChangeText={(text)=>this.setState({title: text})}
-								value={this.state.title}
+								onChangeText={(text)=>this.setState((()=>{
+									let new_values = { ...this.state.values, title: text };
+									return {values: new_values};
+								})())}
+								value={this.state.values.title}
 								underlineColorAndroid={"transparent"}
 							/>
 						</View>
@@ -102,15 +170,18 @@ class _AddBookForm extends Component {
 					<View style={styles.inputGroup}>
 						<View style={styles.label}>
 							<Text style={styles.inputPromptText}>
-					Authors:
+					Authors: <Text style={{color: "red"}}>{this.state.errors.authors}</Text>
 							</Text>
 						</View>
 						<View style={styles.input}>
 							<TextInput
 								placeholder={"E.g Aman Haman, Rajesh Kumar, Hay..."}
 								style={styles.textInput}
-								onChangeText={(text)=>this.setState({authors: text})}
-								value={this.state.authors}
+								onChangeText={(text)=>this.setState((()=>{
+									let new_values = { ...this.state.values, authors: text };
+									return {values: new_values};
+								})())}
+								value={this.state.values.authors}
 								underlineColorAndroid={"transparent"}
 							/>
 						</View>
@@ -120,14 +191,17 @@ class _AddBookForm extends Component {
 					<View style={styles.inputGroup}>
 						<View style={styles.label}>
 							<Text style={styles.inputPromptText}>
-					Edition:
+					Edition: <Text style={{color: "red"}}>{this.state.errors.edition}</Text>
 							</Text>
 						</View>
 						<View style={styles.input}>
 							<TextInput
 								style={styles.textInput}
-								onChangeText={(text)=>this.setState({edition: text})}
-								value={this.state.edition}
+								onChangeText={(text)=>this.setState((()=>{
+									let new_values = { ...this.state.values, edition: text };
+									return {values: new_values};
+								})())}
+								value={this.state.values.edition}
 								underlineColorAndroid={"transparent"}
 							/>
 						</View>
@@ -137,13 +211,16 @@ class _AddBookForm extends Component {
 					<View style={styles.inputGroup}>
 						<View style={styles.label}>
 							<Text style={styles.inputPromptText}>
-					Language:
+					Language: <Text style={{color: "red"}}>{this.state.errors.language/*RESTART FROM*/}</Text>
 							</Text>
 						</View>
 						<View style={styles.input}>
 							<Picker
-								onValueChange={(val, )=>this.setState({language: val})}
-								selectedValue={this.state.language} //TODO LATER: Set default according to user's default language
+								onValueChange={(val, )=>this.setState((()=>{
+									let new_values = { ...this.state.values, language: val };
+									return {values: new_values};
+								})())}
+								selectedValue={this.state.values.language} //TODO LATER: Set default according to user's default language
 								style={styles.bindingPicker}
 								itemStyle={styles.bindingPickerText}
 							>
@@ -164,14 +241,17 @@ class _AddBookForm extends Component {
 					<View style={styles.inputGroup}>
 						<View style={styles.label}>
 							<Text style={styles.inputPromptText}>
-					Publisher:
+					Publisher: <Text style={{color: "red"}}>{this.state.errors.publisher/*RESTART FROM*/}</Text>
 							</Text>
 						</View>
 						<View style={styles.input}>
 							<TextInput
 								style={styles.textInput}
-								onChangeText={(text)=>this.setState({publisher: text})}
-								value={this.state.publisher}
+								onChangeText={(text)=>this.setState((()=>{
+									let new_values = { ...this.state.values, publisher: text };
+									return {values: new_values};
+								})())}
+								value={this.state.values.publisher}
 								underlineColorAndroid={"transparent"}
 							/>
 						</View>
@@ -181,7 +261,7 @@ class _AddBookForm extends Component {
 					<View style={styles.inputGroup}>
 						<View style={styles.label}>
 							<Text style={styles.inputPromptText}>
-					Published:
+					Published: <Text style={{color: "red"}}>{this.state.errors.published}</Text>
 							</Text>
 						</View>
 						<View style={styles.datePicker}>
@@ -207,7 +287,10 @@ class _AddBookForm extends Component {
 													day="0"+day.toString();
 												}
 												let dateString = `${obj.year}-${month}-${day}`;
-												this.setState({published: dateString});
+												this.setState((()=>{
+													let new_values = { ...this.state.values, published: dateString };
+													return {values: new_values};
+												})());
 											}
 										});
 
@@ -229,12 +312,15 @@ class _AddBookForm extends Component {
 					<View style={styles.inputGroup}>
 						<View style={styles.label}>
 							<Text style={styles.inputPromptText}>
-					Binding:
+					Binding: <Text style={{color: "red"}}>{this.state.errors.binding}</Text>
 							</Text>
 						</View>
 						<View style={styles.input}>
 							<Picker
-								onValueChange={(val, )=>this.setState({binding: val})}
+								onValueChange={(val, )=>this.setState((()=>{
+									let new_values = { ...this.state.values, binding: val };
+									return {values: new_values};
+								})())}
 								selectedValue={this.state.binding}
 								style={styles.bindingPicker}
 								itemStyle={styles.bindingPickerText}
@@ -249,14 +335,17 @@ class _AddBookForm extends Component {
 					<View style={styles.inputGroup}>
 						<View style={styles.label}>
 							<Text style={styles.inputPromptText}>
-					ISBN 13:
+					ISBN 13: <Text style={{color: "red"}}>{this.state.errors.isbn}</Text>
 							</Text>
 						</View>
 						<View style={styles.input}>
 							<TextInput
 								style={styles.textInput}
-								onChangeText={(text)=>this.setState({isbn: text})}
-								value={this.state.isbn}
+								onChangeText={(text)=>this.setState((()=>{
+									let new_values = { ...this.state.values, isbn: text };
+									return {values: new_values};
+								})())}
+								value={this.state.values.isbn}
 								underlineColorAndroid={"transparent"}
 							/>
 						</View>
@@ -266,13 +355,16 @@ class _AddBookForm extends Component {
 					<View style={styles.inputGroup}>
 						<View style={styles.label}>
 							<Text style={styles.inputPromptText}>
-					Condition:
+					Condition: <Text style={{color: "red"}}>{this.state.errors.condition}</Text>
 							</Text>
 						</View>
 						<View style={styles.input}>
 							<TextInput
 								style={styles.textInput}
-								onChangeText={(text)=>this.setState({condition: text})}
+								onChangeText={(text)=>this.setState((()=>{
+									let new_values = { ...this.state.values, condition: text };
+									return {values: new_values};
+								})())}
 								value={this.state.condition}
 								underlineColorAndroid={"transparent"}
 							/>
@@ -283,14 +375,17 @@ class _AddBookForm extends Component {
 					<View style={styles.inputGroup}>
 						<View style={styles.label}>
 							<Text style={styles.inputPromptText}>
-					Location:
+					Location: <Text style={{color: "red"}}>{this.state.errors.location}</Text>
 							</Text>
 						</View>
 						<View style={styles.input}>
 							<TextInput
 								style={styles.textInput}
-								onChangeText={(text)=>this.setState({location: text})}
-								value={this.state.location}
+								onChangeText={(text)=>this.setState((()=>{
+									let new_values = { ...this.state.values, location: text };
+									return {values: new_values};
+								})())}
+								value={this.state.values.location}
 								underlineColorAndroid={"transparent"}
 								editable={false}
 							/>
@@ -301,14 +396,17 @@ class _AddBookForm extends Component {
 					<View style={styles.inputGroup}>
 						<View style={styles.label}>
 							<Text style={styles.inputPromptText}>
-					Description:
+					Description: <Text style={{color: "red"}}>{this.state.errors.description}</Text>
 							</Text>
 						</View>
 						<View style={styles.input}>
 							<TextInput
 								style={styles.textInput}
-								onChangeText={(text)=>this.setState({description: text})}
-								value={this.state.description}
+								onChangeText={(text)=>this.setState((()=>{
+									let new_values = { ...this.state.values, description: text };
+									return {values: new_values};
+								})())}
+								value={this.state.values.description}
 								underlineColorAndroid={"transparent"}
 							/>
 						</View>
@@ -318,7 +416,7 @@ class _AddBookForm extends Component {
 					<View style={styles.inputGroup}>
 						<View style={styles.label}>
 							<Text style={styles.inputPromptText}>
-					Available Until:
+					Available Until: <Text style={{color: "red"}}>{this.state.errors.offer_expiry}</Text>
 							</Text>
 						</View>
 						<View style={styles.datePicker}>
@@ -344,7 +442,10 @@ class _AddBookForm extends Component {
 													day="0"+day.toString();
 												}
 												let dateString = `${obj.year}-${month}-${day}`;
-												this.setState({offer_expiry: dateString});
+												this.setState((()=>{
+													let new_values = { ...this.state.values, offer_expiry: dateString };
+													return {values: new_values};
+												})());
 											}
 										});
 
@@ -356,7 +457,7 @@ class _AddBookForm extends Component {
 							>
 								<View style={{flex: 1, width: "100%",}}>
 									<Text style={styles.dateText} ref={(node)=>{this.datepicker = node;}}>
-										{this.state.offer_expiry?this.state.offer_expiry:getDateAfterMilliseconds(5184000000)}
+										{this.state.values.offer_expiry?this.state.values.offer_expiry:getDateAfterMilliseconds(5184000000)}
 									</Text>
 								</View>
 							</TouchableOpacity>
@@ -466,6 +567,21 @@ const styles = StyleSheet.create({
 function mapStateToProps(state){
 	return {
 		book: state.booksToAdd.scannedBookMetaObject,
+		submitStatus: state.addNewBook,
+		// {
+		// 	isAddingNewBook: false,
+		// 	addSuccess: false,
+		// 	addError: {
+		//  * 		errCode: <Number>,
+		//  * 		errMsg: if(errCode==4) {
+		//  * 					return err_obj<Object>
+		// errArr = [{"location":"query","param":"language","value":"","msg":"ER_NO_LANG"},{"location":"query","param":"offer_expiry","value":"","msg":"ER_NO_EXP"}]
+		// err_obj = 
+		//  * 				} else {
+		//  * 					return <String>
+		//  * 				}
+		//  * 		}
+		// }
 	};
 }
 function mapDispatchToProps(dispatch){

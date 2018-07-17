@@ -10,6 +10,7 @@ const store = createStore(
 			session: reducers.session,
 			guiControl: reducers.guiControl,
 			booksToAdd: reducers.booksToAdd,
+			addNewBook: reducers.addNewBook,
 		}
 	)
 );

@@ -323,7 +323,7 @@ export function booksToAdd(
 export function addNewBook(state={
 	isAddingNewBook: false,
 	addSuccess: false,
-	addError: {},
+	addError: null,
 }, action) {
 	switch(action.type) {
 	case accountActions.IS_ADDING_BOOK:
