@@ -17,8 +17,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		fetchBooks: ()=>{
-			dispatchers.fetchBooks(dispatch);
+		fetchBooks: (callback)=>{
+			dispatchers.fetchBooks(dispatch, callback);
 		},
 		showItemDetails: (payload)=>{
 			dispatchers.showItemDetails(dispatch, payload);

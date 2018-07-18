@@ -10,21 +10,28 @@ import {
 	TouchableOpacity,
 	Image,
 	ImageBackground,
+	RefreshControl
 } from "react-native";
 import univ_const from "../../../univ_const.json";
 import * as accountDispatchers from "../account/ac_dispatchers";
-/*
-	//import {objectToString} from "../shared_components/shared_utilities";
+import Spinner from "react-native-loading-spinner-overlay";
 
-	//Call create session with context {type: "START_UP", }
-	//Under what if statement and boolean from the store??(state.props.session)
-	//Careful not to run into an infinite loop
-	//Automatically prompt manual login??
-	//If no session and no creds, don't prompt login. Navigate to init. User might not
-	//have signed up. Only prompt login if session check was triggered by srv_res_status 9
-*/
+// import {objectToString} from "../shared_components/shared_utilities";
+// Call create session with context {type: "START_UP", }
+// Under what if statement and boolean from the store??(state.props.session)
+// Careful not to run into an infinite loop
+// Automatically prompt manual login??
+// If no session and no creds, don't prompt login. Navigate to init. User might not
+// have signed up. Only prompt login if session check was triggered by srv_res_status 9
 const host = univ_const.server_url;
 export default class BooksView extends Component {
+	constructor(props){
+		super(props);
+		this.state={
+			refreshing: false,
+			loading: false,
+		};
+	}
 	componentDidMount=()=>{
 		//Fetch book data from db. Dispatch action
 		if(!this.props.session.isLoggedIn) {
@@ -36,12 +43,53 @@ export default class BooksView extends Component {
 			this.props.createSession(context);
 		} 
 		if(!this.props.searchMode) {
-			this.props.fetchBooks();
+			this.setState({loading: true});
+			this.props.fetchBooks((finished)=>{
+				if(finished) {
+					this.setState({
+						refreshing: false,
+						loading: false,
+					});
+				}
+			});
 		}
 		//Subscribe to the store for rerenderings whenever the store changes.
 	}
 
+	_onRefresh = ()=>{
+		this.setState({refreshing: true});
+		//Fetch the books
+		this.props.fetchBooks((finished)=>{
+			if(finished) {
+				this.setState({
+					refreshing: false,
+					loading: false,
+				});
+			}
+		});
+	}
+
+	_stopLoadIndicators = ()=>{
+		console.log(this.state.loading?"Loading: true":"Loading: false");
+		console.log(this.state.refreshing?"Refreshing: true":"Refreshing: false");
+		if(this.state.loading || this.state.refreshing) {
+			console.log("'bout to refresh");
+			this.setState({
+				loading: false,
+				refreshing: false,
+			});
+		}
+	}
+
 	render() {
+		//Instantiate the loading spinner
+		let loadingSpinner = (
+			<Spinner 
+				visible={true} 
+				textContent={"Loading..."} 
+				textStyle={{color: "#FFF"}} 
+				overlayColor={"rgba(0, 0, 0, 0.5)"}
+			/>);
 		console.log(this.props.searchMode?"SEARCH MODE":"NORMAL MODE");
 		let books = [];
 		//Get the books or error if none.
@@ -78,10 +126,12 @@ export default class BooksView extends Component {
 			//Display all results
 			if(this.props.books.isFetching) {
 			//Display the "wait" spinner
+				
 			}
 			if(this.props.books.successFetching) {
-			//Finished fetching. Check if there are any
-			//books.
+			//Finished fetching. Check if there are any books.
+			//Remove the refreshing/loading indicators
+				console.log("Success fetching");
 				if(this.props.books.booksArr.length>0) {
 				//Some books were found
 				//Render them in a separate component.
@@ -113,6 +163,7 @@ export default class BooksView extends Component {
 
 		return (
 			<View style={styles.container}>
+				{this.state.loading&&loadingSpinner}
 				<ImageBackground
 					style={styles.bgImage}
 					resizeMode={"cover"}
@@ -130,6 +181,12 @@ export default class BooksView extends Component {
 								justifyContent:"flex-start",
 								alignItems: "stretch"
 							}}
+							refreshControl={
+								<RefreshControl
+									refreshing={this.state.refreshing}
+									onRefresh={this._onRefresh}
+								/>
+							}
 						>
 							{books}
 						</ScrollView>

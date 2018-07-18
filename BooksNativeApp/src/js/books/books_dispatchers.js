@@ -5,7 +5,7 @@ import univ_const from "../../../univ_const.json";
 import * as accountDispatchers from "../account/ac_dispatchers";
 const host = univ_const.server_url;
 
-export function fetchBooks(dispatch) {
+export function fetchBooks(dispatch, callback) {
 	//Fetches all the books (closest to user's location)
 	let xhr = new XMLHttpRequest();
 	xhr.responseType = "text";
@@ -15,6 +15,7 @@ export function fetchBooks(dispatch) {
 			type: booksActions.ERROR_FETCHING,
 			payload: "Request timeout. Check your network.",
 		});
+		callback(true);
 	};
 	xhr.onreadystatechange = function(){
 		if(this.readyState===4 && this.status===200) {
@@ -33,6 +34,7 @@ export function fetchBooks(dispatch) {
 					type: booksActions.SUCCESS_FETCHING_BOOKS,
 					payload: booksArr, //Array
 				});
+				callback(true);
 				//TODO
 			} else if(srv_res_status===3) {
 				//No results
@@ -41,6 +43,7 @@ export function fetchBooks(dispatch) {
 					type: booksActions.ERROR_FETCHING,
 					payload: "No results",
 				});
+				callback(true);
 			} else if(srv_res_status===9) {
 				/*
 					User is not logged in. The magic begins. 
@@ -74,6 +77,7 @@ export function fetchBooks(dispatch) {
 					type: booksActions.ERROR_FETCHING,
 					payload: "Bad server response status.",
 				});
+				callback(true);
 			}
 		} else {
 			//An error occured.
@@ -83,6 +87,7 @@ export function fetchBooks(dispatch) {
 					type: booksActions.ERROR_FETCHING,
 					payload: `Possible internal server error. Status: ${this.status}`,
 				});
+				callback(true);
 			}
 		}
 	};
@@ -103,6 +108,7 @@ export function fetchBooks(dispatch) {
 			type: booksActions.ERROR_FETCHING,
 			payload: "Connection or Internal database error.",
 		});
+		callback(true);
 	}
 }
 
