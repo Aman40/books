@@ -202,6 +202,26 @@ class _AddBookForm extends Component {
 					<View style={styles.inputGroup}>
 						<View style={styles.label}>
 							<Text style={styles.inputPromptText}>
+					Pages: <Text style={{color: "red"}}>{this.state.errors.pages}</Text>
+							</Text>
+						</View>
+						<View style={styles.input}>
+							<TextInput
+								style={styles.textInput}
+								onChangeText={(text)=>this.setState((()=>{
+									let new_values = { ...this.state.values, pages: text };
+									return {values: new_values};
+								})())}
+								value={this.state.values.pages}
+								underlineColorAndroid={"transparent"}
+							/>
+						</View>
+					</View>
+
+
+					<View style={styles.inputGroup}>
+						<View style={styles.label}>
+							<Text style={styles.inputPromptText}>
 					Edition: <Text style={{color: "red"}}>{this.state.errors.edition}</Text>
 							</Text>
 						</View>
