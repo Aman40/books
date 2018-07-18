@@ -12,6 +12,7 @@
     "react-native": "0.55.3",
     "react-native-camera": "^1.1.4",
     "react-native-google-places": "^2.5.0",
+    "react-native-loading-spinner-overlay": "^0.5.2",
     "react-native-looped-carousel": "^0.1.10",
     "react-native-qrcode-scanner": "^1.0.1",
     "react-native-restart": "0.0.6",

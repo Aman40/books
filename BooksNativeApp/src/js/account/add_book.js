@@ -19,6 +19,8 @@ import {connect, Provider,} from "react-redux";
 //import {objectToString} from "../shared_components/shared_utilities";
 import { submitNewBook } from "./ac_dispatchers";
 import { langISO6391 } from "../shared_components/shared_utilities";
+import Spinner from "react-native-loading-spinner-overlay";
+
 
 class _AddBookForm extends Component {
 	constructor(props) {
@@ -154,9 +156,18 @@ class _AddBookForm extends Component {
 			})());
 	}
 	render() {
+		//Instantiate the loading spinner
+		let loadingSpinner = (
+			<Spinner 
+				visible={true} 
+				textContent={"Loading..."} 
+				textStyle={{color: "#FFF"}} 
+				overlayColor={"rgba(0, 0, 0, 0.5)"}
+			/>);
 		
 		return (
 			<View style={styles.container}>
+				{this.props.submitStatus.isAddingNewBook&&loadingSpinner}
 				<ScrollView style={{flex: 1}}>	
 					<View style={styles.inputGroup}>
 						<View style={styles.label}>
