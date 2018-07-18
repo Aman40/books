@@ -29,7 +29,7 @@ class _AddBookForm extends Component {
 				title: "",
 				authors: "",
 				edition: "",
-				language: "",
+				language: "af",
 				publisher: "",
 				published: "",
 				binding: "",
@@ -39,7 +39,7 @@ class _AddBookForm extends Component {
 				location: "",
 				curr_date: getDateAfterMilliseconds(0),
 				description: "",
-				offer_expiry: "",
+				offer_expiry: getDateAfterMilliseconds(5184000000),
 				thumbnail: "",
 			},
 			errors: {
@@ -63,7 +63,7 @@ class _AddBookForm extends Component {
 	}
 	componentDidMount=()=>{
 		//Initialize
-		Object.getOwnPropertyNames(this.props.book).length&&this.init();
+		Object.getOwnPropertyNames(this.props.book).length&&this._init();
 	}
 	submit = ()=>{
 		//Submit the form data
@@ -71,7 +71,18 @@ class _AddBookForm extends Component {
 			//Display toast and go back
 			console.log("Response: "+JSON.stringify(response));
 			if(response===true) {
-				this.props.navigation.goBack("ScanPreview");
+				console.log("Added book successfully");
+				Alert.alert(
+					"Hey...",
+					"You did great!", 
+					//TODO: URGENT: Give reasons for failure
+					[
+						{text: "OK", onPress: ()=>console.log("OK")}
+					],
+					{cancelable: true}
+				);
+				console.log("NAVIGATION PROPS: "+Object.getOwnPropertyNames(this.props.navigation));
+				this.props.navigation.goBack(); //Not working.
 			} else {
 				/**
 				 * Alert and do something. Check the store
@@ -114,7 +125,7 @@ class _AddBookForm extends Component {
 			}
 		});
 	}
-	init=()=>{
+	_init=()=>{
 		let state_copy;
 		//This checks store.booksToAdd.scannedBookMetaObj
 		if(Object.getOwnPropertyNames(this.props.book)) {
@@ -468,7 +479,9 @@ class _AddBookForm extends Component {
 				<View style={styles.controls}>
 					<TouchableOpacity 
 						style={styles.cancel} 
-						onPress={this.props.navigation.goBack}>
+						onPress={()=>{
+							this.props.navigation.goBack();
+						}}>
 						<Text style={styles.cancelText}>
 							Cancel
 						</Text>
