@@ -177,7 +177,12 @@ class _AddBookForm extends Component {
 						</View>
 						<View style={styles.input}>
 							<TextInput
-								style={styles.textInput}
+								style={{
+									...StyleSheet.flatten(styles.textInput),
+									borderColor: this.state.errors.title.length?
+										"red":
+										styles.textInput.borderColor,
+								}}
 								onChangeText={(text)=>this.setState((()=>{
 									let new_values = { ...this.state.values, title: text };
 									return {values: new_values};
@@ -198,7 +203,12 @@ class _AddBookForm extends Component {
 						<View style={styles.input}>
 							<TextInput
 								placeholder={"E.g Aman Haman, Rajesh Kumar, Hay..."}
-								style={styles.textInput}
+								style={{
+									...StyleSheet.flatten(styles.textInput),
+									borderColor: this.state.errors.authors.length?
+										"red":
+										styles.textInput.borderColor,
+								}}
 								onChangeText={(text)=>this.setState((()=>{
 									let new_values = { ...this.state.values, authors: text };
 									return {values: new_values};
@@ -218,7 +228,12 @@ class _AddBookForm extends Component {
 						</View>
 						<View style={styles.input}>
 							<TextInput
-								style={styles.textInput}
+								style={{
+									...StyleSheet.flatten(styles.textInput),
+									borderColor: this.state.errors.pages.length?
+										"red":
+										styles.textInput.borderColor,
+								}}
 								onChangeText={(text)=>this.setState((()=>{
 									let new_values = { ...this.state.values, pages: text };
 									return {values: new_values};
@@ -238,7 +253,12 @@ class _AddBookForm extends Component {
 						</View>
 						<View style={styles.input}>
 							<TextInput
-								style={styles.textInput}
+								style={{
+									...StyleSheet.flatten(styles.textInput),
+									borderColor: this.state.errors.edition.length?
+										"red":
+										styles.textInput.borderColor,
+								}}
 								onChangeText={(text)=>this.setState((()=>{
 									let new_values = { ...this.state.values, edition: text };
 									return {values: new_values};
@@ -263,7 +283,12 @@ class _AddBookForm extends Component {
 									return {values: new_values};
 								})())}
 								selectedValue={this.state.values.language} //TODO LATER: Set default according to user's default language
-								style={styles.bindingPicker}
+								style={{
+									...StyleSheet.flatten(styles.bindingPicker),
+									borderColor: this.state.errors.language.length?
+										"red":
+										styles.textInput.borderColor,
+								}}
 								itemStyle={styles.bindingPickerText}
 							>
 								{(()=>{
@@ -288,7 +313,12 @@ class _AddBookForm extends Component {
 						</View>
 						<View style={styles.input}>
 							<TextInput
-								style={styles.textInput}
+								style={{
+									...StyleSheet.flatten(styles.textInput),
+									borderColor: this.state.errors.publisher.length?
+										"red":
+										styles.textInput.borderColor,
+								}}
 								onChangeText={(text)=>this.setState((()=>{
 									let new_values = { ...this.state.values, publisher: text };
 									return {values: new_values};
@@ -340,7 +370,13 @@ class _AddBookForm extends Component {
 										console.warn("Cannot open date picker", message);
 									}
 								}}
-								style={{flex: 1, alignSelf: "stretch"}}
+								style={{
+									flex: 1, 
+									alignSelf: "stretch",
+									borderColor: this.state.errors.title.length?
+										"red":
+										"transparent",
+								}}
 							>
 								<View style={{flex: 1, width: "100%",}}>
 									<Text style={styles.dateText} ref={(node)=>{this.datepicker = node;}}>
@@ -382,7 +418,12 @@ class _AddBookForm extends Component {
 						</View>
 						<View style={styles.input}>
 							<TextInput
-								style={styles.textInput}
+								style={{
+									...StyleSheet.flatten(styles.textInput),
+									borderColor: this.state.errors.isbn.length?
+										"red":
+										styles.textInput.borderColor,
+								}}
 								onChangeText={(text)=>this.setState((()=>{
 									let new_values = { ...this.state.values, isbn: text };
 									return {values: new_values};
@@ -402,7 +443,12 @@ class _AddBookForm extends Component {
 						</View>
 						<View style={styles.input}>
 							<TextInput
-								style={styles.textInput}
+								style={{
+									...StyleSheet.flatten(styles.textInput),
+									borderColor: this.state.errors.condition.length?
+										"red":
+										styles.textInput.borderColor,
+								}}
 								onChangeText={(text)=>this.setState((()=>{
 									let new_values = { ...this.state.values, condition: text };
 									return {values: new_values};
@@ -422,7 +468,12 @@ class _AddBookForm extends Component {
 						</View>
 						<View style={styles.input}>
 							<TextInput
-								style={styles.textInput}
+								style={{
+									...StyleSheet.flatten(styles.textInput),
+									borderColor: this.state.errors.location.length?
+										"red":
+										styles.textInput.borderColor,
+								}}
 								onChangeText={(text)=>this.setState((()=>{
 									let new_values = { ...this.state.values, location: text };
 									return {values: new_values};
@@ -443,7 +494,12 @@ class _AddBookForm extends Component {
 						</View>
 						<View style={styles.input}>
 							<TextInput
-								style={styles.textInput}
+								style={{
+									...StyleSheet.flatten(styles.textInput),
+									borderColor: this.state.errors.description.length?
+										"red":
+										styles.textInput.borderColor,
+								}}
 								onChangeText={(text)=>this.setState((()=>{
 									let new_values = { ...this.state.values, description: text };
 									return {values: new_values};
@@ -495,7 +551,12 @@ class _AddBookForm extends Component {
 										console.warn("Cannot open date picker", message);
 									}
 								}}
-								style={{flex: 1, alignSelf: "stretch"}}
+								style={{flex: 1, 
+									alignSelf: "stretch",
+									borderColor: this.state.errors.title.length?
+										"red":
+										"transparent",
+								}}
 							>
 								<View style={{flex: 1, width: "100%",}}>
 									<Text style={styles.dateText} ref={(node)=>{this.datepicker = node;}}>
