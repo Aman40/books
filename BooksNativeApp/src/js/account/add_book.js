@@ -238,7 +238,7 @@ class _AddBookForm extends Component {
 									let new_values = { ...this.state.values, pages: text };
 									return {values: new_values};
 								})())}
-								value={this.state.values.pages}
+								value={this.state.values.pages.toString()}
 								underlineColorAndroid={"transparent"}
 							/>
 						</View>

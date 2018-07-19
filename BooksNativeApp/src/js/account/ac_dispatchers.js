@@ -32,6 +32,12 @@ export /**/ function login(dispatch, payload) {
 		);
 	});
 }
+export function showItemDetails(dispatch, payload) {
+	dispatch({
+		type: actions.CLICKED_ITEM,
+		payload,
+	});
+}
 
 const START_UP = "connect_at_start_up";
 const _START_UP = START_UP;

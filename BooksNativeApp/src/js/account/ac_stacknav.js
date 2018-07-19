@@ -13,6 +13,7 @@ import TitleBar from "./titlebar";
 import ScanScreen from "./barcode_scanner";
 import AddBook from "./add_book";
 import ScanPreview from "./scanned_preview";
+import ConnectedBookDetails from "./book_details";
 
 let AccountStack = StackNavigator(
 	{
@@ -59,6 +60,12 @@ let AccountStack = StackNavigator(
 						/>);
 					}
 				};
+			}
+		},
+		BookDetails: {
+			screen: ConnectedBookDetails,
+			navigationOptions: {
+				title: "BookDetails"
 			}
 		}
 	},

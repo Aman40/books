@@ -147,6 +147,7 @@ export default class BooksView extends Component {
 						books.push(
 							<BookView
 								showDetails={()=>{
+									//todo: Make sure there are no race conditions.
 									this.props.showItemDetails(i);
 									this.props.navigation.navigate("BookDetails");
 								}}

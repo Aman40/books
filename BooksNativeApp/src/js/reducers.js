@@ -116,6 +116,11 @@ export function myBooks(
 			fetchErrorString: action.payload,
 			fetchStatusString: "Error: "+action.payload,
 		};
+	case accountActions.CLICKED_ITEM:
+		return {
+			...state,
+			clickedOn: action.payload,
+		};
 	default:
 		return state;
 	}

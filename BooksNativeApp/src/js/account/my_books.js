@@ -6,13 +6,14 @@ import {
 	ScrollView,
 	TouchableOpacity,
 	Image,
-	Alert,
+	// Alert,
 } from "react-native";
 import {connect, Provider} from "react-redux";
 import store from "../store";
 import {
 	fetchMyBooks,
 	showAddMethodSelectorMenu,
+	showItemDetails,
 } from "./ac_dispatchers";
 import univ_const from "../../../univ_const.json";
 const host = univ_const.server_url;
@@ -107,16 +108,7 @@ class BookView extends Component {
 		return (
 			<TouchableOpacity
 				style={styles.bk_wrapper}
-				onPress={()=>{
-					Alert.alert(
-						"Hey!",
-						"OK",
-						[
-							{text: "OK", onPress: ()=>console.log("OK")}
-						],
-						{cancelable: true}
-					);
-				}}
+				onPress={this.props.showDetails}
 			>
 				<View style={styles.bk_imageWrapper}>
 					<Image
@@ -152,15 +144,6 @@ class BookView extends Component {
 							}
 						} >
 							{this.props.book.Cover==="paper_back"?"Paperback":"Hardcover"}
-						</Text>
-						<Text style = {
-							{ 
-								...StyleSheet.flatten(styles.bk_title),
-								color: "red",
-								fontSize: 16,
-							}
-						} >
-							{"JPY "+this.props.book.Price}
 						</Text>
 						<Text style={styles.bk_contentValue}>
 							{"Pages: "+this.props.book.PageNo}
@@ -264,6 +247,7 @@ function mapDispatchToProps(dispatch) {
 	return {
 		fetchMyBooks: ()=>fetchMyBooks(dispatch),
 		showMenu: ()=>showAddMethodSelectorMenu(dispatch),
+		showItemDetails: ()=>showItemDetails(dispatch),
 	};
 }
 let ConnectedMyBooks = connect(
@@ -277,7 +261,9 @@ export default class MyBooks extends Component {
 			<Provider
 				store={store}
 			>
-				<ConnectedMyBooks/> 
+				<ConnectedMyBooks
+					navigation={this.props.navigation}
+				/> 
 			</Provider>
 		);
 	}
