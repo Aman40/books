@@ -43,29 +43,37 @@ export default class BooksView extends Component {
 			this.props.createSession(context);
 		} 
 		if(!this.props.searchMode) {
+			console.log("Remounting");
 			this.setState({loading: true});
 			this.props.fetchBooks((finished)=>{
+				console.log("Callback for books view in componentDidMount");
 				if(finished) {
+					console.log("Whyyyy the fuck not?!");
 					this.setState({
 						refreshing: false,
 						loading: false,
 					});
+					console.log("Loading? "+this.state.loading);
 				}
 			});
 		}
 		//Subscribe to the store for rerenderings whenever the store changes.
 	}
+	componentWillUpdate=()=>{
 
+	}
 	_onRefresh = ()=>{
 		this.setState({refreshing: true});
 		//Fetch the books
 		this.props.fetchBooks((finished)=>{
+			console.log("The callback for books_view");
 			if(finished) {
 				this.setState({
 					refreshing: false,
 					loading: false,
 				});
 			}
+			console.log("Loading? "+this.state.loading);
 		});
 	}
 

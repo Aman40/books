@@ -33,7 +33,7 @@ class _AddBookForm extends Component {
 				edition: "",
 				language: "af",
 				publisher: "",
-				published: "",
+				published: "1900-01-01",
 				binding: "",
 				pages: "",
 				isbn: "",
@@ -344,7 +344,7 @@ class _AddBookForm extends Component {
 										// Use `new Date()` for current date.
 										// May 25 2020. Month 0 is January.
 											date: Date.now(),
-											minDate: Date.now(),
+											minDate: Date.parse("1900-01-01 00:00:00"),
 											mode: "default"
 										}).then((obj)=>{
 											if (obj.action !== DatePickerAndroid.dismissedAction) {
@@ -380,7 +380,7 @@ class _AddBookForm extends Component {
 							>
 								<View style={{flex: 1, width: "100%",}}>
 									<Text style={styles.dateText} ref={(node)=>{this.datepicker = node;}}>
-										{this.state.published}
+										{this.state.values.published}
 									</Text>
 								</View>
 							</TouchableOpacity>

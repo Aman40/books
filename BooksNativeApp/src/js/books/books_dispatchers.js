@@ -20,10 +20,51 @@ export function fetchBooks(dispatch, callback) {
 	xhr.onreadystatechange = function(){
 		if(this.readyState===4 && this.status===200) {
 			//console.log(this.responseText);
-			let Parser = new DOMParser();
+			/**
+				 * In case the app is behind a captive portal, the portal will respond to the request with
+				 * a login page.
+				 * The app will try to parse it and fail. That's how we know we're behind a captive portal.
+				 * The failure may also be due to a server error but that's a problem that can be eliminated
+				 * with good programming.
+				 * If the app SOMEHOW manages to parse the response, it should at least fail at finding the
+				 * srv_res_status
+				 */
+
+			let Parser = new DOMParser({
+				locator: {},
+				errorHandler: {
+					warning: ()=>{
+						console.log("Minor problems with your xml");
+						dispatch({
+							type: booksActions.ERROR_FETCHING,
+							payload: "No internet access. Wifi requires log in.",
+						});
+					},
+					error: ()=>{
+						console.log("Major problems with your xml");
+						dispatch({
+							type: booksActions.ERROR_FETCHING,
+							payload: "No internet access. Wifi requires log in.",
+						});
+					}
+				}
+			});
 			let xmlDoc = Parser.parseFromString(this.responseText);
-			let srv_res_status = parseInt(xmlDoc.getElementsByTagName("srv_res_status")[0].childNodes[0].nodeValue);
-			console.log("Account server response status: "+srv_res_status);
+			let srv_res_status;
+			try {
+				srv_res_status = xmlDoc.getElementsByTagName("srv_res_status")[0].childNodes[0].nodeValue;
+			} catch(e) {
+				// console.log("The parser obviously didn't end it: "+e);
+				// console.log("callback is: "+typeof(callback));
+				callback(true);
+				dispatch({
+					type: booksActions.ERROR_FETCHING,
+					payload: "No internet access. Wifi requires log in yo.",
+				});
+				// console.log("After dispatching");
+				return;
+			}
+			srv_res_status = parseInt(srv_res_status);
 
 			if(srv_res_status===0) {
 				//Success. We have some books. Fetch them into booksArr then change the offSet

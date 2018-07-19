@@ -66,12 +66,52 @@ export /*to books_view*/ function createSession(context, dispatch) {
 		let xhr = new XMLHttpRequest();
 		xhr.responseType = "text";
 		xhr.onreadystatechange = function() {
-			if(this.readyState===4 && this.status===200) {
-				let Parser = new DOMParser();
+			if(this.readyState===4 && this.status===200) {				
+				/**
+				 * In case the app is behind a captive portal, the portal will respond to the request with
+				 * a login page.
+				 * The app will try to parse it and fail. That's how we know we're behind a captive portal.
+				 * The failure may also be due to a server error but that's a problem that can be eliminated
+				 * with good programming.
+				 * If the app SOMEHOW manages to parse the response, it should at least fail at finding the
+				 * srv_res_status
+				 */
+				let Parser = new DOMParser({
+					locator: {},
+					errorHandler: {
+						warning: ()=>{
+							console.log("Minor problems with your xml");
+							dispatch({
+								type: actions.LOGIN_ERROR,
+								payload: "The server responded with a "+this.status,
+							});
+							return;
+						},
+						error: ()=>{
+							console.log("Major problems with your xml");
+							dispatch({
+								type: actions.LOGIN_ERROR,
+								payload: "The server responded with a "+this.status,
+							});
+							return;
+						}
+					}
+				});
 				let xmlDoc = Parser.parseFromString(this.responseText);
-
-				let srv_res_status = xmlDoc.getElementsByTagName("srv_res_status")[0].childNodes[0].nodeValue;
+				let srv_res_status;
+				try {
+					srv_res_status = xmlDoc.getElementsByTagName("srv_res_status")[0].childNodes[0].nodeValue;
+				} catch(e) {
+					console.log("The parser obviously didn't end it: "+e);
+					dispatch({
+						type: actions.LOGIN_ERROR,
+						payload: "The server responded with a "+this.status,
+					});
+					return;
+				}
 				srv_res_status = parseInt(srv_res_status);
+
+
 				if(srv_res_status===0) {
 					//Session exists
 					let usrDataObj = JSON.parse(xmlDoc.getElementsByTagName("usr_info")[0].childNodes[0].nodeValue);
