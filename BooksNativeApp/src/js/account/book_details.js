@@ -8,7 +8,7 @@ import {
 	Text,
 	ScrollView,
 	Image,
-	Button,
+	TouchableOpacity,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Carousel from "react-native-looped-carousel";
@@ -284,14 +284,27 @@ class _BookDetails extends Component {
 							</View>
 						</View>
 					</View>
-					<View>
+					<View style={styles.controls}>
 						{/*Claim it controls.*/}
-						<Button
-							onPress={()=>console.log("You can have it!")}
-							title={"Request"}
-							color={"#BADA55"}
-							accessibilityLabel={"Request for this book"}
-						/>
+						<TouchableOpacity
+							onPress={()=>console.log("Wanna edit, huh?")}>
+							<View
+								style={styles.controlButton}>
+								<Text style={styles.btnText}>
+									Edit
+								</Text>
+							</View>
+						</TouchableOpacity>
+
+						<TouchableOpacity
+							onPress={()=>console.log("You can have it!")}>
+							<View
+								style={styles.controlButton}>
+								<Text style={styles.btnText}>
+									Delete
+								</Text>
+							</View>
+						</TouchableOpacity>
 					</View>
 				</View>
 			</ScrollView>
@@ -343,7 +356,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	bk_head: {
-		flex: 1,
+		flex: 2,
 	},
 	bk_headText: {
 		color: "#111",
@@ -353,6 +366,23 @@ const styles = StyleSheet.create({
 	},
 	bk_valueText: {
 		color: "#222",
+	},
+	controls: {
+		width: "100%",
+		flexDirection: "row",
+		justifyContent: "space-around",
+		alignItems: "center",
+	},
+	controlButton: {
+		width: 80,
+		height: 30,
+		backgroundColor: "#BADA55",
+		borderRadius: 10,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	btnText: {
+		color: "white",
 	}
 });
 

@@ -47,6 +47,7 @@ const _FAILED_REQ = FAILED_REQ;
 export { _FAILED_REQ as FAILED_REQ };
 
 export /*to books_view*/ function createSession(context, dispatch) {
+	
 	/*
 		Called when the app starts. OR
 		When a request fails due to an expired session
