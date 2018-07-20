@@ -247,7 +247,7 @@ function mapDispatchToProps(dispatch) {
 	return {
 		fetchMyBooks: ()=>fetchMyBooks(dispatch),
 		showMenu: ()=>showAddMethodSelectorMenu(dispatch),
-		showItemDetails: ()=>showItemDetails(dispatch),
+		showItemDetails: (i)=>showItemDetails(dispatch, i),
 	};
 }
 let ConnectedMyBooks = connect(

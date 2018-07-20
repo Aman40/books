@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Carousel from "react-native-looped-carousel";
-import {objectToString} from "../shared_components/shared_utilities";
+// import {objectToString} from "../shared_components/shared_utilities";
 import univ_const from "../../../univ_const.json";
 const host = univ_const.server_url;
 
@@ -22,7 +22,7 @@ class _BookDetails extends Component {
 	}
 
 	render() {
-		console.log(objectToString(this.props.book.images[0]));
+		// console.log(objectToString(this.props.book));
 		return (
 			<ScrollView>
 				<View style={styles.wrapper}>
@@ -287,6 +287,9 @@ class _BookDetails extends Component {
 					<View style={styles.controls}>
 						{/*Claim it controls.*/}
 						<TouchableOpacity
+							style={{
+								elevation: 5
+							}}
 							onPress={()=>console.log("Wanna edit, huh?")}>
 							<View
 								style={styles.controlButton}>
@@ -297,6 +300,9 @@ class _BookDetails extends Component {
 						</TouchableOpacity>
 
 						<TouchableOpacity
+							style={{
+								elevation: 5
+							}}
 							onPress={()=>console.log("You can have it!")}>
 							<View
 								style={styles.controlButton}>
@@ -349,37 +355,42 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "center",
 		flex: 1,
+		borderRadius: 5,
+		paddingHorizontal: 5,
+		backgroundColor: "black"
 	},
 	bk_row: {
 		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "center",
+		height: 42,
 	},
 	bk_head: {
 		flex: 2,
 	},
 	bk_headText: {
-		color: "#111",
+		color: "orange",
 	},
 	bk_value: {
 		flex: 4,
 	},
 	bk_valueText: {
-		color: "#222",
+		color: "white",
 	},
 	controls: {
 		width: "100%",
 		flexDirection: "row",
 		justifyContent: "space-around",
 		alignItems: "center",
+		height: 40,
 	},
 	controlButton: {
 		width: 80,
 		height: 30,
-		backgroundColor: "#BADA55",
-		borderRadius: 10,
+		backgroundColor: "teal",
 		justifyContent: "center",
 		alignItems: "center",
+		borderRadius: 10,
 	},
 	btnText: {
 		color: "white",
@@ -389,9 +400,7 @@ const styles = StyleSheet.create({
 //connect it.
 function mapStateToProps(state) {
 	return {
-		book: state.guiControl.searchMode?
-			state.books.searchResultsArr[state.books.clickedOn]:
-			state.books.booksArr[state.books.clickedOn],
+		book: state.myBooks.booksArr[state.myBooks.clickedOn],
 	};
 }
 function mapDispatchToProps(dispatch) {
