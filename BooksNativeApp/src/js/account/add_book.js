@@ -131,9 +131,10 @@ class _AddBookForm extends Component {
 		let state_copy;
 		//This checks store.booksToAdd.scannedBookMetaObj
 		if(Object.getOwnPropertyNames(this.props.book)) {
+			console.log(this.props.book);
 			state_copy = {
 				title: this.props.book.title?this.props.book.title:"",
-				authors: this.props.book.authors.length?this.props.book.authors.toString():"",
+				authors: this.props.book.authors?this.props.book.authors.toString():"",
 				edition: this.props.book.edition?this.props.book.edition:"",
 				language: this.props.book.language?this.props.book.language:"",
 				publisher: this.props.book.publisher?this.props.book.publisher:"",
@@ -143,7 +144,7 @@ class _AddBookForm extends Component {
 				description: this.props.book.description?this.props.book.description:"",
 				pages: this.props.book.pageCount?this.props.book.pageCount:"",
 				offer_expiry: getDateAfterMilliseconds(5184000000),//2 months from now
-				thumbnail: this.props.book.imageLinks.thumbnail?this.props.book.imageLinks.thumbnail:"",
+				thumbnail: this.props.book.imageLinks?this.props.book.imageLinks.thumbnail:"",
 			};
 		}
 		//TODO: Then set the location as the user's session's university

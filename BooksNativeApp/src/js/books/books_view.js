@@ -48,7 +48,7 @@ export default class BooksView extends Component {
 			this.props.fetchBooks((finished)=>{
 				console.log("Callback for books view in componentDidMount");
 				if(finished) {
-					console.log("Whyyyy the fuck not?!");
+					// console.log("Whyyyy the fuck not?!");
 					this.setState({
 						refreshing: false,
 						loading: false,

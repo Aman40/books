@@ -38,6 +38,16 @@ class _ScanScreen extends Component {
 					this.props.navigation.navigate("ScanPreview");
 				} else {
 					//Alert or something
+					Alert.alert(
+						"Error",
+						"Meta data for that book not found. Enter data manually.",
+						[
+							{text: "OK", onPress: ()=>{
+								this.props.navigation.goBack();
+							}}
+						],
+						{cancelable: false}
+					);
 				}
 			});
 		}
@@ -45,7 +55,7 @@ class _ScanScreen extends Component {
 	}
 
 	componentDidUpdate=()=>{
-		if(!this.props.wait && !this.props.show) {
+		if(!this.props.wait && !this.props.show && this.props.success) {
 			console.log("Reactivating");
 			this.scanner&&this.scanner.reactivate();
 		}

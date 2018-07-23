@@ -11,6 +11,7 @@ const store = createStore(
 			guiControl: reducers.guiControl,
 			booksToAdd: reducers.booksToAdd,
 			addNewBook: reducers.addNewBook,
+			deleteBook: reducers.deleteBook,
 		}
 	)
 );

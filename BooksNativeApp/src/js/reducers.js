@@ -309,7 +309,7 @@ export function booksToAdd(
 				isbn: ISBN.toIsbn13(action.payload.isbn),
 			},
 		};
-	case accountActions.ISBN_TO_META_FAIL:
+	case accountActions.ISBN_TO_META_ERROR:
 		return {
 			...state,
 			fetchingWait: false,
@@ -366,6 +366,36 @@ export function addNewBook(state={
 		return state;
 	}
 
+}
+export function deleteBook(state={
+	isDeletingBook: false,
+	deleteSuccess: false,
+	deleteError: null,
+},action) {
+	switch(action.type){
+	case accountActions.DELETING_BOOK:
+		return {
+			...state,
+			isDeletingBook: true,
+			deleteSuccess: false,
+			deleteError: null,
+		};
+	case accountActions.SUCCESS_DELETING_BOOK:
+		return {
+			...state,
+			isDeletingBook: false,
+			deleteSuccess: true,
+		};
+	case accountActions.ERROR_DELETING_BOOK:
+		return {
+			...state,
+			deleteSuccess: false,
+			isDeletingBook: false, //No need to wait anymore
+			deleteError: action.payload,
+		};
+	default:
+		return state;
+	}
 }
 //NOTES: Async functions should always dispatch 3 types of actions.
 //1. When the action starts and the result is pending

@@ -29,4 +29,8 @@ export const ADD_BOOK_ERROR = "failed to add a new book";
 //Showing an item's details
 //Tells the next navigator which item's index was clicked 
 //on. Payload is an integer representing the index of the clicked item in the array
-export const CLICKED_ITEM = "clicked_item_in_my_books"; 
+export const CLICKED_ITEM = "clicked_item_in_my_books";
+//Attempting to delete a book
+export const DELETING_BOOK = "deleting_my_book";
+export const SUCCESS_DELETING_BOOK = "deleted_my_book";
+export const ERROR_DELETING_BOOK = "error_deleting_book"; 

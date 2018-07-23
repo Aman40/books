@@ -408,11 +408,40 @@ export function fetchMyBooks(dispatch) {
 	xhr.onreadystatechange = function(){
 		if(this.readyState===4 && this.status===200) {
 			//console.log(this.responseText);
-			let Parser = new DOMParser();
+			let Parser = new DOMParser({
+				locator: {},
+				errorHandler: {
+					warning: ()=>{
+						console.log("Minor problems with your xml");
+						dispatch({
+							type: actions.ERROR_FETCHING_MY_BOOKS,
+							payload: "The server responded with a "+this.status,
+						});
+						return;
+					},
+					error: ()=>{
+						console.log("Major problems with your xml");
+						dispatch({
+							type: actions.ERROR_FETCHING_MY_BOOKS,
+							payload: "The server responded with a "+this.status,
+						});
+						return;
+					}
+				}
+			});
 			let xmlDoc = Parser.parseFromString(this.responseText);
-			let srv_res_status = parseInt(xmlDoc.getElementsByTagName("srv_res_status")[0].childNodes[0].nodeValue);
-			console.log("Account server response status: "+srv_res_status);
-
+			let srv_res_status;
+			try {
+				srv_res_status = xmlDoc.getElementsByTagName("srv_res_status")[0].childNodes[0].nodeValue;
+			} catch(e) {
+				console.log("The parser obviously didn't end it: "+e);
+				dispatch({
+					type: actions.ERROR_FETCHING_MY_BOOKS,
+					payload: "The server responded with a "+this.status,
+				});
+				return;
+			}
+			srv_res_status = parseInt(srv_res_status);
 			if(srv_res_status===0) {
 				//Success. We have some books. Fetch them into booksArr then change the offSet
 				//Extract the books as an object.
@@ -514,6 +543,7 @@ export function getMetaFromIsbn(dispatch, isbn, callback) {
 	 */
 	if(ISBN.isValidIsbn13(isbn)) {
 		//Convert to isbn10
+		// console.log("Converting to ISBN10");
 		isbn = ISBN.toIsbn10(isbn);
 	} else if(!ISBN.isValidIsbn10(isbn)) {
 		//Report reasons and return. RETURN!!
@@ -537,11 +567,12 @@ export function getMetaFromIsbn(dispatch, isbn, callback) {
 					msg: "Invalid ISBN",
 				}
 			});
-			console.log("Invalid isbn");
+			console.log("Invalid isbn. Nothing to do with -");
 			callback(false);
 			return;
 		}
 	}
+	console.log("ISBN to search: "+isbn);
 	//By this point, the ISBN is solid.
 	let xhr = new XMLHttpRequest();
 	xhr.responseType = "text";
@@ -559,13 +590,17 @@ export function getMetaFromIsbn(dispatch, isbn, callback) {
 		callback(false);
 	};
 	xhr.onreadystatechange = function() {
+		// console.log(`status: ${this.status}, readyState: ${this.readyState}`);
 		if(this.readyState===4 && this.status===200) {
 			//OK! Proceed to extract data and invoke callback.
 			//TODO: PICKUP
 			//Network problem??
 			const resultObj = JSON.parse(this.responseText);
+			console.log(resultObj);
+			// console.log("Total items: "+resultObj.totalItems);
 			if(!resultObj.totalItems) {
 				//Problems. No data found
+				console.log("Nothing found");
 				dispatch({
 					type: actions.ISBN_TO_META_ERROR,
 					payload: {
@@ -573,15 +608,17 @@ export function getMetaFromIsbn(dispatch, isbn, callback) {
 						msg: "No meta data in the database",
 					}
 				});
+				callback(false);
 			} else {
 				//Call the callback.
-				console.log(resultObj);
+				// console.log(resultObj);
+				console.log("Something found");
 				dispatch({
 					type: actions.ISBN_TO_META_SUCCESS,
 					payload: {isbn, resultObj:resultObj.items[0].volumeInfo},
 				});
 				callback(true);//The true=succeeded. false=failed. 
-			}
+			} 
 		} else if(this.readyState===4) {
 			//Server problem
 			console.log("Server Error");
@@ -593,12 +630,13 @@ export function getMetaFromIsbn(dispatch, isbn, callback) {
 				}
 			});
 			callback(false);
-		}
+		} 
 	};
 
 	xhr.open("GET", `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=AIzaSyCY-8-Rey7EZEmEacYR0RCMu9KapTItAOU`, true);
 
 	xhr.send();
+	console.log("Fetching started");
 	dispatch({
 		type: actions.ISBN_META_FETCH_START,
 		payload: "Fetching meta data",
@@ -730,6 +768,75 @@ export function resetScannedBookBuffer(dispatch) {
 	dispatch({
 		type: actions.RESET_SCANNED_BUFFER,
 		payload: null,
+	});
+}
+
+export function deleteBooks(dispatch, book_ids, callback) {
+	// console.log(`book_ids: ${book_ids}`);
+	/**
+	 * STATUS CODES: (Not to be confused with srv_res_status. TOTALLY DIFFERENT)
+	 * 0. Success
+	 * 1. Error deleting. (Server related)
+	 * 2. Request sent
+	 * 3. Possible captive portal or mangled server reponse.
+	 * 4. No internet connectivity
+	 * 5.
+	 */
+	let xhr = new XMLHttpRequest();
+	xhr.responseType = "text";
+	xhr.onreadystatechange = function(){
+		console.log(`Status: ${this.status}, readyState: ${this.readyState}`);
+		if(this.status===200 && this.readyState===4) {
+			console.log(this.responseText);
+			let resObj = JSON.parse(this.responseText);
+			let srv_res_status = parseInt(resObj.srv_res_status);
+
+			if(srv_res_status===0) {
+			//success. Dispatch or call callback
+				console.log("Success");
+				dispatch({
+					type: actions.SUCCESS_DELETING_BOOK,
+					payload: {
+						code: 0,
+						msg: "Successfully deleted book",
+					}
+				});
+				callback(true);
+			} else {
+			//Failure. Dispatch or call appropriate callback.
+			//Get the error info responsible for the failure
+				console.log("Failed: "+resObj.msg);
+				dispatch({
+					type: actions.ERROR_DELETING_BOOK,
+					payload: {
+						code: 1,
+						msg: "Error deleting book."+resObj.msg, 
+					}
+				});
+				callback(false);
+			}
+		} else if(this.status===4){
+			//Server is not running or problem accessing internet
+			console.log("Either the server isn't running or you have no internet access");
+			dispatch({
+				type: actions.ERROR_DELETING_BOOK,
+				payload: {
+					code: 4,
+					msg: "Check your internet connection"
+				}
+			});
+			callback(false);
+		} 
+	};
+
+	xhr.open("POST", `${host}/books/delete?booksArr=${JSON.stringify(book_ids)}`, true);
+	xhr.send();
+	dispatch({
+		type: actions.DELETING_BOOK,
+		payload: {
+			code: 2,
+			msg: "Request sent"
+		}
 	});
 }
 /*

@@ -10,6 +10,7 @@ import {
 	Image,
 	TouchableOpacity,
 } from "react-native";
+import { deleteBooks } from "./ac_dispatchers";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Carousel from "react-native-looped-carousel";
 // import {objectToString} from "../shared_components/shared_utilities";
@@ -303,7 +304,13 @@ class _BookDetails extends Component {
 							style={{
 								elevation: 5
 							}}
-							onPress={()=>console.log("You can have it!")}>
+							onPress={()=>{
+								// console.log("Deleting: "+this.props.book.BookID);
+								this.props.deleteBooks([this.props.book.BookID], (success)=>{
+									console.log(success?"Deleted":"NOT Deleted");
+									console.log("Done! This is the callback");
+								}); //Put the bookId[ and callback]
+							}}>
 							<View
 								style={styles.controlButton}>
 								<Text style={styles.btnText}>
@@ -399,18 +406,16 @@ const styles = StyleSheet.create({
 
 //connect it.
 function mapStateToProps(state) {
+	// console.log(JSON.stringify(state.myBooks.booksArr[state.myBooks.clickedOn]));
 	return {
 		book: state.myBooks.booksArr[state.myBooks.clickedOn],
+		deleteBookStatus: state.deleteBooks,
 	};
 }
 function mapDispatchToProps(dispatch) {
 	return ({
-		check: ()=>{
-			console.log("It's dispatching!");
-			dispatch({
-				type: "TESTING",
-				payload: "This is temporary"
-			});
+		deleteBooks: (book_ids, callback)=>{
+			deleteBooks(dispatch, book_ids, callback);
 		}
 	});
 }
