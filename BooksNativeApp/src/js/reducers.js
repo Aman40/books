@@ -2,6 +2,7 @@ import * as booksActions from "./books/books_actions";
 import * as accountActions from "./account/ac_actions";
 //import {objectToString} from "./shared_components/shared_utilities";
 import { isbn as ISBN } from "simple-isbn";
+import { actions as inetActions } from "./no_inet_gen_comp";
 
 export function books(
 	state={
@@ -136,6 +137,7 @@ export function session(state={
 	logoutWait: false,
 	logoutSuccess: false,
 	logoutErrorMsg: "",
+	hasInternet: false,
 }, action) {
 	switch (action.type) {
 	case accountActions.IS_LOGGING_IN:
@@ -148,6 +150,7 @@ export function session(state={
 			userData: "",
 			logoutSuccess: false,
 			loginErrorMsg: null,
+			hasInternet: false, //False until proven otherwise
 		};
 	case accountActions.LOGIN_SUCCESS:
 		console.log("We are logged in yo!");
@@ -157,8 +160,11 @@ export function session(state={
 			loginSuccess: true,
 			isLoggedIn: true,
 			userData: action.payload,
+			hasInternet: true,
 		};
 	case accountActions.LOGIN_ERROR:
+	//Send different error codes to determine whether connected to the 
+	//Internet or not.
 		return {
 			...state,
 			loginWait: false,
@@ -182,8 +188,11 @@ export function session(state={
 			isLoggedIn: false,
 			logoutSuccess: true,
 			userData: "",
+			hasInternet: true,
 		};
 	case accountActions.LOGOUT_ERROR:
+	//Send different error codes to determine whether connected to the 
+	//Internet or not.
 		return {
 			...state,
 			logoutSuccess: false,
@@ -392,6 +401,38 @@ export function deleteBook(state={
 			deleteSuccess: false,
 			isDeletingBook: false, //No need to wait anymore
 			deleteError: action.payload,
+		};
+	default:
+		return state;
+	}
+}
+
+export function noInternet(state={
+	retrying: false,
+	restored: false,
+	failed: null,
+	loggedIn: false,
+},action) {
+	switch(action.type) {
+	case inetActions.STARTED_REFRESHING:
+		return {
+			...state,
+			restored: false,
+			failed: false,
+		};
+	case inetActions.ERROR_REFRESHING:
+		return {
+			...state,
+			retrying: false,
+			restored: false,
+			failed: true,
+		};
+	case inetActions.SUCCESS_REFRESHING:
+		return {
+			...state,
+			retrying: false,
+			restored: true,
+			failed: false,
 		};
 	default:
 		return state;

@@ -12,6 +12,7 @@ const store = createStore(
 			booksToAdd: reducers.booksToAdd,
 			addNewBook: reducers.addNewBook,
 			deleteBook: reducers.deleteBook,
+			noInternet: reducers.noInternet,
 		}
 	)
 );

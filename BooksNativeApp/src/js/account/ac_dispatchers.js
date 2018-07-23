@@ -717,7 +717,7 @@ export function submitNewBook(dispatch, data, callback) {
 				for(let i=0; i<errArray.length; i++) {
 					err_obj[errArray[i].param] = errArray[i].msg;
 				}
-				console.log("What went wrong: "+JSON.stringify(err_obj));
+				// console.log("What went wrong: "+JSON.stringify(err_obj));
 				//Dispatch
 				dispatch({
 					type: actions.ADD_BOOK_ERROR,
@@ -755,7 +755,7 @@ export function submitNewBook(dispatch, data, callback) {
 		}
 	};
 
-	console.log(JSON.stringify(fd.toString()));
+	// console.log(JSON.stringify(fd.toString()));
 	xhr.open("POST", `${host}/books/alter/add?${fd.toString()}`, true);
 	xhr.send();
 	dispatch({

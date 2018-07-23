@@ -43,7 +43,7 @@ export default PastPaperStack;
 const styles = StyleSheet.create({
 	wrapper: {
 		flex: 1,
-		width: 400,
+		width: "100%",
 		justifyContent: "center",
 		alignItems: "center",
 	},
