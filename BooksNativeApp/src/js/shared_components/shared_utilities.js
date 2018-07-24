@@ -88,6 +88,7 @@ export const langISO6391 = {
 	th: "Thai",
 	tr: "Turkish",
 	vi: "Vietnamese",
+	ot: "Other"
 };
 
 import React, { Component } from "react";

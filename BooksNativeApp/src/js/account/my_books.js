@@ -17,6 +17,7 @@ import {
 	showItemDetails,
 } from "./ac_dispatchers";
 import univ_const from "../../../univ_const.json";
+import { langISO6391 } from "../shared_components/shared_utilities";
 const host = univ_const.server_url;
 //import {objectToString} from "../shared_components/shared_utilities";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -143,7 +144,7 @@ class BookView extends Component {
 								by: {this.props.book.Authors}
 							</Text>
 							<Text style={styles.bk_contentValue}>
-								{this.props.book.Language==="english"?"English":"Japanese"}
+								{langISO6391[this.props.book.Language]}
 							</Text>
 							<Text style = {
 								{ 

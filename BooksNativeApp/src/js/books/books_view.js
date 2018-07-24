@@ -15,6 +15,7 @@ import {
 import univ_const from "../../../univ_const.json";
 import * as accountDispatchers from "../account/ac_dispatchers";
 import Spinner from "react-native-loading-spinner-overlay";
+import { langISO6391 } from "../shared_components/shared_utilities";
 
 // import {objectToString} from "../shared_components/shared_utilities";
 // Call create session with context {type: "START_UP", }
@@ -243,7 +244,7 @@ class BookView extends Component {
 							by: {this.props.book.Authors}
 						</Text>
 						<Text style={styles.bk_contentValue}>
-							{this.props.book.Language==="english"?"English":"Japanese"}
+							{langISO6391[this.props.book.Language]}
 						</Text>
 						<Text style = {
 							{ 
