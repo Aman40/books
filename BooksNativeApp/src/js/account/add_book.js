@@ -7,13 +7,13 @@ import {
 	View,
 	Text,
 	StyleSheet,
-	TextInput,
 	ScrollView,
 	DatePickerAndroid,
 	TouchableOpacity,
 	Picker,
 	Alert,
 } from "react-native";
+import { MyTextInput } from "../shared_components/shared_utilities";
 import store from "../store";
 import {connect, Provider,} from "react-redux";
 //import {objectToString} from "../shared_components/shared_utilities";
@@ -177,7 +177,7 @@ class _AddBookForm extends Component {
 							</Text>
 						</View>
 						<View style={styles.input}>
-							<TextInput
+							<MyTextInput
 								style={{
 									...StyleSheet.flatten(styles.textInput),
 									borderColor: this.state.errors.title.length?
@@ -202,7 +202,7 @@ class _AddBookForm extends Component {
 							</Text>
 						</View>
 						<View style={styles.input}>
-							<TextInput
+							<MyTextInput
 								placeholder={"E.g Aman Haman, Rajesh Kumar, Hay..."}
 								style={{
 									...StyleSheet.flatten(styles.textInput),
@@ -228,7 +228,8 @@ class _AddBookForm extends Component {
 							</Text>
 						</View>
 						<View style={styles.input}>
-							<TextInput
+							<MyTextInput
+								keyboardType={"numeric"}
 								style={{
 									...StyleSheet.flatten(styles.textInput),
 									borderColor: this.state.errors.pages.length?
@@ -253,7 +254,7 @@ class _AddBookForm extends Component {
 							</Text>
 						</View>
 						<View style={styles.input}>
-							<TextInput
+							<MyTextInput
 								style={{
 									...StyleSheet.flatten(styles.textInput),
 									borderColor: this.state.errors.edition.length?
@@ -313,7 +314,7 @@ class _AddBookForm extends Component {
 							</Text>
 						</View>
 						<View style={styles.input}>
-							<TextInput
+							<MyTextInput
 								style={{
 									...StyleSheet.flatten(styles.textInput),
 									borderColor: this.state.errors.publisher.length?
@@ -418,7 +419,7 @@ class _AddBookForm extends Component {
 							</Text>
 						</View>
 						<View style={styles.input}>
-							<TextInput
+							<MyTextInput
 								style={{
 									...StyleSheet.flatten(styles.textInput),
 									borderColor: this.state.errors.isbn.length?
@@ -443,7 +444,7 @@ class _AddBookForm extends Component {
 							</Text>
 						</View>
 						<View style={styles.input}>
-							<TextInput
+							<MyTextInput
 								style={{
 									...StyleSheet.flatten(styles.textInput),
 									borderColor: this.state.errors.condition.length?
@@ -468,7 +469,7 @@ class _AddBookForm extends Component {
 							</Text>
 						</View>
 						<View style={styles.input}>
-							<TextInput
+							<MyTextInput
 								style={{
 									...StyleSheet.flatten(styles.textInput),
 									borderColor: this.state.errors.location.length?
@@ -487,19 +488,26 @@ class _AddBookForm extends Component {
 					</View>
 
 
-					<View style={styles.inputGroup}>
-						<View style={styles.label}>
+					<View style={{
+						...StyleSheet.flatten(styles.inputGroup),
+						height: 140,
+					}}>
+						<View style={{
+							height: 35,
+						}}>
 							<Text style={styles.inputPromptText}>
 					Description: <Text style={{color: "red"}}>{this.state.errors.description}</Text>
 							</Text>
 						</View>
 						<View style={styles.input}>
-							<TextInput
+							<MyTextInput
+								multiline={true}
 								style={{
 									...StyleSheet.flatten(styles.textInput),
 									borderColor: this.state.errors.description.length?
 										"red":
 										styles.textInput.borderColor,
+									height: 105,
 								}}
 								onChangeText={(text)=>this.setState((()=>{
 									let new_values = { ...this.state.values, description: text };

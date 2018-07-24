@@ -6,6 +6,7 @@ import {
 	ScrollView,
 	TouchableOpacity,
 	Image,
+	TouchableWithoutFeedback
 	// Alert,
 } from "react-native";
 import {connect, Provider} from "react-redux";
@@ -106,51 +107,59 @@ class BookView extends Component {
 	//Receives book object as props.
 	render() {
 		return (
-			<TouchableOpacity
+			<TouchableWithoutFeedback
 				style={styles.bk_wrapper}
 				onPress={this.props.showDetails}
 			>
-				<View style={styles.bk_imageWrapper}>
-					<Image
-						resizeMode={"contain"}
-						style={styles.bk_image}
-						source={{uri: (()=>{
-							return this.props.book.Thumbnail?
-								this.props.book.Thumbnail.replace(/^http:/,"https:"):
-								`${host}/images/placeholder.jpg`;
-						})()}}
-					/>
-				</View>
-				<View style={styles.bk_contentWrapper}>
-					<View style={styles.bk_contentRow}>
-						< Text style = {
-							{ 
-								...StyleSheet.flatten(styles.bk_title),
-								color: "black"
-							}
-						} >
-							{this.props.book.Title}
-						</Text>
-						<Text style={styles.bk_contentValue}>
-							by: {this.props.book.Authors}
-						</Text>
-						<Text style={styles.bk_contentValue}>
-							{this.props.book.Language==="english"?"English":"Japanese"}
-						</Text>
-						<Text style = {
-							{ 
-								...StyleSheet.flatten(styles.bk_title),
-								color: "black"
-							}
-						} >
-							{this.props.book.Cover==="paper_back"?"Paperback":"Hardcover"}
-						</Text>
-						<Text style={styles.bk_contentValue}>
-							{"Pages: "+this.props.book.PageNo}
-						</Text>
+				<View style={{
+					flex: 1,
+					flexDirection: "row",
+					justifyContent: "center",
+					alignItems: "stretch",
+					paddingVertical: 10,
+				}}>
+					<View style={styles.bk_imageWrapper}>
+						<Image
+							resizeMode={"contain"}
+							style={styles.bk_image}
+							source={{uri: (()=>{
+								return this.props.book.Thumbnail?
+									this.props.book.Thumbnail.replace(/^http:/,"https:"):
+									`${host}/images/placeholder.jpg`;
+							})()}}
+						/>
+					</View>
+					<View style={styles.bk_contentWrapper}>
+						<View style={styles.bk_contentRow}>
+							< Text style = {
+								{ 
+									...StyleSheet.flatten(styles.bk_title),
+									color: "black"
+								}
+							} >
+								{this.props.book.Title}
+							</Text>
+							<Text style={styles.bk_contentValue}>
+								by: {this.props.book.Authors}
+							</Text>
+							<Text style={styles.bk_contentValue}>
+								{this.props.book.Language==="english"?"English":"Japanese"}
+							</Text>
+							<Text style = {
+								{ 
+									...StyleSheet.flatten(styles.bk_title),
+									color: "black"
+								}
+							} >
+								{this.props.book.Cover==="paper_back"?"Paperback":"Hardcover"}
+							</Text>
+							<Text style={styles.bk_contentValue}>
+								{"Pages: "+this.props.book.PageNo}
+							</Text>
+						</View>
 					</View>
 				</View>
-			</TouchableOpacity>
+			</TouchableWithoutFeedback>
 		);
 	}
 }
@@ -168,10 +177,8 @@ const styles = StyleSheet.create({
 	},
 	bk_wrapper: {
 		height: 120,
-		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "stretch",
-		paddingVertical: 10,
 	},
 	bk_imageWrapper: {
 		flex: 1,

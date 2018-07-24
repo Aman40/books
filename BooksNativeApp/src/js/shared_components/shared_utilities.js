@@ -89,3 +89,91 @@ export const langISO6391 = {
 	tr: "Turkish",
 	vi: "Vietnamese",
 };
+
+import React, { Component } from "react";
+import {
+	View,
+	Text,
+	TouchableWithoutFeedback,
+	TextInput,
+	StyleSheet,
+} from "react-native";
+
+export class MyTextInput extends Component {
+	constructor(props) {
+		super(props);
+		this.state={
+			mode: "display", //Other: "edit"
+			textIsPlaceholder: !this.props.value,
+		};
+	}
+	_switchToEdit=()=>{
+		this.setState({mode: "edit"});
+	}
+	_switchToDisplay=()=>{
+		this.setState({mode: "display"});
+	}
+	componentDidMount=()=>{
+		console.log(Object.getOwnPropertyNames(this));
+	}
+	//Receives props [value, underlineColorAndroid, onChangeText, style, placeholder]
+	render(){
+		if(this.state.mode==="display") {
+			return (
+				<TouchableWithoutFeedback
+					onPress={this._switchToEdit}
+				>
+					<View>
+						<Text 
+							numberOfLines={this.props.numberOfLines?
+								this.props.numberOfLines:
+								1}
+							style={{
+								borderWidth: 1,
+								padding: 5,
+								borderRadius: 5,
+								...StyleSheet.flatten(this.props.style),
+								color: (()=>{
+									if(!this.props.value) {
+										console.log("Is a placeholder");
+										//Check if the user provided a custom placeholder color
+										//and return it. Else, return the default 
+										//(my default for now)
+										return this.props.placeholderTextColor?
+											this.props.placeholderTextColor:
+											"gray";
+									} else {
+										console.log("Not a placeholder");
+										//It's not a placeholder
+										//Return the user custom color if any, 
+										//Otherwise, use black
+										return this.props.color?
+											this.props.color:
+											"#333";
+									}
+								})(),
+								backgroundColor: "#EEE",
+							}}>
+							{this.props.value?this.props.value:this.props.placeholder}
+						</Text>
+					</View>
+				</TouchableWithoutFeedback>
+			);
+		} else { //edit
+			return (
+				<TextInput 
+					{...this.props}
+					autoFocus={true}
+					style={{
+						...StyleSheet.flatten(this.props.style),
+					}}
+					onEndEditing={this._switchToDisplay}
+					onChangeText={this.props.onChangeText?
+						(text)=>this.props.onChangeText(text):
+						null}
+					
+				/>
+			);
+		}
+	}
+}
