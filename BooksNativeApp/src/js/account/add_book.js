@@ -397,16 +397,17 @@ class _AddBookForm extends Component {
 						</View>
 						<View style={styles.input}>
 							<Picker
-								onValueChange={(val, )=>this.setState((()=>{
+								onValueChange={(val)=>this.setState((()=>{
+									console.log("Selected: "+val);
 									let new_values = { ...this.state.values, binding: val };
 									return {values: new_values};
 								})())}
-								selectedValue={this.state.binding}
+								selectedValue={this.state.values.binding}
 								style={styles.bindingPicker}
 								itemStyle={styles.bindingPickerText}
 							>
-								<Picker.Item label={"Paperback"} value={"paper_back"}/>
-								<Picker.Item label={"Hardcover"} value={"hard_back"}/>
+								<Picker.Item label={"Paperback"} value={"paperback"}/>
+								<Picker.Item label={"Hardcover"} value={"hardcover"}/>
 							</Picker>
 						</View>
 					</View>
