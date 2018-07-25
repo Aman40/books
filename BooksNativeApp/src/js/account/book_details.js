@@ -13,6 +13,7 @@ import {
 import { deleteBooks, pullDatabaseChanges } from "./ac_dispatchers";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Carousel from "react-native-looped-carousel";
+import { langISO6391 } from "../shared_components/shared_utilities";
 // import {objectToString} from "../shared_components/shared_utilities";
 import univ_const from "../../../univ_const.json";
 const host = univ_const.server_url;
@@ -170,7 +171,7 @@ class _BookDetails extends Component {
 							</View>
 							<View style={styles.bk_value}>
 								<Text style={styles.bk_valueText}>
-									{this.props.book.Language}
+									{langISO6391[this.props.book.Language]}
 								</Text>
 							</View>
 						</View>
@@ -181,7 +182,7 @@ class _BookDetails extends Component {
 							</View>
 							<View style={styles.bk_value}>
 								<Text style={styles.bk_valueText}>
-									{this.props.book.Cover}
+									{this.props.book.Binding}
 								</Text>
 							</View>
 						</View>

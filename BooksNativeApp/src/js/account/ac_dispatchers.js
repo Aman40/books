@@ -724,6 +724,7 @@ export function submitNewBook(dispatch, data, callback) {
 	 * 3: Unknown server error
 	 * 4: Failed form validation
 	 */
+	console.log(data);
 	let fd = new MyFormData();
 	let keys = Object.getOwnPropertyNames(data);
 	for(let i=0;i<keys.length;i++) {
@@ -792,6 +793,7 @@ export function submitNewBook(dispatch, data, callback) {
 					type: actions.ADD_BOOK_SUCCESS,
 					payload: data.isbn, //Add the isbn13 to the list of those already scanned successfully
 				}); 
+				pullDatabaseChanges(dispatch);
 				//What better time to call the callback?
 				callback(true);
 			} else if(srv_res_status===8) {

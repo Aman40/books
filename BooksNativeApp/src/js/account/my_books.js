@@ -224,7 +224,7 @@ class BookView extends Component {
 									color: "black"
 								}
 							} >
-								{this.props.book.Cover==="paper_back"?"Paperback":"Hardcover"}
+								{this.props.book.Binding==="paperback"?"Paperback":"Hardcover"}
 							</Text>
 							<Text style={styles.bk_contentValue}>
 								{"Pages: "+this.props.book.PageNo}

@@ -14,7 +14,7 @@ import {
 	connect,
 	Provider
 } from "react-redux";
-const ISBN = require("simple-isbn").isbn;
+// const ISBN = require("simple-isbn").isbn;
 
 class _ScanScreen extends Component {
 	onSuccess(e) {

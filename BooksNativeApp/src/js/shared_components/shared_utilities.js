@@ -114,9 +114,6 @@ export class MyTextInput extends Component {
 	_switchToDisplay=()=>{
 		this.setState({mode: "display"});
 	}
-	componentDidMount=()=>{
-		console.log(Object.getOwnPropertyNames(this));
-	}
 	//Receives props [value, underlineColorAndroid, onChangeText, style, placeholder]
 	render(){
 		if(this.state.mode==="display") {
