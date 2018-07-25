@@ -400,7 +400,7 @@ export function logout(dispatch) {
 }	
 
 
-export function fetchMyBooks(dispatch) {
+export function fetchMyBooks(dispatch, callback) {
 	//Fetches all the books (closest to user's location)
 	//Change the url
 	let xhr = new XMLHttpRequest();
@@ -439,6 +439,7 @@ export function fetchMyBooks(dispatch) {
 					type: actions.ERROR_FETCHING_MY_BOOKS,
 					payload: "The server responded with a "+this.status,
 				});
+				callback(false);
 				return;
 			}
 			srv_res_status = parseInt(srv_res_status);
@@ -451,6 +452,7 @@ export function fetchMyBooks(dispatch) {
 					type: actions.SUCCESS_FETCHING_MY_BOOKS,
 					payload: booksArr, //Array
 				});
+				callback(true);
 			} else if(srv_res_status===3) {
 				//No results
 				console.log("No results");
@@ -459,6 +461,7 @@ export function fetchMyBooks(dispatch) {
 					payload: "No results found",
 					//TODO NECESSARY: Use status codes depending on the error
 				});
+				callback(false);
 			} else if(srv_res_status===9) {
 				/*
 					User is not logged in. The magic begins. 
@@ -486,6 +489,7 @@ export function fetchMyBooks(dispatch) {
 					type: actions.ERROR_FETCHING_MY_BOOKS,
 					payload: "Bad server response status.",
 				});
+				callback(false);
 			}
 		} else {
 			//An error occured.
@@ -495,6 +499,7 @@ export function fetchMyBooks(dispatch) {
 					type: actions.ERROR_FETCHING_MY_BOOKS,
 					payload: `Possible internal server error. Status: ${this.status}`,
 				});
+				callback(false);
 			}
 		}
 	};

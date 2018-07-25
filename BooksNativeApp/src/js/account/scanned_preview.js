@@ -31,7 +31,7 @@ class _ScanPreview extends Component {
 		 * Navigate back AND Erase the data from the store
 		 */
 		this.props.resetScannedBookBuffer();
-		this.props.navigation.goBack();
+		this.props.navigation.navigate("BarcodeScanner");
 	}
 	next=()=>{
 		/**

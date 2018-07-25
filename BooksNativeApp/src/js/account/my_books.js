@@ -6,7 +6,8 @@ import {
 	ScrollView,
 	TouchableOpacity,
 	Image,
-	TouchableWithoutFeedback
+	TouchableWithoutFeedback,
+	RefreshControl
 	// Alert,
 } from "react-native";
 import {connect, Provider} from "react-redux";
@@ -22,13 +23,57 @@ const host = univ_const.server_url;
 //import {objectToString} from "../shared_components/shared_utilities";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MethodSelectorMenu from "./slct_bk_add_method";
+import Spinner from "react-native-loading-spinner-overlay";
+
 
 class _MyBooks /*to ac_tabnav.js*/ extends Component {
+	constructor(props){
+		super(props);
+		this.state = {
+			refreshing: false,
+			loading: false, //For the loading screen
+		};
+	}
 	componentDidMount = ()=>{
-		this.props.fetchMyBooks();
+		this.setState({refreshing: false, loading: true});
+		this.props.fetchMyBooks((finished)=>{
+			if(finished){
+				//Do something
+			} else {
+				//Alert an error or something
+			}
+			this.setState({
+				refreshing: false,
+				loading: false,
+			});
+		});
+	}
+	_onRefresh=(finished)=>{
+		this.setState({refreshing: true});
+		this.props.fetchMyBooks(()=>{
+			console.log("Done fetching my books");
+			if(finished){
+				//Alert or something
+			} else {
+				//Alert an error or something
+			}
+			this.setState({
+				refreshing: false,
+				loading: false,
+			});
+		});
 	}
 
 	render() {
+		//Instantiate the loading spinner
+		let loadingSpinner = (
+			<Spinner 
+				visible={true} 
+				textContent={"Loading..."} 
+				textStyle={{color: "#FFF"}} 
+				overlayColor={"rgba(0, 0, 0, 0.5)"}
+			/>);
+
 		let books = [];
 		let errReport = "";
 		if(this.props.books.isFetching) {
@@ -61,7 +106,7 @@ class _MyBooks /*to ac_tabnav.js*/ extends Component {
 					</View>
 				);
 			}
-		} else {
+		} else if(this.props.books.fetchErrorString) {
 			//Error is implied
 			errReport = (
 				<View>
@@ -74,6 +119,7 @@ class _MyBooks /*to ac_tabnav.js*/ extends Component {
 
 		return (
 			<View style={styles.container}>
+				{this.state.loading&&loadingSpinner}
 				<View style={styles.controls}>
 					<TouchableOpacity 
 						style={styles.addbk}
@@ -96,8 +142,14 @@ class _MyBooks /*to ac_tabnav.js*/ extends Component {
 						justifyContent:"flex-start",
 						alignItems: "stretch"
 					}}
+					refreshControl={
+						<RefreshControl
+							refreshing={this.state.refreshing}
+							onRefresh={this._onRefresh}
+						/>
+					}
 				>
-					{books.length?books: errReport}
+					{books.length?books: nulls}
 				</ScrollView>
 			</View>
 		);
@@ -253,7 +305,7 @@ function mapStateToProps(state) {
 }
 function mapDispatchToProps(dispatch) {
 	return {
-		fetchMyBooks: ()=>fetchMyBooks(dispatch),
+		fetchMyBooks: (callback)=>fetchMyBooks(dispatch, callback),
 		showMenu: ()=>showAddMethodSelectorMenu(dispatch),
 		showItemDetails: (i)=>showItemDetails(dispatch, i),
 	};

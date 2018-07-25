@@ -77,7 +77,10 @@ class _ScanScreen extends Component {
 				bottomContent={
 					<TouchableOpacity
 						style={styles.buttonTouchable}
-						onPress={()=>this.props.navigation.navigate("Switch")}
+						onPress={()=>{
+							console.log(Object.getOwnPropertyNames(this.props.navigation));
+							this.props.navigation.pop();
+						}}
 					>
 						<Text style={styles.buttonText}>
 							{this.props.wait?"Processing... Wait": "Finish"}

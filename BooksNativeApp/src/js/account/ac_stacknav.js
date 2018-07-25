@@ -10,10 +10,9 @@ import {StackNavigator} from "react-navigation";
 import SignIn from "./view_signin";
 import Switch from "./ac_switch";
 import TitleBar from "./titlebar";
-import ScanScreen from "./barcode_scanner";
-import AddBook from "./add_book";
-import ScanPreview from "./scanned_preview";
+import AddBook from "./add_book_stack";
 import ConnectedBookDetails from "./book_details";
+import ScanRoutine from "./scan_routine_switch_nav";
 
 let AccountStack = StackNavigator(
 	{
@@ -39,34 +38,17 @@ let AccountStack = StackNavigator(
 				title: "Sign In",
 			}
 		},
-		BarcodeScanner: {
-			screen: ScanScreen,
-			navigationOptions: {
-				//todo
-			}
-		},
 		AddBook: {
 			screen: AddBook,
-		},
-		ScanPreview: {
-			screen: ScanPreview,
-			navigationOptions: ({navigation, screenProps})=>{
-				return {
-					header: (headerProps)=>{
-						return (<TitleBar
-							navigation={navigation}
-							screenProps={screenProps}
-							headerProps={headerProps}
-						/>);
-					}
-				};
-			}
 		},
 		BookDetails: {
 			screen: ConnectedBookDetails,
 			navigationOptions: {
 				title: "BookDetails"
 			}
+		},
+		ScanRoutine: {
+			screen: ScanRoutine
 		}
 	},
 );
