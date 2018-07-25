@@ -10,7 +10,7 @@ import {
 	Image,
 	TouchableOpacity,
 } from "react-native";
-import { deleteBooks } from "./ac_dispatchers";
+import { deleteBooks, pullDatabaseChanges } from "./ac_dispatchers";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Carousel from "react-native-looped-carousel";
 // import {objectToString} from "../shared_components/shared_utilities";
@@ -312,8 +312,8 @@ class _BookDetails extends Component {
 									//Go back and refresh.
 									this.props.navigation.goBack();
 									//Dispatch a change action to the store
+									this.props.pullDbChanges();
 									//myBooks, upon detecting the change should refresh
-									//And 
 								}); //Put the bookId[ and callback]
 							}}>
 							<View
@@ -421,6 +421,9 @@ function mapDispatchToProps(dispatch) {
 	return ({
 		deleteBooks: (book_ids, callback)=>{
 			deleteBooks(dispatch, book_ids, callback);
+		},
+		pullDbChanges: ()=>{
+			pullDatabaseChanges(dispatch);
 		}
 	});
 }

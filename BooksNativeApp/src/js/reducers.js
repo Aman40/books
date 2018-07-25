@@ -89,6 +89,7 @@ export function myBooks(
 		searchStatusString: "",
 		searchErrorString: "",
 		searchResultsArr: [],
+		shouldPullDB: false, //Poll db or not
 	}, action
 ) {
 	switch (action.type) {
@@ -98,7 +99,6 @@ export function myBooks(
 			isFetching: true,
 			successFetching: false,
 			fetchErrorString: null,
-			booksArr: [],			
 			fetchStatusString: "Fetching books",
 		};
 	case accountActions.SUCCESS_FETCHING_MY_BOOKS:
@@ -121,6 +121,11 @@ export function myBooks(
 		return {
 			...state,
 			clickedOn: action.payload,
+		};
+	case accountActions.SHOULD_PULL_DB:
+		return {
+			...state,
+			shouldPullDB: !state.shouldPullDB, //Reverse
 		};
 	default:
 		return state;

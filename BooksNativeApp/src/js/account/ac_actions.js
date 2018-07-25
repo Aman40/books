@@ -33,4 +33,6 @@ export const CLICKED_ITEM = "clicked_item_in_my_books";
 //Attempting to delete a book
 export const DELETING_BOOK = "deleting_my_book";
 export const SUCCESS_DELETING_BOOK = "deleted_my_book";
-export const ERROR_DELETING_BOOK = "error_deleting_book"; 
+export const ERROR_DELETING_BOOK = "error_deleting_book";
+//Setting/Unsetting the flag for whether or not to repoll the database
+export const SHOULD_PULL_DB = "to_poll_db_or_not";

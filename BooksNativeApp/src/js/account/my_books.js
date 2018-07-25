@@ -16,6 +16,7 @@ import {
 	fetchMyBooks,
 	showAddMethodSelectorMenu,
 	showItemDetails,
+	pullDatabaseChanges
 } from "./ac_dispatchers";
 import univ_const from "../../../univ_const.json";
 import { langISO6391 } from "../shared_components/shared_utilities";
@@ -35,6 +36,9 @@ class _MyBooks /*to ac_tabnav.js*/ extends Component {
 		};
 	}
 	componentDidMount = ()=>{
+		this._refresh();
+	}
+	_refresh=()=>{
 		this.setState({refreshing: false, loading: true});
 		this.props.fetchMyBooks((finished)=>{
 			if(finished){
@@ -52,7 +56,17 @@ class _MyBooks /*to ac_tabnav.js*/ extends Component {
 	componentDidUpdate=()=>{
 		//Refetch items if the store refresh bit (bool) is turned on.
 		//Then turn it off
-		
+		console.log("I updated");
+		if(this.props.pullChanges) {
+			//The databse has been updated
+			console.log("Refreshing");
+			this._refresh();
+			console.log("Flipping the switch");
+			this.props.pullDbChanges();
+		} else {
+			console.log("Nothing changed, no refreshing");
+		}
+		console.log("Done update routine");
 	}
 	_onRefresh=(finished)=>{
 		this.setState({refreshing: true});
@@ -307,6 +321,7 @@ function mapStateToProps(state) {
 	return {
 		books: state.myBooks,
 		show: state.guiControl.showBookAddMethodSelectorMenu,
+		pullChanges: state.myBooks.shouldPullDB,
 	};
 }
 function mapDispatchToProps(dispatch) {
@@ -314,6 +329,9 @@ function mapDispatchToProps(dispatch) {
 		fetchMyBooks: (callback)=>fetchMyBooks(dispatch, callback),
 		showMenu: ()=>showAddMethodSelectorMenu(dispatch),
 		showItemDetails: (i)=>showItemDetails(dispatch, i),
+		pullDbChanges: ()=>{
+			pullDatabaseChanges(dispatch);
+		}
 	};
 }
 let ConnectedMyBooks = connect(

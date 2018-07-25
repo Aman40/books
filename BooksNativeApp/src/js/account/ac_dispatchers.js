@@ -844,6 +844,16 @@ export function deleteBooks(dispatch, book_ids, callback) {
 		}
 	});
 }
+
+export function pullDatabaseChanges(dispatch){
+	//Toggle on/off
+	//May have to change it in future to have it send
+	//An explicit bool instead
+	dispatch({
+		type: actions.SHOULD_PULL_DB,
+		payload: null,
+	});
+}
 /*
 TODO
 1. Check for session check!
