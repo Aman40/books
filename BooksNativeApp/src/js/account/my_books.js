@@ -48,6 +48,12 @@ class _MyBooks /*to ac_tabnav.js*/ extends Component {
 			});
 		});
 	}
+
+	componentDidUpdate=()=>{
+		//Refetch items if the store refresh bit (bool) is turned on.
+		//Then turn it off
+		
+	}
 	_onRefresh=(finished)=>{
 		this.setState({refreshing: true});
 		this.props.fetchMyBooks(()=>{
@@ -149,7 +155,7 @@ class _MyBooks /*to ac_tabnav.js*/ extends Component {
 						/>
 					}
 				>
-					{books.length?books: nulls}
+					{books.length?books: null}
 				</ScrollView>
 			</View>
 		);

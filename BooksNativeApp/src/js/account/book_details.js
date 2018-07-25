@@ -309,6 +309,11 @@ class _BookDetails extends Component {
 								this.props.deleteBooks([this.props.book.BookID], (success)=>{
 									console.log(success?"Deleted":"NOT Deleted");
 									console.log("Done! This is the callback");
+									//Go back and refresh.
+									this.props.navigation.goBack();
+									//Dispatch a change action to the store
+									//myBooks, upon detecting the change should refresh
+									//And 
 								}); //Put the bookId[ and callback]
 							}}>
 							<View

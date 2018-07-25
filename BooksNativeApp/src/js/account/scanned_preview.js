@@ -38,7 +38,7 @@ class _ScanPreview extends Component {
 		 * Move data to the editor (AddBook). This, being a modal, cannot use
 		 * navigation. It therefore has to use the store
 		 */
-		this.props.navigation.navigate("AddBook");
+		this.props.navigation.navigate("EditBook");
 	}
 	
 	render() {
