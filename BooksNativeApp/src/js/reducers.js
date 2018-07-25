@@ -90,6 +90,7 @@ export function myBooks(
 		searchErrorString: "",
 		searchResultsArr: [],
 		shouldPullDB: false, //Poll db or not
+		isbnList: []
 	}, action
 ) {
 	switch (action.type) {
@@ -108,6 +109,12 @@ export function myBooks(
 			successFetching: true,
 			booksArr: action.payload, //obj expected
 			fetchStatusString: "Done fetching books",
+			isbnList: (()=>{
+				//An array of objects is in action.payload [{ISBN: "",...},{},...]
+				return action.payload.map((obj)=>{
+					return obj.ISBN;
+				});
+			})(),
 		};
 	case accountActions.ERROR_FETCHING_MY_BOOKS:
 		return {
@@ -126,6 +133,11 @@ export function myBooks(
 		return {
 			...state,
 			shouldPullDB: !state.shouldPullDB, //Reverse
+		};
+	case accountActions.ADD_BOOK_SUCCESS: //A bit foreign, this action type
+		return {
+			...state,
+			isbnList: state.isbnList.slice(0, state.isbnList.length).push(action.payload),
 		};
 	default:
 		return state;
@@ -290,7 +302,7 @@ export function booksToAdd(
 			 */
 		},
 		scannedBookMetaObject: {},
-		scannedIsbnList: [],
+		scannedIsbnList: [], //Deprecated
 	},
 	action
 ) {

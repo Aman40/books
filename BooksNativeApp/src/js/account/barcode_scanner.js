@@ -20,14 +20,14 @@ class _ScanScreen extends Component {
 	onSuccess(e) {
 		//Get the meta for each book and put it in the redux store before moving on to the next book
 		//Check if this has been scanned before before getting meta data
-		if(this.props.scannedIsbnList.includes(ISBN.toIsbn10(e.data))) {
+		if(this.props.scannedIsbnList.includes(e.data)) {
 			//Already scanned
 			//Display a modal or something.
 			Alert.alert(
 				"Error",
 				"Already scanned that book, idiot!",
 				[
-					{text: "OK", onPress: ()=>console.log("OK")}
+					{text: "OK", onPress: ()=>this.scanner&&this.scanner.reactivate()}
 				],
 				{cancelable: true}
 			);
@@ -40,10 +40,11 @@ class _ScanScreen extends Component {
 					//Alert or something
 					Alert.alert(
 						"Error",
-						"Meta data for that book not found. Enter data manually.",
+						this.props.errMsg,
 						[
 							{text: "OK", onPress: ()=>{
 								this.props.navigation.goBack();
+								this.scanner&&this.scanner.reactivate();
 							}}
 						],
 						{cancelable: false}
@@ -102,7 +103,7 @@ function mapStateToProps(state) {
 		errCode: state.booksToAdd.fetchMetaError.code,
 		errMsg: state.booksToAdd.fetchMetaError.msg,
 		addedBooks: state.booksToAdd.addedBooksList,
-		scannedIsbnList: state.booksToAdd.scannedIsbnList,
+		scannedIsbnList: state.myBooks.isbnList,
 	};
 }
 function mapDispatchToProps(dispatch) {

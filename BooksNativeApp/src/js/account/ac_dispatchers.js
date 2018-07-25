@@ -258,11 +258,40 @@ function _login(dispatch, credentials, callback) {
 	xhr.responseType = "text";
 	xhr.onreadystatechange = function() {
 		if(this.readyState===4 && this.status===200) {
-			let Parser = new DOMParser();
+			let Parser = new DOMParser({
+				locator: {},
+				errorHandler: {
+					warning: ()=>{
+						console.log("Minor problems with your xml");
+						dispatch({
+							type: actions.LOGIN_ERROR,
+							payload: "The server responded with a "+this.status,
+						});
+						return;
+					},
+					error: ()=>{
+						console.log("Major problems with your xml");
+						dispatch({
+							type: actions.LOGIN_ERROR,
+							payload: "The server responded with a "+this.status,
+						});
+						return;
+					}
+				}
+			});
 			let xmlDoc = Parser.parseFromString(this.responseText);
-
-			let srv_res_status = parseInt(xmlDoc.getElementsByTagName("srv_res_status")[0].childNodes[0].nodeValue);
-
+			let srv_res_status;
+			try {
+				srv_res_status = xmlDoc.getElementsByTagName("srv_res_status")[0].childNodes[0].nodeValue;
+			} catch(e) {
+				console.log("The parser obviously didn't end it: "+e);
+				dispatch({
+					type: actions.LOGIN_ERROR,
+					payload: "The server responded with a "+this.status,
+				});
+				return;
+			}
+			srv_res_status = parseInt(srv_res_status);
 			let usrDataObj = JSON.parse(xmlDoc.getElementsByTagName("usr_info")[0].childNodes[0].nodeValue);
 
 			if(srv_res_status===0) {
@@ -330,11 +359,41 @@ export function logout(dispatch) {
 	xhr.onreadystatechange = function(){
 		if(this.readyState===4 && this.status===200) {
 			//Successfully logged out. Dispatch logout_successful
-			let Parser = new DOMParser();
+			let Parser = new DOMParser({
+				locator: {},
+				errorHandler: {
+					warning: ()=>{
+						console.log("Minor problems with your xml");
+						dispatch({
+							type: actions.LOGOUT_ERROR,
+							payload: "The server responded with a "+this.status,
+						});
+						return;
+					},
+					error: ()=>{
+						console.log("Major problems with your xml");
+						dispatch({
+							type: actions.LOGOUT_ERROR,
+							payload: "The server responded with a "+this.status,
+						});
+						return;
+					}
+				}
+			});
 			let xmlDoc = Parser.parseFromString(this.responseText);
-
-			let srv_res_status = xmlDoc.getElementsByTagName("srv_res_status")[0].childNodes[0].nodeValue;
+			let srv_res_status;
+			try {
+				srv_res_status = xmlDoc.getElementsByTagName("srv_res_status")[0].childNodes[0].nodeValue;
+			} catch(e) {
+				console.log("The parser obviously didn't end it: "+e);
+				dispatch({
+					type: actions.LOGOUT_ERROR,
+					payload: "The server responded with a "+this.status,
+				});
+				return;
+			}
 			srv_res_status = parseInt(srv_res_status);
+
 			if(srv_res_status===0) {
 				console.log("Logging out: Step 1; done.");
 				//Delete the stored creds.
@@ -447,7 +506,7 @@ export function fetchMyBooks(dispatch, callback) {
 				//Success. We have some books. Fetch them into booksArr then change the offSet
 				//Extract the books as an object.
 				let booksArr = JSON.parse(xmlDoc.getElementsByTagName("bks_info")[0].childNodes[0].nodeValue);
-
+				console.log("Object structure: "+JSON.stringify(booksArr[0]));
 				dispatch({
 					type: actions.SUCCESS_FETCHING_MY_BOOKS,
 					payload: booksArr, //Array
@@ -540,13 +599,22 @@ export function hideAddMethodSelectorMenu(dispatch){
 
 export function getMetaFromIsbn(dispatch, isbn, callback) {
 	/**
+	 * 
 	 * 1. Check that it's a string.
 	 * 2. Check that there aren't any hyphenes
 	 * 3. Check if valid isbn10 then 13
 	 * if 10, OK. if 13, convert to 10. if invalid isbn, error, enter manually.
 	 * Use bookmooch api to get meta data as object
+	 * 
+	 * ERROR CODES
+	 * 0. Success
+	 * 1. Includes hyphene
+	 * 2. Invalid ISBN
+	 * 3. Request timed out
+	 * 4. No meta data in the db
+	 * 5. Server error
 	 */
-	if(ISBN.isValidIsbn13(isbn)) {
+	if(ISBN.isValidIsbn13(isbn)) {	
 		//Convert to isbn10
 		// console.log("Converting to ISBN10");
 		isbn = ISBN.toIsbn10(isbn);
@@ -557,7 +625,7 @@ export function getMetaFromIsbn(dispatch, isbn, callback) {
 			dispatch({
 				type: actions.ISBN_TO_META_ERROR,
 				payload: {
-					code: 0,
+					code: 1,
 					msg: "ISBN must not include a hyphene (-)",
 				}
 			});
@@ -568,7 +636,7 @@ export function getMetaFromIsbn(dispatch, isbn, callback) {
 			dispatch({
 				type: actions.ISBN_TO_META_ERROR,
 				payload: {
-					code: 0,
+					code: 2,
 					msg: "Invalid ISBN",
 				}
 			});
@@ -588,7 +656,7 @@ export function getMetaFromIsbn(dispatch, isbn, callback) {
 		dispatch({
 			type: actions.ISBN_TO_META_ERROR,
 			payload: {
-				code: 1,
+				code: 3,
 				msg: "Request timeout. Check your network",
 			}
 		});
@@ -609,7 +677,7 @@ export function getMetaFromIsbn(dispatch, isbn, callback) {
 				dispatch({
 					type: actions.ISBN_TO_META_ERROR,
 					payload: {
-						code: 3,
+						code: 4,
 						msg: "No meta data in the database",
 					}
 				});
@@ -630,8 +698,8 @@ export function getMetaFromIsbn(dispatch, isbn, callback) {
 			dispatch({
 				type: actions.ISBN_TO_META_ERROR,
 				payload: {
-					code: 2,
-					msg: "Server Error. Try again later!",
+					code: 5,
+					msg: "Check your network. If it's fine then it must be our servers. Sowwi. :(",
 				}
 			});
 			callback(false);
@@ -679,10 +747,39 @@ export function submitNewBook(dispatch, data, callback) {
 	xhr.responseType = "text";
 	xhr.onreadystatechange = function(){
 		if(this.readyState===4 && this.status===200) {
-			let Parser = new DOMParser();
+			let Parser = new DOMParser({
+				locator: {},
+				errorHandler: {
+					warning: ()=>{
+						console.log("Minor problems with your xml");
+						dispatch({
+							type: actions.ADD_BOOK_ERROR,
+							payload: "The server responded with a "+this.status,
+						});
+						return;
+					},
+					error: ()=>{
+						console.log("Major problems with your xml");
+						dispatch({
+							type: actions.ADD_BOOK_ERROR,
+							payload: "The server responded with a "+this.status,
+						});
+						return;
+					}
+				}
+			});
 			let xmlDoc = Parser.parseFromString(this.responseText);
-
-			let srv_res_status = xmlDoc.getElementsByTagName("srv_res_status")[0].childNodes[0].nodeValue;
+			let srv_res_status;
+			try {
+				srv_res_status = xmlDoc.getElementsByTagName("srv_res_status")[0].childNodes[0].nodeValue;
+			} catch(e) {
+				console.log("The parser obviously didn't end it: "+e);
+				dispatch({
+					type: actions.ADD_BOOK_ERROR,
+					payload: "The server responded with a "+this.status,
+				});
+				return;
+			}
 			srv_res_status = parseInt(srv_res_status);
 			if(srv_res_status===0) {
 				/**
@@ -693,8 +790,8 @@ export function submitNewBook(dispatch, data, callback) {
 				 */
 				dispatch({
 					type: actions.ADD_BOOK_SUCCESS,
-					payload: null,
-				});
+					payload: data.isbn, //Add the isbn13 to the list of those already scanned successfully
+				}); 
 				//What better time to call the callback?
 				callback(true);
 			} else if(srv_res_status===8) {
@@ -854,6 +951,7 @@ export function pullDatabaseChanges(dispatch){
 		payload: null,
 	});
 }
+
 /*
 TODO
 1. Check for session check!
