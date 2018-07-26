@@ -5,6 +5,7 @@ import {
 	Text,
 } from "react-native";
 import {StackNavigator} from "react-navigation";
+import univ_const from "../../../univ_const";
 
 //import MapView from "react-native-maps";
 class PastPapersHome extends Component {
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
 	},
 	soon: {
 		fontSize: 24,
-		color: "#3465A4",
+		color: univ_const.alt_theme_color,
 		fontWeight: "bold",
 	},
 	text: {

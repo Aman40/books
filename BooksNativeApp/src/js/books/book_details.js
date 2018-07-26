@@ -13,7 +13,7 @@ import {
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Carousel from "react-native-looped-carousel";
 import {objectToString} from "../shared_components/shared_utilities";
-import univ_const from "../../../univ_const.json";
+import univ_const from "../../../univ_const";
 const host = univ_const.server_url;
 
 class _BookDetails extends Component {

@@ -12,7 +12,7 @@ import {
 	ImageBackground,
 	RefreshControl
 } from "react-native";
-import univ_const from "../../../univ_const.json";
+import univ_const from "../../../univ_const";
 import * as accountDispatchers from "../account/ac_dispatchers";
 import Spinner from "react-native-loading-spinner-overlay";
 import { langISO6391 } from "../shared_components/shared_utilities";

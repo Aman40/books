@@ -1,6 +1,6 @@
 import * as actions from "./ac_actions";
 import { DOMParser } from "xmldom";
-import univ_const from "../../../univ_const.json";
+import univ_const from "../../../univ_const";
 const host = univ_const.server_url;
 import {AsyncStorage} from "react-native";
 import {objectToString} from "../shared_components/shared_utilities";
@@ -616,7 +616,6 @@ export function getMetaFromIsbn(dispatch, isbn, callback) {
 	 */
 	if(ISBN.isValidIsbn13(isbn)) {	
 		//Convert to isbn10
-		// console.log("Converting to ISBN10");
 		isbn = ISBN.toIsbn10(isbn);
 	} else if(!ISBN.isValidIsbn10(isbn)) {
 		//Report reasons and return. RETURN!!

@@ -15,6 +15,7 @@ import store from "../store";
 import React, {Component} from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import {searchBook, toggleSearchMode} from "./books_dispatchers";
+import univ_const from "../../../univ_const";
 //import {objectToString} from "../shared_components/shared_utilities";
 
 class _TitleBar extends Component {
@@ -199,7 +200,7 @@ const styles = StyleSheet.create({
 	titleTop: {
 		alignSelf: "center",
 		height: 56,
-		backgroundColor: "#6A9B9C",
+		backgroundColor: univ_const.alt_theme_color,
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "stretch"

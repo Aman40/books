@@ -1,7 +1,7 @@
 /*jshint esversion: 6 */
 import * as booksActions from "./books_actions";
 let DOMParser = require("xmldom").DOMParser;
-import univ_const from "../../../univ_const.json";
+import univ_const from "../../../univ_const";
 import * as accountDispatchers from "../account/ac_dispatchers";
 const host = univ_const.server_url;
 

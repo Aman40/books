@@ -9,6 +9,7 @@ import {
 	Text,
 	TouchableOpacity,
 } from "react-native";
+import univ_const from "../../../univ_const";
 
 class SignUpIn extends Component {
 	constructor(props) {
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
 		color: "white",
 	},
 	btn: {
-		backgroundColor: "#6A9B9C",
+		backgroundColor: univ_const.alt_theme_color,
 		elevation: 10,
 		paddingHorizontal: 5,
 		paddingVertical: 5,

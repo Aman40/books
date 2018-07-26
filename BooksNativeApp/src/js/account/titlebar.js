@@ -16,6 +16,7 @@ import {
 	showAccountMenu,
 } from "./ac_dispatchers";
 import Menu from "./account_menu";
+import univ_const from "../../../univ_const";
 
 class _TitleBar extends Component {
 	constructor(props){
@@ -103,7 +104,7 @@ const styles = StyleSheet.create({
 	wrapper: {
 		alignSelf: "center",
 		height: 56,
-		backgroundColor: "#6A9B9C",
+		backgroundColor: univ_const.alt_theme_color,
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "stretch"
