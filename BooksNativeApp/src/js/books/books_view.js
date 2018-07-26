@@ -248,7 +248,6 @@ class BookView extends Component {
 						</Text>
 						<Text style = {
 							{ 
-								...StyleSheet.flatten(styles.bk_title),
 								color: "black"
 							}
 						} >
