@@ -9,18 +9,27 @@ import {
 	ScrollView,
 	Image,
 	Button,
+	TouchableWithoutFeedback
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Carousel from "react-native-looped-carousel";
 import {objectToString} from "../shared_components/shared_utilities";
 import univ_const from "../../../univ_const";
 const host = univ_const.server_url;
+import { langISO6391 } from "../shared_components/shared_utilities";
 
 class _BookDetails extends Component {
 	constructor(props) {
 		super(props);
+		this.state={
+			boolScaleModeToggle: false,
+		};
 	}
-
+	_toggleResizeMode=()=>{
+		this.setState({
+			boolScaleModeToggle: !this.state.boolScaleModeToggle
+		});
+	}
 	render() {
 		console.log(objectToString(this.props.book.images[0]));
 		return (
@@ -96,35 +105,68 @@ class _BookDetails extends Component {
 									let carouselImgs = [];
 									for(let i = 0; i<this.props.book.images;i++){
 										carouselImgs.push(
-											<View key={this.props.book.images[i].ImgID} 
-												style={styles.imageWrapper}>
-												<Image 
-													source={{uri: `${host}/images/${this.props.book.images[i].ImgID}.jpeg`}}
-													style={styles.image}
-													resizeMode={"contain"}
-												/>
+											
+											<View  
+												key={this.props.book.images[i].ImgID}
+												style={styles.imageWrapper}
+											>
+												<TouchableWithoutFeedback
+													onPress={this._toggleResizeMode}
+													style={{
+														width: "100%",
+														flex: 1,
+													}}
+												>
+													<Image 
+														source={{uri: `${host}/images/${this.props.book.images[i].ImgID}.jpeg`}}
+														style={styles.image}
+														resizeMode={this.state.boolScaleModeToggle?"contain":"center"}
+													/>
+												</TouchableWithoutFeedback>	
 											</View>
+											
 										);
 									}
 									if(this.props.book.Thumbnail) {
 										carouselImgs.push(
-											<View key={"thumbnail"} style={styles.imageWrapper}>
-												<Image 
-													source={{uri: this.props.book.Thumbnail.replace(/^http:/,"https:")}}
-													style={styles.image}
-													resizeMode={"contain"}
-												/>
+											<View 
+												key={"thumbnail"}
+												style={styles.imageWrapper}
+											>
+												<TouchableWithoutFeedback
+													onPress={this._toggleResizeMode}
+													style={{
+														width: "100%",
+														flex: 1,
+													}}
+												>
+													<Image 
+														source={{uri: this.props.book.Thumbnail.replace(/^http:/,"https:")}}
+														style={styles.image}
+														resizeMode={this.state.boolScaleModeToggle?"contain":"center"}
+													/>
+												</TouchableWithoutFeedback>
 											</View>
+											
 										);
 									}
 									if(!carouselImgs.length){
 										carouselImgs.push(
 											<View key={"default"} style={styles.imageWrapper}>
-												<Image 
-													source={{uri: `${host}/images/placeholder.jpg`}}
-													style={styles.image}
-													resizeMode={"contain"}
-												/>
+												<TouchableWithoutFeedback
+													onPress={this._toggleResizeMode}
+													style={{
+														width: "100%",
+														flex: 1,
+													}}
+												>
+													<Image 
+														source={{uri: `${host}/images/placeholder.jpg`}}
+														style={styles.image}
+														resizeMode={this.state.boolScaleModeToggle?"contain":"center"}
+													/>
+												</TouchableWithoutFeedback>
+												
 											</View>
 										);
 									}
@@ -138,11 +180,6 @@ class _BookDetails extends Component {
 
 					<View>
 						{/*Price*/}
-						<Text style={{color: "#333", fontSize: 18}}>
-							Price: JPY <Text style={{color: "red", fontSize: 18}}>
-								{this.props.book.Price}
-							</Text>
-						</Text>
 					</View>
 
 					<View style={styles.availability}>
@@ -169,7 +206,7 @@ class _BookDetails extends Component {
 							</View>
 							<View style={styles.bk_value}>
 								<Text style={styles.bk_valueText}>
-									{this.props.book.Language}
+									{langISO6391[this.props.book.Language]}
 								</Text>
 							</View>
 						</View>
@@ -289,7 +326,7 @@ class _BookDetails extends Component {
 						<Button
 							onPress={()=>console.log("You can have it!")}
 							title={"Request"}
-							color={"#BADA55"}
+							color={univ_const.alt_theme_color}
 							accessibilityLabel={"Request for this book"}
 						/>
 					</View>
@@ -324,7 +361,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: "center",
 		alignItems: "center",
-		backgroundColor: "white",
+		backgroundColor: "#EEEEEE",
 	},
 	image: {
 		flex: 1,
@@ -336,23 +373,31 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "center",
 		flex: 1,
+		borderRadius: 5,
+		padding: 5,
+		// backgroundColor: "#EEEEEE"
 	},
 	bk_row: {
 		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "center",
+		paddingVertical: 5,
+		// height: 42,
 	},
 	bk_head: {
-		flex: 1,
+		flex: 2,
 	},
 	bk_headText: {
-		color: "#111",
+		color: "#F57900",
+		fontWeight: "bold",
+		fontSize: 14
 	},
 	bk_value: {
 		flex: 4,
 	},
 	bk_valueText: {
-		color: "#222",
+		color: "#777",
+		fontSize: 14,
 	}
 });
 
