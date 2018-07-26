@@ -3,12 +3,15 @@ import {
 	View,
 	StyleSheet,
 	Text,
-	Button,
+	// Button,
 	TextInput,
+	TouchableOpacity
 } from "react-native";
 import store from "../store";
 import {connect, Provider} from "react-redux";
 import * as ac_dispatchers from "./ac_dispatchers";
+import { MyTextInput } from "../shared_components/shared_utilities";
+import univ_const from "../../../univ_const";
 
 class _SignIn extends Component {
 	constructor(props) {
@@ -67,12 +70,19 @@ class _SignIn extends Component {
 					onChangeText={(text)=>this.handlePasswordChange(text)}
 					secureTextEntry={true}
 					value={this.state.password}
+					underlineColorAndroid={"transparent"}
 				/>
-				<Button
+				<TouchableOpacity
 					onPress={this.submit}
-					title={"Submit"}
-					style={styles.submitButton}
-				/>
+					accessibilityComponentType="button"
+					style={styles.btn}
+				>
+					<View >
+						<Text style={styles.btnText}>
+							Submit
+						</Text>
+					</View>
+				</TouchableOpacity>
 			</View>
 		);
 	}
@@ -84,6 +94,7 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "stretch",
 		paddingHorizontal: 10,
+		width: "100%",
 	},
 	inputPromptText: {
 		textAlign: "left",
@@ -100,9 +111,21 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 		marginBottom: 10,
 	},
-	submitButton: {
-		marginTop: 20,
-	}
+	btn: {
+		flexDirection: "row",
+		backgroundColor: univ_const.alt_theme_color,
+		elevation: 10,
+		paddingHorizontal: 5,
+		paddingVertical: 5,
+		justifyContent: "center",
+		alignItems: "center",
+		borderRadius: 5,
+		height: 40,
+	},
+	btnText: {
+		fontSize: 18,
+		color: "white",
+	},
 });
 
 function mapStateToProps(state) {

@@ -42,6 +42,7 @@ class _Switch extends Component {
 function mapStateToProps(state) {
 	return {
 		isLoggedIn: state.session.isLoggedIn,
+		hasInternet: state.session.hasInternet,
 	};
 }
 //Connect

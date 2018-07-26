@@ -88,18 +88,10 @@ export /*to books_view*/ function createSession(context, dispatch) {
 					errorHandler: {
 						warning: ()=>{
 							console.log("Minor problems with your xml");
-							dispatch({
-								type: actions.LOGIN_ERROR,
-								payload: "The server responded with a "+this.status,
-							});
 							return;
 						},
 						error: ()=>{
 							console.log("Major problems with your xml");
-							dispatch({
-								type: actions.LOGIN_ERROR,
-								payload: "The server responded with a "+this.status,
-							});
 							return;
 						}
 					}
@@ -112,7 +104,10 @@ export /*to books_view*/ function createSession(context, dispatch) {
 					console.log("The parser obviously didn't end it: "+e);
 					dispatch({
 						type: actions.LOGIN_ERROR,
-						payload: "The server responded with a "+this.status,
+						payload: {
+							code: 3,
+							msg: "The server responded with a "+this.status
+						},
 					});
 					return;
 				}
@@ -150,7 +145,10 @@ export /*to books_view*/ function createSession(context, dispatch) {
 					//Not user's fault
 					dispatch({
 						type: actions.LOGIN_ERROR,
-						payload: "The server responded with a "+this.status,
+						payload: {
+							code: 4,
+							msg: "The server responded with a "+this.status
+						},
 					});
 				}
 			}
@@ -163,7 +161,10 @@ export /*to books_view*/ function createSession(context, dispatch) {
 			console.log("An error occured while trying to open and send");
 			dispatch({
 				type: actions.LOGIN_ERROR,
-				payload: "Failed to either open or send the request. Fix it.",
+				payload: {
+					code: 5,
+					msg: "Failed to either open or send the request. Fix it."
+				},
 			});
 		}
 	}
@@ -180,6 +181,13 @@ function _autoLoginWithCreds(context, dispatch) {
 		javascrips bundle reloads OR calls the last failed request.
 		Else, prompts for manual login by dispatching action to navigate to
 		Manual login view. Code reuse is why this is a function.
+
+		ERROR CODES
+		1. Error reading from storage
+		2. No credentials found
+		3. Captive portal or server error //Should distinguish the two in future
+		4. Definite server error
+		5. "Internal error" aka I'm a terrible programmer
 	*/
 	try {
 		let credentials = null;
@@ -194,12 +202,17 @@ function _autoLoginWithCreds(context, dispatch) {
 				//No credentials. prompt manual login. Dispatch appropriate action(s)
 				dispatch({
 					type: actions.LOGIN_ERROR,
-					payload: "",
+					payload: {
+						code: 1,
+						msg: "Error reading from disk"
+					},
 				});
 			//TODO: Dispatch an action to mark the action in the context as failed.
 			} else if(!result) {
 				console.log("No creds found");
 				AsyncStorage.getAllKeys((err, keys)=>{
+					//THIS IS PURELY FOR Debugging purposes to check whether or not
+					//AsyncStorage is working.
 					if(err) {
 						console.log("----Error getting keys-----");
 					} else {
@@ -213,7 +226,10 @@ function _autoLoginWithCreds(context, dispatch) {
 				});
 				dispatch({
 					type: actions.LOGIN_ERROR,
-					payload: "",
+					payload: {
+						code: 2,
+						msg: "No credentials found"
+					},
 				});
 			} else {
 			//If it's successful though, resume the last request, which should be in
@@ -236,7 +252,10 @@ function _autoLoginWithCreds(context, dispatch) {
 		console.error("An error with the async storage occurred!");
 		dispatch({
 			type: actions.LOGIN_ERROR,
-			payload: "Error accessing storage!",
+			payload: {
+				code: 1,
+				msg: "Error reading from disk"
+			},
 		});
 	}
 }
@@ -263,18 +282,10 @@ function _login(dispatch, credentials, callback) {
 				errorHandler: {
 					warning: ()=>{
 						console.log("Minor problems with your xml");
-						dispatch({
-							type: actions.LOGIN_ERROR,
-							payload: "The server responded with a "+this.status,
-						});
 						return;
 					},
 					error: ()=>{
 						console.log("Major problems with your xml");
-						dispatch({
-							type: actions.LOGIN_ERROR,
-							payload: "The server responded with a "+this.status,
-						});
 						return;
 					}
 				}
@@ -287,14 +298,17 @@ function _login(dispatch, credentials, callback) {
 				console.log("The parser obviously didn't end it: "+e);
 				dispatch({
 					type: actions.LOGIN_ERROR,
-					payload: "The server responded with a "+this.status,
+					payload: {
+						code: 3,
+						msg: "The server responded with a "+this.status
+					},
 				});
 				return;
 			}
 			srv_res_status = parseInt(srv_res_status);
-			let usrDataObj = JSON.parse(xmlDoc.getElementsByTagName("usr_info")[0].childNodes[0].nodeValue);
 
 			if(srv_res_status===0) {
+				let usrDataObj = JSON.parse(xmlDoc.getElementsByTagName("usr_info")[0].childNodes[0].nodeValue);
 				let user_data = { //set user_data
 					alias: usrDataObj["alias"],
 					uid: usrDataObj["uid"],
@@ -311,7 +325,10 @@ function _login(dispatch, credentials, callback) {
 			else {
 				dispatch({
 					type: actions.LOGIN_ERROR,
-					payload: "The srv_res_status returned is "+srv_res_status,
+					payload: {
+						code: 4,
+						msg: "The srv_res_status returned is "+srv_res_status
+					},
 				});
 			}
 
@@ -319,7 +336,10 @@ function _login(dispatch, credentials, callback) {
 			if(this.readyState===4) {
 				dispatch({
 					type: actions.LOGIN_ERROR,
-					payload: "The server responded with a "+this.status,
+					payload: {
+						code: 4,
+						msg: "The server responded with a "+this.status
+					},
 				});
 			}
 		}
@@ -331,7 +351,10 @@ function _login(dispatch, credentials, callback) {
 	catch(error) {
 		dispatch({
 			type: actions.LOGIN_ERROR,
-			payload: "Failed to either open or send the request. Fix it.",
+			payload: {
+				code: 5,
+				msg: "Failed to either open or send the request. Fix it."
+			},
 		});
 	}
 }

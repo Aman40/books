@@ -182,6 +182,7 @@ export function session(state={
 	case accountActions.LOGIN_ERROR:
 	//Send different error codes to determine whether connected to the 
 	//Internet or not.
+		console.log("Code is: "+action.payload.code);
 		return {
 			...state,
 			loginWait: false,
@@ -189,6 +190,7 @@ export function session(state={
 			loginErrorMsg: action.payload,
 			isLoggedIn: false,
 			userData: "",
+			hasInternet: action.payload.code===2?true:false,
 		};
 	case accountActions.IS_LOGGING_OUT:
 		return {
