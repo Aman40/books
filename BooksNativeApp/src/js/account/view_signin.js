@@ -5,12 +5,13 @@ import {
 	Text,
 	// Button,
 	TextInput,
+	Alert,
 	TouchableOpacity
 } from "react-native";
 import store from "../store";
 import {connect, Provider} from "react-redux";
 import * as ac_dispatchers from "./ac_dispatchers";
-import { MyTextInput } from "../shared_components/shared_utilities";
+// import { MyTextInput } from "../shared_components/shared_utilities";
 import univ_const from "../../../univ_const";
 
 class _SignIn extends Component {
@@ -33,6 +34,25 @@ class _SignIn extends Component {
 		this.props.submitCreds({
 			email: this.state.email,
 			password: this.state.password,
+		},
+		(success)=>{
+			console.log("Either way, done!");
+			console.log("Succeeded tho? "+success);
+			if(success!==false) {
+				Alert.alert(
+					"Hey",
+					"Just wanna let you know that you've successfully logged in",
+					[{text: "OK", onPress: ()=>console.log("OK")}],
+					{ cancelable: true }
+				);
+			} else {
+				Alert.alert(
+					"Oops!",
+					this.props.session.loginErrorMsg,
+					[{text: "OK", onPress: ()=>console.log("OK")}],
+					{ cancelable: true }
+				);
+			}
 		});
 	}
 	render() {
@@ -135,8 +155,8 @@ function mapStateToProps(state) {
 }
 function mapDispatchToProps(dispatch) {
 	return {
-		submitCreds: (payload)=>{
-			ac_dispatchers.login(dispatch, payload);
+		submitCreds: (payload, callback)=>{
+			ac_dispatchers.login(dispatch, payload, callback);
 		}
 	};
 }

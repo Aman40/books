@@ -8,28 +8,38 @@ import RNRestart from "react-native-restart";
 import { isbn as ISBN } from "simple-isbn";
 import { getCurrDate, MyFormData } from "../shared_components/shared_utilities";
 
-export /**/ function login(dispatch, payload) {
+export /**/ function login(dispatch, payload, callback) {
 	//Payload must be {email, password}
 	//Manual login. Exported to login screen
-	_login(dispatch, payload, (session_data)=>{
+
+	_login(dispatch, payload, (result)=>{ //result = <bool | object>
 		//Dispatch login success and store credentials
-		dispatch({
-			type: actions.LOGIN_SUCCESS,
-			payload: session_data,
-		});
-		//Store credentials in the background
-		AsyncStorage.setItem(
-			"creds",
-			JSON.stringify(payload),
-			(error)=>{
-				if(error) {
-					console.log(objectToString(error));
-				} else {
-					console.log("Stored creds successfully");
-					RNRestart.Restart();
+		if(result!==false) {
+			console.log("The result is not false");
+			//result is either true or an object
+			dispatch({
+				type: actions.LOGIN_SUCCESS,
+				payload: result,
+			});
+			//Store credentials in the background
+			AsyncStorage.setItem(
+				"creds",
+				JSON.stringify(payload),
+				(error)=>{
+					if(error) {
+						//TODO. Do actual useful error handling.
+						console.log(objectToString(error));
+					} else {
+						console.log("Stored creds successfully");
+						RNRestart.Restart();
+					}
 				}
-			}
-		);
+			);
+		} else {
+			//result is false
+			console.log("The result is false");
+			callback(false);
+		}
 	});
 }
 export function showItemDetails(dispatch, payload) {
@@ -188,6 +198,8 @@ function _autoLoginWithCreds(context, dispatch) {
 		3. Captive portal or server error //Should distinguish the two in future
 		4. Definite server error
 		5. "Internal error" aka I'm a terrible programmer
+		6. Wrong email address
+		7. Wrong password
 	*/
 	try {
 		let credentials = null;
@@ -267,6 +279,14 @@ function _login(dispatch, credentials, callback) {
 		2. Sending session data to the store and
 		3. Call the callback with user_data argument.
 		4. Dispatches appropriate errors upon failure.
+			The callback is called with either the session data or false
+		/**
+	 * RESPONSE STATUSES FOR THIS PATH
+	 * 0: Success
+	 * 1: Wrong password
+	 * 3: Wrong email address
+	 * 4: Internal error (Problem with query syntax or some shit)
+	 * 6: Internal error. (Error while comparing/Connection error)
 	*/
 	//Payload must be {email, password}
 	let fd = new FormData();
@@ -300,9 +320,10 @@ function _login(dispatch, credentials, callback) {
 					type: actions.LOGIN_ERROR,
 					payload: {
 						code: 3,
-						msg: "The server responded with a "+this.status
+						msg: "Login to your wifi"
 					},
 				});
+				callback(false);
 				return;
 			}
 			srv_res_status = parseInt(srv_res_status);
@@ -321,8 +342,29 @@ function _login(dispatch, credentials, callback) {
 					school: usrDataObj["school"],
 				};
 				callback(user_data);
-			}
-			else {
+			} else if(srv_res_status===1) {
+				//Wrong password
+				dispatch({
+					type: actions.LOGIN_ERROR,
+					payload: {
+						code: 7,
+						msg: "Wrong password"
+					},
+				});
+				console.log("Wrong password");
+				callback(false);
+			} else if(srv_res_status===3) {
+				//Wrong email
+				dispatch({
+					type: actions.LOGIN_ERROR,
+					payload: {
+						code: 6,
+						msg: "Wrong email address"
+					},
+				});
+				console.log("Wrong email address");
+				callback(false);
+			} else {
 				dispatch({
 					type: actions.LOGIN_ERROR,
 					payload: {
@@ -330,6 +372,7 @@ function _login(dispatch, credentials, callback) {
 						msg: "The srv_res_status returned is "+srv_res_status
 					},
 				});
+				callback(false);
 			}
 
 		} else {
@@ -341,6 +384,7 @@ function _login(dispatch, credentials, callback) {
 						msg: "The server responded with a "+this.status
 					},
 				});
+				callback(false);
 			}
 		}
 	};
@@ -356,6 +400,7 @@ function _login(dispatch, credentials, callback) {
 				msg: "Failed to either open or send the request. Fix it."
 			},
 		});
+		callback(false);
 	}
 }
 
@@ -529,7 +574,7 @@ export function fetchMyBooks(dispatch, callback) {
 				//Success. We have some books. Fetch them into booksArr then change the offSet
 				//Extract the books as an object.
 				let booksArr = JSON.parse(xmlDoc.getElementsByTagName("bks_info")[0].childNodes[0].nodeValue);
-				console.log("Object structure: "+JSON.stringify(booksArr[0]));
+				// console.log("Object structure: "+JSON.stringify(booksArr[0]));
 				dispatch({
 					type: actions.SUCCESS_FETCHING_MY_BOOKS,
 					payload: booksArr, //Array

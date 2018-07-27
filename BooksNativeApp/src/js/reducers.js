@@ -149,6 +149,7 @@ export function session(state={
 	loginWait: false,
 	loginSuccess: false,
 	loginErrorMsg: "",
+	loginErrorCode: null,
 	isLoggedIn: false,
 	userData: "",
 	logoutWait: false,
@@ -167,6 +168,7 @@ export function session(state={
 			userData: "",
 			logoutSuccess: false,
 			loginErrorMsg: null,
+			loginErrorCode: null, //reset
 			hasInternet: false, //False until proven otherwise
 		};
 	case accountActions.LOGIN_SUCCESS:
@@ -187,7 +189,8 @@ export function session(state={
 			...state,
 			loginWait: false,
 			loginSuccess: false,
-			loginErrorMsg: action.payload,
+			loginErrorMsg: action.payload.msg,
+			loginErrorCode: action.payload.code,
 			isLoggedIn: false,
 			userData: "",
 			hasInternet: action.payload.code===2?true:false,
