@@ -45,6 +45,8 @@ let AccountTabNav = TabNavigator(
 		tabBarOptions: {
 			activeTintColor: "blue",
 			inactiveTintColor: "grey",
+			activeBackgroundColor: "white",
+			inactiveBackgroundColor: "white"
 		},
 		tabBarComponent: TabBarBottom,
 		tabBarPosition: "top",

@@ -24,7 +24,7 @@ const host = univ_const.server_url;
 //import {objectToString} from "../shared_components/shared_utilities";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MethodSelectorMenu from "./slct_bk_add_method";
-import Spinner from "react-native-loading-spinner-overlay";
+// import Spinner from "react-native-loading-spinner-overlay";
 
 
 class _MyBooks /*to ac_tabnav.js*/ extends Component {
@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: "flex-start",
 		alignItems: "stretch",
-		backgroundColor: "#FEFEFE",
+		backgroundColor: "#FFF",
 	},
 	scrollview: {
 		flex: 1,
@@ -305,7 +305,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "center",
-		backgroundColor: "#DDD",
+		backgroundColor: "#EEE",
 		height: 44,
 	},
 	addbk: {
