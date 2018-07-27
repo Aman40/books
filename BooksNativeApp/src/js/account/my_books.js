@@ -36,6 +36,7 @@ class _MyBooks /*to ac_tabnav.js*/ extends Component {
 		};
 	}
 	componentDidMount = ()=>{
+		console.log("Mounting my books");
 		this._refresh();
 	}
 	_refresh=()=>{
@@ -86,13 +87,20 @@ class _MyBooks /*to ac_tabnav.js*/ extends Component {
 
 	render() {
 		//Instantiate the loading spinner
-		let loadingSpinner = (
-			<Spinner 
-				visible={true} 
-				textContent={"Loading..."} 
-				textStyle={{color: "#FFF"}} 
-				overlayColor={"rgba(0, 0, 0, 0.5)"}
-			/>);
+		let loadingSpinner = null;
+		//BUG: Upon signing in, this loading spinner is displayed despite the 
+		//Component not even being mounted! The console.log doesn't even appear!
+		// if(this.state.loading) {
+		// 	console.log("Loading = "+this.state.loading);
+		// 	loadingSpinner = (
+		// 		<Spinner 
+		// 			visible={this.state.loading} //Dirty trick 
+		// 			textContent={"Loading my_books..."} 
+		// 			textStyle={{color: "#FFF"}} 
+		// 			overlayColor={"rgba(0, 0, 0, 0.5)"}
+		// 		/>);
+		// }
+		
 
 		let books = [];
 		let errReport = "";
@@ -139,7 +147,7 @@ class _MyBooks /*to ac_tabnav.js*/ extends Component {
 
 		return (
 			<View style={styles.container}>
-				{this.state.loading&&loadingSpinner}
+				{loadingSpinner}
 				<View style={styles.controls}>
 					<TouchableOpacity 
 						style={styles.addbk}

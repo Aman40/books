@@ -95,7 +95,7 @@ export default class BooksView extends Component {
 		let loadingSpinner = (
 			<Spinner 
 				visible={true} 
-				textContent={"Loading..."} 
+				textContent={"Loading books_view..."} 
 				textStyle={{color: "#FFF"}} 
 				overlayColor={"rgba(0, 0, 0, 0.5)"}
 			/>);

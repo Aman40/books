@@ -161,7 +161,7 @@ class _AddBookForm extends Component {
 		let loadingSpinner = (
 			<Spinner 
 				visible={true} 
-				textContent={"Loading..."} 
+				textContent={"Loading add_book_stack..."} 
 				textStyle={{color: "#FFF"}} 
 				overlayColor={"rgba(0, 0, 0, 0.5)"}
 			/>);
