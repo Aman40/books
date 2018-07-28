@@ -460,6 +460,38 @@ export function noInternet(state={
 		return state;
 	}
 }
+
+export function signUp(state={
+	submitting: false,
+	success: false,
+	error: null, //An object of the form {code: <Number>, msg: <String>}
+}, action){
+	switch(action.type){
+	case accountActions.SUBMITTING_SIGNUP_FORM:
+		return {
+			...state,
+			submitting: true,
+			success: false,
+			error: null,
+		};
+	case accountActions.SIGNUP_SUCCESS:
+		return {
+			...state,
+			submitting: false,
+			success: true,
+			error: null,
+		};
+	case accountActions.SIGNUP_ERROR:
+		return {
+			...state,
+			submitting: false,
+			success: false,
+			error: action.payload,
+		};
+	default:
+		return state;
+	}
+}
 //NOTES: Async functions should always dispatch 3 types of actions.
 //1. When the action starts and the result is pending
 //2. When the action ends successfully

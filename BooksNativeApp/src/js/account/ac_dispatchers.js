@@ -1021,8 +1021,18 @@ export function pullDatabaseChanges(dispatch){
 	});
 }
 
-export function submitSignupForm(dispatch, data){
+export function submitSignupForm(dispatch, data, callback){
 	//Do stuff
+	//DESCRIPTION OF EXIT CODES/RETURN STATUSES srv_res_status
+	//0: Success
+	//1: Duplicate entry of email or alias
+	//2: Illegal characters in input
+	//3: No results found
+	//4: Query error
+	//5: Connect error
+	//6: Other system errors
+	//7: Passwords don't match
+	//8: Error in form
 }
 /*
 TODO

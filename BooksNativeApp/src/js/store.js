@@ -13,6 +13,7 @@ const store = createStore(
 			addNewBook: reducers.addNewBook,
 			deleteBook: reducers.deleteBook,
 			noInternet: reducers.noInternet,
+			signUp: reducers.signUp,
 		}
 	)
 );

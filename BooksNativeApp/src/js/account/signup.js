@@ -20,7 +20,8 @@ import {
 	TouchableOpacity,
 	ScrollView,
 	Picker,
-	DatePickerAndroid
+	DatePickerAndroid,
+	TextInput
 } from "react-native";
 import store from "../store";
 import { connect, Provider } from "react-redux";
@@ -43,7 +44,9 @@ class _SignUp extends Component {
 				prefecture: "",
 				about: "",
 				student: false,
-				school: ""
+				school: "",
+				password: "",
+				passrepeat: ""
 			},
 			errors: {
 				alias: "",
@@ -53,13 +56,14 @@ class _SignUp extends Component {
 				prefecture: "",
 				about: "",
 				student: "",
-				school: ""
+				school: "",
+				password: "",
 			}
 		};
 	}
 
 	submit = ()=>{
-		this.props.submitCreds({
+		this.props.submit({
 			email: this.state.email,
 			password: this.state.password,
 		},
@@ -236,7 +240,7 @@ class _SignUp extends Component {
 									let new_values = { ...this.state.values, email: text };
 									return {values: new_values};
 								})())}
-								value={this.state.email}
+								value={this.state.values.email}
 								underlineColorAndroid={"transparent"}
 							/>
 						</View>
@@ -263,7 +267,6 @@ class _SignUp extends Component {
 								})())}
 								value={this.state.values.prefecture}
 								underlineColorAndroid={"transparent"}
-								editable={false}
 							/>
 						</View>
 					</View>
@@ -353,7 +356,57 @@ class _SignUp extends Component {
 								})())}
 								value={this.state.values.school}
 								underlineColorAndroid={"transparent"}
-								editable={false}
+							/>
+						</View>
+					</View>
+
+					<View style={styles.inputGroup}>
+						<View style={styles.label}>
+							<Text style={styles.inputPromptText}>
+					Password: <Text style={{color: "red"}}>{this.state.errors.password}</Text>
+							</Text>
+						</View>
+						<View style={styles.input}>
+							<TextInput
+								style={{
+									...StyleSheet.flatten(styles.textInput),
+									borderColor: this.state.errors.password.length?
+										"red":
+										styles.textInput.borderColor,
+								}}
+								onChangeText={(text)=>this.setState((()=>{
+									let new_values = { ...this.state.values, password: text };
+									return {values: new_values};
+								})())}
+								value={this.state.values.password}
+								underlineColorAndroid={"transparent"}
+								secureTextEntry={true}
+							/>
+						</View>
+					</View>
+
+
+					<View style={styles.inputGroup}>
+						<View style={styles.label}>
+							<Text style={styles.inputPromptText}>
+					Confirm Password: <Text style={{color: "red"}}>{}</Text>
+							</Text>
+						</View>
+						<View style={styles.input}>
+							<TextInput
+								style={{
+									...StyleSheet.flatten(styles.textInput),
+									borderColor: this.state.values.password!==this.state.values.passrepeat?
+										"red":
+										"green",
+								}}
+								onChangeText={(text)=>this.setState((()=>{
+									let new_values = { ...this.state.values, passrepeat: text };
+									return {values: new_values};
+								})())}
+								value={this.state.values.passrepeat}
+								underlineColorAndroid={"transparent"}
+								secureTextEntry={true}
 							/>
 						</View>
 					</View>
@@ -364,7 +417,7 @@ class _SignUp extends Component {
 					<TouchableOpacity 
 						style={styles.cancel} 
 						onPress={()=>{
-							this.props.navigation.navigate("BarcodeScanner");
+							this.props.navigation.goback();
 						}}>
 						<Text style={styles.cancelText}>
 							Cancel
@@ -372,7 +425,7 @@ class _SignUp extends Component {
 					</TouchableOpacity>
 					<TouchableOpacity 
 						style={styles.submit}
-						onPress={this.submit}>
+						onPress={this.submit}>	
 						<Text style={styles.submitText}>
 							Submit
 						</Text>
@@ -481,14 +534,16 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state){
 	return {
-		//Later
+		submitting: state.signUp.submitting,
+		success: state.signUp.success,
+		error: state.signUp.error,
 	};
 }
 
 function mapDispatchToProps(dispatch){
 	return {
-		submit: (data)=>{
-			submitSignupForm(dispatch, data);
+		submit: (data, callback)=>{
+			submitSignupForm(dispatch, data, callback);
 		}
 	};
 }

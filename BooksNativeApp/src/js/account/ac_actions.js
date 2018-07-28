@@ -36,3 +36,7 @@ export const SUCCESS_DELETING_BOOK = "deleted_my_book";
 export const ERROR_DELETING_BOOK = "error_deleting_book";
 //Setting/Unsetting the flag for whether or not to repoll the database
 export const SHOULD_PULL_DB = "to_poll_db_or_not";
+//Submitting signup data
+export const SUBMITTING_SIGNUP_FORM = "submitting_signup_form";
+export const SIGNUP_SUCCESS = "succeeded_signing_up";
+export const SIGNUP_ERROR = "error_signing_up";
