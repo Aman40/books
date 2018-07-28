@@ -24,7 +24,9 @@ import {
 } from "react-native";
 import store from "../store";
 import { connect, Provider } from "react-redux";
-import * as ac_dispatchers from "./ac_dispatchers";
+import {
+	submitSignupForm
+} from "./ac_dispatchers";
 import Spinner from "react-native-loading-spinner-overlay";
 import univ_const from "../../../univ_const";
 import { MyTextInput } from "../shared_components/shared_utilities";
@@ -110,7 +112,6 @@ class _SignUp extends Component {
 		
 		return (
 			<View style={styles.container}>
-				{this.props.submitStatus.isAddingNewBook&&loadingSpinner}
 				<ScrollView style={{flex: 1}}>	
 					<View style={styles.inputGroup}>
 						<View style={styles.label}>
@@ -276,7 +277,7 @@ class _SignUp extends Component {
 							height: 35,
 						}}>
 							<Text style={styles.inputPromptText}>
-					About: <Text style={{color: "red"}}>{this.state.errors.description}</Text>
+					About: <Text style={{color: "red"}}>{this.state.errors.about}</Text>
 							</Text>
 						</View>
 						<View style={styles.input}>
@@ -284,16 +285,16 @@ class _SignUp extends Component {
 								multiline={true}
 								style={{
 									...StyleSheet.flatten(styles.textInput),
-									borderColor: this.state.errors.description.length?
+									borderColor: this.state.errors.about?
 										"red":
 										styles.textInput.borderColor,
 									height: 105,
 								}}
 								onChangeText={(text)=>this.setState((()=>{
-									let new_values = { ...this.state.values, description: text };
+									let new_values = { ...this.state.values, about: text };
 									return {values: new_values};
 								})())}
-								value={this.state.values.description}
+								value={this.state.values.about}
 								underlineColorAndroid={"transparent"}
 							/>
 						</View>
@@ -486,7 +487,9 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
 	return {
-		//Later
+		submit: (data)=>{
+			submitSignupForm(dispatch, data);
+		}
 	};
 }
 
@@ -498,7 +501,9 @@ let ConnectedSignupForm = connect(
 export default class SignUpForm extends Component {
 	render(){
 		return(
-			<Provider>
+			<Provider
+				store={store}
+			>
 				<ConnectedSignupForm
 					navigation={this.props.navigation}
 				/>

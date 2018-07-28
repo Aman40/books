@@ -25,6 +25,7 @@ class SignUpIn extends Component {
 		return (
 			<View style={styles.wrapper}>
 				<TouchableOpacity
+					onPress={this.navigateToSignUp}
 					accessibilityComponentType="button"
 					style = {
 						{

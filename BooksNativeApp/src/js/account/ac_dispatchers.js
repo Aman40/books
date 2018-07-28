@@ -1021,6 +1021,9 @@ export function pullDatabaseChanges(dispatch){
 	});
 }
 
+export function submitSignupForm(dispatch, data){
+	//Do stuff
+}
 /*
 TODO
 1. Check for session check!

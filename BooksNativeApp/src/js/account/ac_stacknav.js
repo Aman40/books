@@ -8,6 +8,7 @@ This defines 3 things.
 import React from "react";
 import {StackNavigator} from "react-navigation";
 import SignIn from "./view_signin";
+import SignUpForm from "./signup";
 import Switch from "./ac_switch";
 import TitleBar from "./titlebar";
 import AddBook from "./add_book_stack";
@@ -44,11 +45,17 @@ let AccountStack = StackNavigator(
 		BookDetails: {
 			screen: ConnectedBookDetails,
 			navigationOptions: {
-				title: "BookDetails"
+				title: "Book Details"
 			}
 		},
 		ScanRoutine: {
 			screen: ScanRoutine
+		},
+		SignUp: {
+			screen: SignUpForm,
+			navigationOptions: {
+				title: "Sign Up",
+			}
 		}
 	},
 );
