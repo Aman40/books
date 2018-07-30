@@ -1040,7 +1040,7 @@ export function submitSignupForm(dispatch, data, callback){
 	 * 3: Unknown server error
 	 * 4: Failed form validation
 	 */
-	console.log("Signup data: "+data);
+	console.log("Signup data: "+JSON.stringify(data));
 	let fd = new MyFormData();
 	let keys = Object.getOwnPropertyNames(data);
 	for(let i=0;i<keys.length;i++) {
@@ -1154,7 +1154,7 @@ export function submitSignupForm(dispatch, data, callback){
 				//Calling the callback won't be necessary
 			} else if(srv_res_status===8) {
 				//Failed validation tests
-				console.log("Failed the validation tests");
+				console.log("Failed the SIGNUP validation tests");
 				let errArray = JSON.parse(xmlDoc.getElementsByTagName("err_arr")[0].childNodes[0].nodeValue);
 				let err_obj = { /*Reinitialize/empty the previous errors*/
 					alias: "",

@@ -6,7 +6,7 @@
  * Sex <Selector>
  * DoB <DatePicker>
  * Email <TextInput>
- * Prefecture <Selector>
+ * pref <Selector>
  * About <TextInput>
  * Student(?) <RadioButton>
  * School <TextInput>
@@ -68,14 +68,37 @@ class _SignUp extends Component {
 		this.props.submit(this.state.values,
 			(success)=>{
 				console.log("Either way, done!");
-				console.log("Succeeded tho? "+success);
+				console.log("Succeeded tho? "+JSON.stringify(success));
 				if(success!==false) {
-					Alert.alert(
-						"Hey",
-						"Just wanna let you know that you've successfully signed up.",
-						[{text: "OK", onPress: ()=>console.log("OK")}],
-						{ cancelable: true }
-					);
+					if(this.props.success) {
+						//This likely won't get called because RNRestart.restart()
+						//in the dispatcher.
+						Alert.alert(
+							"Hey",
+							"Just wanna let you know that you've successfully signed up.",
+							[{text: "OK", onPress: ()=>console.log("OK")}],
+							{ cancelable: true }
+						);
+					} else if(this.props.error.errCode===1) {
+						//Timeout
+						console.log("Timeout");
+					} else if(this.props.error.errCode===2) {
+						//Network error or server not running
+						console.log("Network error");
+					} else if(this.props.error.errCode===3) {
+						//Server is running but some error occurred
+						console.log("Your server needs help");
+						//Unlikely
+					} else if(this.props.error.errCode===4) {
+						//Failed the for validation. Set state with
+						//state.errors equal to the payload
+						this.setState({
+							...this.state,
+							errors: this.props.error.errMsg,
+							//errMsg contains an object with the same
+							//property names as state.errors
+						});
+					}
 				} else {
 					Alert.alert(
 						"Oops!",
@@ -108,13 +131,14 @@ class _SignUp extends Component {
 		let loadingSpinner = (
 			<Spinner 
 				visible={true} 
-				textContent={"Loading add_book_switch..."} 
+				textContent={"Signing you up..."} 
 				textStyle={{color: "#FFF"}} 
 				overlayColor={"rgba(0, 0, 0, 0.5)"}
 			/>);
 		
 		return (
 			<View style={styles.container}>
+				{this.props.submitting&&loadingSpinner}
 				<ScrollView style={{flex: 1}}>	
 					<View style={styles.inputGroup}>
 						<View style={styles.label}>
@@ -249,22 +273,22 @@ class _SignUp extends Component {
 					<View style={styles.inputGroup}>
 						<View style={styles.label}>
 							<Text style={styles.inputPromptText}>
-					Prefecture: <Text style={{color: "red"}}>{this.state.errors.prefecture}</Text>
+					Prefecture: <Text style={{color: "red"}}>{this.state.errors.pref}</Text>
 							</Text>
 						</View>
 						<View style={styles.input}>
 							<MyTextInput
 								style={{
 									...StyleSheet.flatten(styles.textInput),
-									borderColor: this.state.errors.prefecture.length?
+									borderColor: this.state.errors.pref.length?
 										"red":
 										styles.textInput.borderColor,
 								}}
 								onChangeText={(text)=>this.setState((()=>{
-									let new_values = { ...this.state.values, prefecture: text };
+									let new_values = { ...this.state.values, pref: text };
 									return {values: new_values};
 								})())}
-								value={this.state.values.prefecture}
+								value={this.state.values.pref}
 								underlineColorAndroid={"transparent"}
 							/>
 						</View>
@@ -416,7 +440,7 @@ class _SignUp extends Component {
 					<TouchableOpacity 
 						style={styles.cancel} 
 						onPress={()=>{
-							this.props.navigation.goback();
+							this.props.navigation.goBack();
 						}}>
 						<Text style={styles.cancelText}>
 							Cancel
