@@ -25,12 +25,12 @@ import {
 } from "react-native";
 import store from "../store";
 import { connect, Provider } from "react-redux";
-import {
-	submitSignupForm
-} from "./ac_dispatchers";
+import { submitSignupForm } from "./ac_dispatchers";
 import Spinner from "react-native-loading-spinner-overlay";
+
 // import univ_const from "../../../univ_const";
 import { MyTextInput } from "../shared_components/shared_utilities";
+import prefecturesList from "../../../prefectures.json";
 
 class _SignUp extends Component {
 	constructor(props){
@@ -136,6 +136,17 @@ class _SignUp extends Component {
 				overlayColor={"rgba(0, 0, 0, 0.5)"}
 			/>);
 		
+			//Render the <Picker.Item>s for the prefecture
+		let prefecturePickers = [];
+		for(let i=0;i<prefecturesList.length;i++){
+			prefecturePickers.push(
+				<Picker.Item
+					label={prefecturesList[i]}
+					value={prefecturesList[i]}
+					key={prefecturesList[i].toLowerCase()}
+				/>
+			);
+		}
 		return (
 			<View style={styles.container}>
 				{this.props.submitting&&loadingSpinner}
@@ -181,8 +192,8 @@ class _SignUp extends Component {
 								style={styles.sexPicker}
 								itemStyle={styles.sexPickerText}
 							>
-								<Picker.Item label={"Paperback"} value={"paperback"}/>
-								<Picker.Item label={"Hardcover"} value={"hardcover"}/>
+								<Picker.Item label={"Male"} value={"M"}/>
+								<Picker.Item label={"Female"} value={"F"}/>
 							</Picker>
 						</View>
 					</View>
@@ -277,20 +288,18 @@ class _SignUp extends Component {
 							</Text>
 						</View>
 						<View style={styles.input}>
-							<MyTextInput
-								style={{
-									...StyleSheet.flatten(styles.textInput),
-									borderColor: this.state.errors.pref.length?
-										"red":
-										styles.textInput.borderColor,
-								}}
-								onChangeText={(text)=>this.setState((()=>{
-									let new_values = { ...this.state.values, pref: text };
+							<Picker
+								onValueChange={(val)=>this.setState((()=>{
+									console.log("Selected: "+val);
+									let new_values = { ...this.state.values, pref: val };
 									return {values: new_values};
 								})())}
-								value={this.state.values.pref}
-								underlineColorAndroid={"transparent"}
-							/>
+								selectedValue={this.state.values.pref}
+								style={styles.sexPicker}
+								itemStyle={styles.sexPickerText}
+							>
+								{prefecturePickers}
+							</Picker>
 						</View>
 					</View>
 
@@ -327,29 +336,34 @@ class _SignUp extends Component {
 					</View>
 
 
-					<View style={styles.inputGroup}>
+					<View style={{...StyleSheet.flatten(styles.inputGroup),
+						justifyContent: "center",
+						alignItems: "stretch"}}>
+						<View style={styles.label}>
+							<Text style={styles.inputPromptText}>
+					Sex: <Text style={{color: "red"}}>{this.state.errors.school}</Text>
+							</Text>
+						</View>
 						<View style={styles.slctBtn}>
-							<View style={styles.leftBtn}>
+							<View style={this.state.values.sex==="M"?styles.btnActive:styles.btnInactive}>
 								<TouchableOpacity
-									onPress={()=>{
-										console.log("male");
-									}}
+									onPress={this._selectSexMale}
+									style={styles.sexSlctTouchable}
 								>
-									<View>
-										<Text>
+									<View style={styles.textWrap}>
+										<Text style={this.state.values.sex==="M"?styles.sextActive:styles.sextInactive}>
 											Male
 										</Text>
 									</View>
 								</TouchableOpacity>
 							</View>
-							<View style={styles.rightBtn}>
+							<View style={this.state.values.sex==="F"?styles.btnActive:styles.btnInactive}>
 								<TouchableOpacity
-									onPress={()=>{
-										console.log("Female");
-									}}
+									onPress={this._selectSexFemale}
+									style={styles.sexSlctTouchable}
 								>
-									<View>
-										<Text>
+									<View style={styles.textWrap}>
+										<Text style={this.state.values.sex==="F"?styles.sextActive:styles.sextInactive}>
 											Female
 										</Text>
 									</View>
@@ -536,22 +550,47 @@ const styles = StyleSheet.create({
 		padding: 5,
 	},
 	slctBtn: {
+		flex: 1,
 		flexDirection: "row",
 		justifyContent: "center",
-		alignItems: "center"
+		alignItems: "stretch",
 	},
-	leftBtn: {
+	btnActive: {
 		flex: 1,
 		justifyContent: "center",
-		alignItems: "center",
+		alignItems: "stretch",
+		borderRadius: 5,
+		borderWidth: 1,
+		borderColor: "rgb(0,122,255)"
 	},
-	rightBtn: {
+	btnInactive: {
 		flex: 1,
 		justifyContent: "center",
-		alignItems: "center",
+		alignItems: "stretch",
+		borderRadius: 5,
+		borderWidth: 0,
+		borderColor: "gray"
 	},
 	btnText: {
 		fontSize: 16,
+	},
+	sexSlctTouchable: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "stretch",
+	},
+	textWrap: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	sextActive: {
+		fontSize: 20,
+		color: "rgb(0, 122, 255)"
+	},
+	sextInactive: {
+		fontSize: 20,
+		color: "gray"
 	}
 });
 
