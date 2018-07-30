@@ -486,7 +486,8 @@ export function signUp(state={
 			...state,
 			submitting: false,
 			success: false,
-			error: action.payload,
+			//Payload is already pre-formated by the dispatcher
+			error: action.payload, 
 		};
 	default:
 		return state;

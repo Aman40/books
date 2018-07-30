@@ -1033,6 +1033,189 @@ export function submitSignupForm(dispatch, data, callback){
 	//6: Other system errors
 	//7: Passwords don't match
 	//8: Error in form
+	/**
+	 * Error codes: 
+	 * 1: Timeout
+	 * 2: Network error?
+	 * 3: Unknown server error
+	 * 4: Failed form validation
+	 */
+	console.log("Signup data: "+data);
+	let fd = new MyFormData();
+	let keys = Object.getOwnPropertyNames(data);
+	for(let i=0;i<keys.length;i++) {
+		fd.append(keys[i], data[keys[i]]);
+	}
+	//Append current datetime
+	fd.append("curr_date_time", getCurrDate());
+
+	let xhr = new XMLHttpRequest();
+	xhr.timeout = 10000;
+	xhr.ontimeout = function(){
+		dispatch({
+			type: actions.SIGNUP_ERROR,
+			payload: {
+				errCode: 1,
+				errMsg: "Timeout. Network or Server error",
+			}
+		});
+		callback("Timeout. Network or Server error");
+	};
+	xhr.responseType = "text";
+	xhr.onreadystatechange = function(){
+		if(this.readyState===4 && this.status===200) {
+			let Parser = new DOMParser({
+				locator: {},
+				errorHandler: {
+					warning: ()=>{
+						console.log("Minor problems with your xml");
+						dispatch({
+							type: actions.SIGNUP_ERROR,
+							payload: "The server responded with a "+this.status,
+						});
+						return;
+					},
+					error: ()=>{
+						console.log("Major problems with your xml");
+						dispatch({
+							type: actions.SIGNUP_ERROR,
+							payload: "The server responded with a "+this.status,
+						});
+						return;
+					}
+				}
+			});
+			let xmlDoc = Parser.parseFromString(this.responseText);
+			let srv_res_status;
+			try {
+				srv_res_status = xmlDoc.getElementsByTagName("srv_res_status")[0].childNodes[0].nodeValue;
+			} catch(e) {
+				console.log("The parser obviously didn't end it: "+e);
+				dispatch({
+					type: actions.SIGNUP_ERROR,
+					payload: "The server responded with a "+this.status,
+				});
+				return;
+			}
+			srv_res_status = parseInt(srv_res_status);
+			if(srv_res_status===0) {
+				//When the signup is successful, the user is automatically logged in
+				//by the server. That means the response container the session data.
+				//Set it in the store. Also store the creds
+				
+				//Extract the user data
+				let usrDataObj = JSON.parse(xmlDoc.getElementsByTagName("usr_info")[0].childNodes[0].nodeValue);
+				let user_data = { //set user_data
+					alias: usrDataObj["alias"],
+					uid: usrDataObj["uid"],
+					sex: usrDataObj["sex"],
+					dob: usrDataObj["dob"],
+					pref: usrDataObj["pref"],
+					email: usrDataObj["email"],
+					about: usrDataObj["about"],
+					student: usrDataObj["student"],
+					school: usrDataObj["school"],
+				};
+				//Store credentials in the background. May or may not succeed. 
+				//In case of failure, user will have to login manually next time.
+				//Make it a problem for later. For simplicity.
+				AsyncStorage.setItem(
+					"creds",
+					JSON.stringify({
+						email: data.email,
+						password: data.password1
+					}) //email and password
+				).then()
+					.catch((error)=>{
+						if(error) {
+							//TODO. Do actual useful error handling.
+							console.log("Error storing the credentials. Details below.");
+							console.log(objectToString(error));
+						} else {
+							console.log("Stored creds successfully");
+						}
+					})
+					.finally(()=>{
+						//dispatch all the success here whether the credentials were 
+						//successfully stored or not. This should trigger the necessary
+						//renders to get rid of the "loading" screen and then restart.
+						dispatch({
+							type: actions.SIGNUP_SUCCESS,
+							payload: data.isbn, //Add the isbn13 to the list of those already scanned successfully
+						}); 
+						//Not only that, but we also successfully logged in
+						dispatch({
+							type: actions.LOGIN_SUCCESS,
+							payload: user_data, //Session data. How to obtain?
+						});
+						//Restart the JS package.
+						RNRestart.Restart();
+					});
+				//Calling the callback won't be necessary
+			} else if(srv_res_status===8) {
+				//Failed validation tests
+				console.log("Failed the validation tests");
+				let errArray = JSON.parse(xmlDoc.getElementsByTagName("err_arr")[0].childNodes[0].nodeValue);
+				let err_obj = { /*Reinitialize/empty the previous errors*/
+					alias: "",
+					sex: "",
+					dob: "",
+					email: "",
+					prefecture: "",
+					about: "",
+					student: "",
+					school: "",
+					schoolzip: "",
+					password1: "",
+				};
+				for(let i=0; i<errArray.length; i++) {
+					err_obj[errArray[i].param] = errArray[i].msg;
+				}
+				// console.log("What went wrong: "+JSON.stringify(err_obj));
+				//Dispatch
+				dispatch({
+					type: actions.SIGNUP_ERROR,
+					payload: {
+						errCode: 4, //Failed the validation tests
+						errMsg: err_obj,
+					}
+				});
+				callback(err_obj);
+			} else {
+				//Unknown server error
+				dispatch({
+					type: actions.SIGNUP_ERROR,
+					payload: {
+						errCode: 3, //Unknown server error. Unlikely
+						errMsg: "Unknown server error",
+					}
+				});
+				callback(false);
+			}
+		} else {
+			//Something happened
+			if(this.readyState===4) {
+				console.log("Error. this.status = "+this.status);
+				dispatch({
+					type: actions.SIGNUP_ERROR,
+					payload: {
+						errCode: 2,
+						errMsg: "Network Error."
+					}
+				});
+				callback(false);
+			}
+			
+		}
+	};
+
+	// console.log(JSON.stringify(fd.toString()));
+	xhr.open("POST", `${host}/signup?${fd.toString()}`, true);
+	xhr.send();
+	dispatch({
+		type: actions.SUBMITTING_SIGNUP_FORM,
+		payload: null,
+	});
 }
 /*
 TODO

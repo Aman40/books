@@ -29,7 +29,7 @@ import {
 	submitSignupForm
 } from "./ac_dispatchers";
 import Spinner from "react-native-loading-spinner-overlay";
-import univ_const from "../../../univ_const";
+// import univ_const from "../../../univ_const";
 import { MyTextInput } from "../shared_components/shared_utilities";
 
 class _SignUp extends Component {
@@ -41,51 +41,50 @@ class _SignUp extends Component {
 				sex: "M",
 				dob: "1900-01-01",
 				email: "",
-				prefecture: "",
+				pref: "",
 				about: "",
 				student: false,
 				school: "",
-				password: "",
-				passrepeat: ""
+				schoolzip: "", //Future proofing
+				password1: "",
+				password2: ""
 			},
 			errors: {
 				alias: "",
 				sex: "",
 				dob: "",
 				email: "",
-				prefecture: "",
+				pref: "",
 				about: "",
 				student: "",
 				school: "",
-				password: "",
+				schoolzip: "",
+				password1: "",
 			}
 		};
 	}
 
 	submit = ()=>{
-		this.props.submit({
-			email: this.state.email,
-			password: this.state.password,
-		},
-		(success)=>{
-			console.log("Either way, done!");
-			console.log("Succeeded tho? "+success);
-			if(success!==false) {
-				Alert.alert(
-					"Hey",
-					"Just wanna let you know that you've successfully logged in",
-					[{text: "OK", onPress: ()=>console.log("OK")}],
-					{ cancelable: true }
-				);
-			} else {
-				Alert.alert(
-					"Oops!",
-					this.props.session.loginErrorMsg,
-					[{text: "OK", onPress: ()=>console.log("OK")}],
-					{ cancelable: true }
-				);
-			}
-		});
+		this.props.submit(this.state.values,
+			(success)=>{
+				console.log("Either way, done!");
+				console.log("Succeeded tho? "+success);
+				if(success!==false) {
+					Alert.alert(
+						"Hey",
+						"Just wanna let you know that you've successfully signed up.",
+						[{text: "OK", onPress: ()=>console.log("OK")}],
+						{ cancelable: true }
+					);
+				} else {
+					Alert.alert(
+						"Oops!",
+						this.props.error.msg,
+						[{text: "OK", onPress: ()=>console.log("OK")}],
+						{ cancelable: true }
+					);
+				}
+			});
 	}
 
 	_selectSexMale=()=>{
@@ -363,22 +362,22 @@ class _SignUp extends Component {
 					<View style={styles.inputGroup}>
 						<View style={styles.label}>
 							<Text style={styles.inputPromptText}>
-					Password: <Text style={{color: "red"}}>{this.state.errors.password}</Text>
+					Password: <Text style={{color: "red"}}>{this.state.errors.password1}</Text>
 							</Text>
 						</View>
 						<View style={styles.input}>
 							<TextInput
 								style={{
 									...StyleSheet.flatten(styles.textInput),
-									borderColor: this.state.errors.password.length?
+									borderColor: this.state.errors.password1.length?
 										"red":
 										styles.textInput.borderColor,
 								}}
 								onChangeText={(text)=>this.setState((()=>{
-									let new_values = { ...this.state.values, password: text };
+									let new_values = { ...this.state.values, password1: text };
 									return {values: new_values};
 								})())}
-								value={this.state.values.password}
+								value={this.state.values.password1}
 								underlineColorAndroid={"transparent"}
 								secureTextEntry={true}
 							/>
@@ -396,15 +395,15 @@ class _SignUp extends Component {
 							<TextInput
 								style={{
 									...StyleSheet.flatten(styles.textInput),
-									borderColor: this.state.values.password!==this.state.values.passrepeat?
+									borderColor: this.state.values.password1!==this.state.values.password2?
 										"red":
 										"green",
 								}}
 								onChangeText={(text)=>this.setState((()=>{
-									let new_values = { ...this.state.values, passrepeat: text };
+									let new_values = { ...this.state.values, password2: text };
 									return {values: new_values};
 								})())}
-								value={this.state.values.passrepeat}
+								value={this.state.values.password2}
 								underlineColorAndroid={"transparent"}
 								secureTextEntry={true}
 							/>
@@ -537,6 +536,7 @@ function mapStateToProps(state){
 		submitting: state.signUp.submitting,
 		success: state.signUp.success,
 		error: state.signUp.error,
+		session: state.session,
 	};
 }
 
