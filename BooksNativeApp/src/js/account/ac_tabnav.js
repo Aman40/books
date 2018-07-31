@@ -7,7 +7,7 @@ import MyPastPapers from "./my_pastpapers";
 import MyProfile from "./my_profile";
 import React from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
-
+// import univ_const from "../../../univ_const";
 let AccountTabNav = TabNavigator(
 	{
 		MyBooks: {
@@ -43,7 +43,7 @@ let AccountTabNav = TabNavigator(
 	},
 	{
 		tabBarOptions: {
-			activeTintColor: "blue",
+			activeTintColor: "#F57900",
 			inactiveTintColor: "grey",
 			activeBackgroundColor: "white",
 			inactiveBackgroundColor: "white"

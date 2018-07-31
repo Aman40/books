@@ -34,12 +34,12 @@ class _MyProfile /*to ac_tabnav.js*/ extends Component {
 					<View style={styles.scroll}>
 						<View style={styles.item}>
 							<View style={styles.itemhead}>
-								<Text>
+								<Text style={styles.headtext}>
 								Alias:
 								</Text>
 							</View>
 							<View style={styles.itemdata}>
-								<Text>
+								<Text style={styles.datatext}>
 									{this.props.userData.alias}
 								</Text>
 							</View>
@@ -47,12 +47,12 @@ class _MyProfile /*to ac_tabnav.js*/ extends Component {
 
 						<View style={styles.item}>
 							<View style={styles.itemhead}>
-								<Text>
+								<Text style={styles.headtext}>
 									Sex:
 								</Text>
 							</View>
 							<View style={styles.itemdata}>
-								<Text>
+								<Text style={styles.datatext}>
 									{this.props.userData.sex}
 								</Text>
 							</View>
@@ -60,12 +60,12 @@ class _MyProfile /*to ac_tabnav.js*/ extends Component {
 
 						<View style={styles.item}>
 							<View style={styles.itemhead}>
-								<Text>
+								<Text style={styles.headtext}>
 									DoB:			
 								</Text>
 							</View>
 							<View style={styles.itemdata}>
-								<Text>
+								<Text style={styles.datatext}>
 									{this.props.userData.dob}
 								</Text>
 							</View>
@@ -73,12 +73,12 @@ class _MyProfile /*to ac_tabnav.js*/ extends Component {
 
 						<View style={styles.item}>
 							<View style={styles.itemhead}>
-								<Text>
+								<Text style={styles.headtext}>
 									Email:
 								</Text>
 							</View>
 							<View style={styles.itemdata}>
-								<Text>
+								<Text style={styles.datatext}>
 									{this.props.userData.email}
 								</Text>
 							</View>
@@ -86,12 +86,12 @@ class _MyProfile /*to ac_tabnav.js*/ extends Component {
 
 						<View style={styles.item}>
 							<View style={styles.itemhead}>
-								<Text>
+								<Text style={styles.headtext}>
 									About:
 								</Text>
 							</View>
 							<View style={styles.itemdata}>
-								<Text>
+								<Text style={styles.datatext}>
 									{this.props.userData.about}
 								</Text>
 							</View>
@@ -99,12 +99,12 @@ class _MyProfile /*to ac_tabnav.js*/ extends Component {
 
 						<View style={styles.item}>
 							<View style={styles.itemhead}>
-								<Text>
+								<Text style={styles.headtext}>
 									Student:
 								</Text>
 							</View>
 							<View style={styles.itemdata}>
-								<Text>
+								<Text style={styles.datatext}>
 									{this.props.userData.student?"Yes":"No"}
 								</Text>
 							</View>
@@ -112,12 +112,12 @@ class _MyProfile /*to ac_tabnav.js*/ extends Component {
 
 						<View style={styles.item}>
 							<View style={styles.itemhead}>
-								<Text>
+								<Text style={styles.headtext}>
 									University:
 								</Text>
 							</View>
 							<View style={styles.itemdata}>
-								<Text>
+								<Text style={styles.datatext}>
 									{this.props.userData.school}
 								</Text>
 							</View>
@@ -192,13 +192,26 @@ const styles = StyleSheet.create(
 		},
 		item: {
 			flexDirection: "row",
-			height: 40,
+			justifyContent: "center",
+			alignItems: "center",
+			paddingVertical: 5,
+			borderBottomWidth: 1,
+			borderBottomColor: "#DDD",
 		},
 		itemhead: {
 			flex: 1,
 		},
+		headtext: {
+			color: "#F57900",
+			fontWeight: "bold",
+			fontSize: 14
+		},
 		itemdata: {
 			flex: 2,
+		},
+		datatext: {
+			color: "#777",
+			fontSize: 14,
 		}
 	}
 );

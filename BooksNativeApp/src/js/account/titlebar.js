@@ -44,7 +44,7 @@ class _TitleBar extends Component {
 				
 				<View style={styles.center}>
 					<Text style={styles.text}>
-						Center component
+						Account Home
 					</Text>
 				</View>
 
