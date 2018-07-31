@@ -232,28 +232,28 @@ class BookView extends Component {
 				</View>
 				<View style={styles.bk_contentWrapper}>
 					<View style={styles.bk_contentRow}>
-						< Text style = {
-							{ 
-								...StyleSheet.flatten(styles.bk_title),
-								color: "black"
-							}
-						} >
+						< Text style = {{ 
+							...StyleSheet.flatten(styles.bk_title),
+							color: "black"
+						}}
+						numberOfLines={1}
+						>
 							{this.props.book.Title}
 						</Text>
-						<Text style={styles.bk_contentValue}>
+						<Text style={styles.bk_contentValue} numberOfLines={1}>
 							by: {this.props.book.Authors}
 						</Text>
-						<Text style={styles.bk_contentValue}>
+						<Text style={styles.bk_contentValue} numberOfLines={1}>
 							{langISO6391[this.props.book.Language]}
 						</Text>
-						<Text style = {
-							{ 
-								color: "black"
-							}
-						} >
+						<Text style = {{ 
+							color: "black"
+						}}
+						numberOfLines={1}
+						>
 							{this.props.book.Binding==="paperback"?"Paperback":"Hardcover"}
 						</Text>
-						<Text style={styles.bk_contentValue}>
+						<Text style={styles.bk_contentValue} numberOfLines={1}>
 							{"Pages: "+this.props.book.PageNo}
 						</Text>
 					</View>
@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
 		flexDirection: "column",
 		justifyContent: "center",
 		alignItems: "flex-start",
-		paddingLeft: 10,
+		padding: 10,
 	},
 	bk_contentRow: {
 		flex: 1,
