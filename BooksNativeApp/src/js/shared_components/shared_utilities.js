@@ -133,7 +133,7 @@ export class MyTextInput extends Component {
 								...StyleSheet.flatten(this.props.style),
 								color: (()=>{
 									if(!this.props.value) {
-										console.log("Is a placeholder");
+										// console.log("Is a placeholder");
 										//Check if the user provided a custom placeholder color
 										//and return it. Else, return the default 
 										//(my default for now)

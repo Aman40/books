@@ -376,6 +376,32 @@ class _SignUp extends Component {
 					<View style={styles.inputGroup}>
 						<View style={styles.label}>
 							<Text style={styles.inputPromptText}>
+					School: <Text style={{color: "red"}}>{this.state.errors.schoolzip}</Text>
+							</Text>
+						</View>
+						<View style={styles.input}>
+							<MyTextInput
+								style={{
+									...StyleSheet.flatten(styles.textInput),
+									borderColor: this.state.errors.schoolzip.length?
+										"red":
+										styles.textInput.borderColor,
+								}}
+								onChangeText={(text)=>this.setState((()=>{
+									let new_values = { ...this.state.values, schoolzip: text };
+									return {values: new_values};
+								})())}
+								value={this.state.values.schoolzip}
+								keyboardType={"numeric"}
+								underlineColorAndroid={"transparent"}
+							/>
+						</View>
+					</View>
+
+
+					<View style={styles.inputGroup}>
+						<View style={styles.label}>
+							<Text style={styles.inputPromptText}>
 					School: <Text style={{color: "red"}}>{this.state.errors.school}</Text>
 							</Text>
 						</View>
