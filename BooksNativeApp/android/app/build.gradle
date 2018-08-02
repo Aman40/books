@@ -150,6 +150,7 @@ dependencies {
             force = true
         }
     }
+    implementation project(':react-native-fs')
 }
 
 // Run this once to be able to run the application with BUCK
