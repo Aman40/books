@@ -7,6 +7,9 @@ import {objectToString} from "../shared_components/shared_utilities";
 import RNRestart from "react-native-restart";
 import { isbn as ISBN } from "simple-isbn";
 import { getCurrDate, MyFormData } from "../shared_components/shared_utilities";
+import RNFS from "react-native-fs";
+import PDFDocument from "pdfkit";
+import { createWriteStream } from "fs";
 
 export /**/ function login(dispatch, payload, callback) {
 	//Payload must be {email, password}
@@ -1216,6 +1219,60 @@ export function submitSignupForm(dispatch, data, callback){
 		type: actions.SUBMITTING_SIGNUP_FORM,
 		payload: null,
 	});
+}
+
+export function pdfGen(dispatch, callback) {
+	/**
+	 * This function generates a pdf of the user's entire catalogue and saves it in
+	 * Documents on the device.
+	 */
+	// console.log("Attempting to create a file in "+RNFS.DocumentDirectoryPath);
+	let docPath = "/sdcard/Document/rntestfile.pdf";
+	// RNFS.writeFile(docPath, "Hello, world! I am a test file created by react native", "utf8")
+	// 	.then(()=>{
+	// 		console.log("The file was created");
+	// 		callback(true);
+	// 	})
+	// 	.catch((err)=>{
+	// 		console.log("File creation failed because "+err);
+	// 		callback(false, JSON.stringify(err));
+	// 	})
+	// 	.finally(()=>{console.log("Well, the function has finished");});
+	let doc = new PDFDocument();
+	doc.pipe = createWriteStream(docPath);
+	doc.font("fonts/PalatinoBold.ttf")
+		.fontSize(25)
+		.text("Some text with an embedded font!", 100, 100);
+
+	// # Add another page
+	doc.addPage()
+		.fontSize(25)
+		.text("Here is some vector graphics...", 100, 100);
+
+	// # Draw a triangle
+	doc.save()
+		.moveTo(100, 150)
+		.lineTo(100, 250)
+		.lineTo(200, 250)
+		.fill("#FF3300");
+
+	// # Apply some transforms and render an SVG path with the 'even-odd' fill rule
+	doc.scale(0.6)
+		.translate(470, -380)
+		.path("M 250,75 L 323,301 131,161 369,161 177,301 z")
+		.fill("red", "even-odd")
+		.restore();
+
+	// # Add some text with annotations
+	doc.addPage()
+		.fillColor("blue")
+		.text("Here is a link!", 100, 100)
+		.underline(100, 100, 160, 27, {color: "#0000FF"})
+		.link(100, 100, 160, 27, "http://google.com/");
+
+	// # Finalize PDF file
+	doc.end();
+	callback(true);
 }
 /*
 TODO

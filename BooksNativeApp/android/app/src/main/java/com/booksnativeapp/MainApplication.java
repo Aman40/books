@@ -27,7 +27,8 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
             new ReactNativeRestartPackage(),
-              new RNCameraPackage()
+              new RNCameraPackage(),
+              new RNFSPackage()
       );
     }
 
@@ -46,13 +47,5 @@ public class MainApplication extends Application implements ReactApplication {
   public void onCreate() {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
-  }
-
-  @Override
-  protected List<ReactPackage> getPackages() {
-    return Arrays.<ReactPackage>asList(
-            new MainReactPackage(), // <---- add comma
-            new RNFSPackage() // <---------- add package
-    );
   }
 }

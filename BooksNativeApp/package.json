@@ -4,17 +4,24 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "jest",
+    "postinstall": "node node_modules/.bin/rn-nodeify --install crypto,fs,https --hack"
   },
   "dependencies": {
     "hoek": "^5.0.3",
+    "https-browserify": "0.0.1",
+    "pdfkit": "^0.8.3",
     "react": "16.3.1",
     "react-native": "0.55.3",
     "react-native-camera": "^1.1.4",
+    "react-native-crypto": "^2.1.2",
+    "react-native-fs": "^2.10.14",
     "react-native-google-places": "^2.5.0",
+    "react-native-level-fs": "^3.0.1",
     "react-native-loading-spinner-overlay": "^0.5.2",
     "react-native-looped-carousel": "^0.1.10",
     "react-native-qrcode-scanner": "^1.0.1",
+    "react-native-randombytes": "^3.5.0",
     "react-native-restart": "0.0.6",
     "react-native-vector-icons": "^4.6.0",
     "react-native-view-overflow": "0.0.3",
@@ -22,6 +29,7 @@
     "react-redux": "^5.0.7",
     "react-xml-parser": "^1.0.5",
     "redux": "^4.0.0",
+    "rn-nodeify": "^10.0.0",
     "simple-isbn": "^1.0.0",
     "urlencode": "^1.1.0",
     "xmldom": "^0.1.27"
@@ -38,5 +46,15 @@
   },
   "jest": {
     "preset": "react-native"
+  },
+  "react-native": {
+    "crypto": "react-native-crypto",
+    "https": "https-browserify",
+    "fs": "react-native-level-fs"
+  },
+  "browser": {
+    "crypto": "react-native-crypto",
+    "https": "https-browserify",
+    "fs": "react-native-level-fs"
   }
 }
