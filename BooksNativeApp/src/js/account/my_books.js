@@ -37,17 +37,17 @@ class _MyBooks /*to ac_tabnav.js*/ extends Component {
 		};
 	}
 	componentDidMount = ()=>{
-		pdfGen(null, (success, err)=>{
+		pdfGen(null, (success, msg)=>{
 			if(success){
 				Alert.alert(
 					"Yatta",
-					"Your file was created",
+					"Your file was probably created "+msg,
 					[{text: "OK", onPress: ()=>{console.log("OK");}}],
 				);
 			} else {
 				Alert.alert(
 					"OOps",
-					"Your file wasn't created because "+err,
+					"Your file wasn't created because "+msg,
 					[{text: "OK", onPress: ()=>{console.log("OK");}}]
 				);
 			}

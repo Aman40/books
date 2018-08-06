@@ -8,8 +8,7 @@ import RNRestart from "react-native-restart";
 import { isbn as ISBN } from "simple-isbn";
 import { getCurrDate, MyFormData } from "../shared_components/shared_utilities";
 import RNFS from "react-native-fs";
-import PDFDocument from "pdfkit";
-import { createWriteStream } from "fs";
+import RNFetchBlob from "react-native-fetch-blob";
 
 export /**/ function login(dispatch, payload, callback) {
 	//Payload must be {email, password}
@@ -1223,56 +1222,162 @@ export function submitSignupForm(dispatch, data, callback){
 
 export function pdfGen(dispatch, callback) {
 	/**
-	 * This function generates a pdf of the user's entire catalogue and saves it in
-	 * Documents on the device.
+	 * 1. Send a request to the server to generate the file
+	 * 		the response should contain the name of the file created
+	 * 2. Send a second request to download the file
 	 */
-	// console.log("Attempting to create a file in "+RNFS.DocumentDirectoryPath);
-	let docPath = "/sdcard/Document/rntestfile.pdf";
-	// RNFS.writeFile(docPath, "Hello, world! I am a test file created by react native", "utf8")
-	// 	.then(()=>{
-	// 		console.log("The file was created");
-	// 		callback(true);
-	// 	})
-	// 	.catch((err)=>{
-	// 		console.log("File creation failed because "+err);
-	// 		callback(false, JSON.stringify(err));
-	// 	})
-	// 	.finally(()=>{console.log("Well, the function has finished");});
-	let doc = new PDFDocument();
-	doc.pipe = createWriteStream(docPath);
-	doc.font("fonts/PalatinoBold.ttf")
-		.fontSize(25)
-		.text("Some text with an embedded font!", 100, 100);
-
-	// # Add another page
-	doc.addPage()
-		.fontSize(25)
-		.text("Here is some vector graphics...", 100, 100);
-
-	// # Draw a triangle
-	doc.save()
-		.moveTo(100, 150)
-		.lineTo(100, 250)
-		.lineTo(200, 250)
-		.fill("#FF3300");
-
-	// # Apply some transforms and render an SVG path with the 'even-odd' fill rule
-	doc.scale(0.6)
-		.translate(470, -380)
-		.path("M 250,75 L 323,301 131,161 369,161 177,301 z")
-		.fill("red", "even-odd")
-		.restore();
-
-	// # Add some text with annotations
-	doc.addPage()
-		.fillColor("blue")
-		.text("Here is a link!", 100, 100)
-		.underline(100, 100, 160, 27, {color: "#0000FF"})
-		.link(100, 100, 160, 27, "http://google.com/");
-
-	// # Finalize PDF file
-	doc.end();
+	//Call genCatalog. If it succeeds, the second argument should contain the
+	//book name to download
+	_genCatalog((status, msg)=>{
+		//status is <bool>, msg = status===true?"Error message":"book to download";
+		if(status) {
+			//Send second request for downloading.
+			//TODO: START FROM HERE
+			let options = {
+				useDownloadManager: true,
+				notification: false,
+				path: "/sdcard/Document/mybooks.txt",
+				Description: "Downloading your file"
+			};
+			RNFetchBlob.config(options)
+				.fetch("GET", `${host}/pdf_download/${msg}`)
+				.then((res)=>{
+					console.log("The file is saved in "+res.path());
+				})
+				.catch((err)=>{
+					console.error("File download failed: "+JSON.stringify(err));
+					callback(false, "File download failed with "+JSON.stringify(err));
+				});
+		} else {
+			//deal with the errors
+			callback(false, msg);
+		}
+	});
 	callback(true);
+}
+function _genCatalog(callback){
+	let xhr = new XMLHttpRequest();
+	xhr.responseType = "text";
+	xhr.onreadystatechange = function(){
+		if(this.readyState===4 && this.status===200) {
+			//console.log(this.responseText);
+			let Parser = new DOMParser({
+				locator: {},
+				errorHandler: {
+					warning: ()=>{
+						console.log("Minor problems with your xml");
+						// dispatch({
+						// 	type: actions.ERROR_FETCHING_MY_BOOKS,
+						// 	payload: "The server responded with a "+this.status,
+						// });
+						return;
+					},
+					error: ()=>{
+						console.log("Major problems with your xml");
+						// dispatch({
+						// 	type: actions.ERROR_FETCHING_MY_BOOKS,
+						// 	payload: "The server responded with a "+this.status,
+						// });
+						return;
+					}
+				}
+			});
+			let xmlDoc = Parser.parseFromString(this.responseText);
+			let srv_res_status;
+			try {
+				srv_res_status = xmlDoc.getElementsByTagName("srv_res_status")[0].childNodes[0].nodeValue;
+			} catch(e) {
+				console.log("The parser obviously didn't end it: "+e);
+				// dispatch({
+				// 	type: actions.ERROR_FETCHING_MY_BOOKS,
+				// 	payload: "The server responded with a "+this.status,
+				// });
+				callback(false, "parse error");
+				return;
+			}
+			srv_res_status = parseInt(srv_res_status);
+			if(srv_res_status===0) {
+				//Success. We have some books. Fetch them into booksArr then change the offSet
+				//Extract the books as an object.
+				let fileName = JSON.parse(xmlDoc.getElementsByTagName("filename")[0].childNodes[0].nodeValue);
+				// console.log("Object structure: "+JSON.stringify(booksArr[0]));
+				// dispatch({
+				// 	type: actions.SUCCESS_FETCHING_MY_BOOKS,
+				// 	payload: booksArr, //Array
+				// });
+				console.log("The file to download is: "+fileName);
+				
+				callback(true, fileName);
+			} else if(srv_res_status===3) {
+				//No results
+				console.log("No results");
+				// dispatch({
+				// 	type: actions.ERROR_FETCHING_MY_BOOKS,
+				// 	payload: "No results found",
+				// 	//TODO NECESSARY: Use status codes depending on the error
+				// });
+				callback(false, "No results");
+			} else if(srv_res_status===9) {
+				/*
+					User is not logged in. The magic begins. 
+					call the create session function. It will check for stored creds, and
+					if any, it will log in automatically AND resume the last request. 
+					otherwise, it will prompt manual login.
+				*/
+				console.log("A FAILED REQUEST. NOT LOGGED IN!");
+				// let context = {
+				// 	type: FAILED_REQ,
+				// 	payload: {
+				// 		dispatcher: (dispatch)=>{
+				// 			fetchMyBooks(dispatch);
+				// 		},
+				// 		arguments: "",
+				// 	}
+				// };
+				// createSession(
+				// 	context,
+				// 	dispatch
+				// );
+				callback(false, "Not logged in");
+			} else {
+				//An error
+				// dispatch({
+				// 	type: actions.ERROR_FETCHING_MY_BOOKS,
+				// 	payload: "Bad server response status.",
+				// });
+				callback(false, "Bad server response status");
+			}
+		} else {
+			//An error occured.
+			if(this.readyState===4) {
+				console.log("Error fetching.");
+				// dispatch({
+				// 	type: actions.ERROR_FETCHING_MY_BOOKS,
+				// 	payload: `Possible internal server error. Status: ${this.status}`,
+				// });
+				callback(false, "Error. Possible internal server error. ");
+			}
+		}
+	};
+
+	try {
+		console.log("Trying...");
+		xhr.open("POST",`${host}/books/fetch`, true);
+		xhr.send();
+		// dispatch({
+		// 	type: actions.IS_FETCHING_MY_BOOKS,
+		// 	payload: null,
+		// });
+	}
+	catch(error) {
+		//If there's an error with connecting to the db, update the state with it.
+		console.log("Error connecting to the db: "+error);
+		// dispatch({
+		// 	type: actions.ERROR_FETCHING_MY_BOOKS,
+		// 	payload: "Connection or Internal database error.",
+		// });
+		callback(false, "Error connecting to the db: err="+error);
+	}
 }
 /*
 TODO

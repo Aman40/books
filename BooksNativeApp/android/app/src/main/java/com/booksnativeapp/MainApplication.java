@@ -3,6 +3,14 @@ package com.booksnativeapp;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.entria.views.RNViewOverflowPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.avishayil.rnrestart.ReactNativeRestartPackage;
+import com.bitgo.randombytes.RandomBytesPackage;
+import com.arttitude360.reactnative.rngoogleplaces.RNGooglePlacesPackage;
+import com.rnfs.RNFSPackage;
+import com.RNFetchBlob.RNFetchBlobPackage;
+import org.reactnative.camera.RNCameraPackage;
 import com.avishayil.rnrestart.ReactNativeRestartPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -26,6 +34,14 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNViewOverflowPackage(),
+            new VectorIconsPackage(),
+            new ReactNativeRestartPackage(),
+            new RandomBytesPackage(),
+            new RNGooglePlacesPackage(),
+            new RNFSPackage(),
+            new RNFetchBlobPackage(),
+            new RNCameraPackage(),
             new ReactNativeRestartPackage(),
               new RNCameraPackage(),
               new RNFSPackage()
