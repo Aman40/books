@@ -36,15 +36,12 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
             new RNViewOverflowPackage(),
             new VectorIconsPackage(),
-            new ReactNativeRestartPackage(),
             new RandomBytesPackage(),
             new RNGooglePlacesPackage(),
             new RNFSPackage(),
             new RNFetchBlobPackage(),
             new RNCameraPackage(),
-            new ReactNativeRestartPackage(),
-              new RNCameraPackage(),
-              new RNFSPackage()
+            new ReactNativeRestartPackage()
       );
     }
 
