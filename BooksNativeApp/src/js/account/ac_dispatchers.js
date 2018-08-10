@@ -1283,6 +1283,7 @@ function _genCatalog(callback){
 				}
 			});
 			let xmlDoc = Parser.parseFromString(this.responseText);
+			console.log("xmlDoc: "+xmlDoc);
 			let srv_res_status;
 			try {
 				srv_res_status = xmlDoc.getElementsByTagName("srv_res_status")[0].childNodes[0].nodeValue;
@@ -1299,13 +1300,13 @@ function _genCatalog(callback){
 			if(srv_res_status===0) {
 				//Success. We have some books. Fetch them into booksArr then change the offSet
 				//Extract the books as an object.
-				let fileName = JSON.parse(xmlDoc.getElementsByTagName("filename")[0].childNodes[0].nodeValue);
+				let fileName = xmlDoc.getElementsByTagName("filename")[0].childNodes[0].nodeValue;
 				// console.log("Object structure: "+JSON.stringify(booksArr[0]));
 				// dispatch({
 				// 	type: actions.SUCCESS_FETCHING_MY_BOOKS,
 				// 	payload: booksArr, //Array
 				// });
-				console.log("The file to download is: "+fileName);
+				console.log(`The file to download is: ${fileName}`);
 				
 				callback(true, fileName);
 			} else if(srv_res_status===3) {
@@ -1362,7 +1363,7 @@ function _genCatalog(callback){
 
 	try {
 		console.log("Trying...");
-		xhr.open("POST",`${host}/books/fetch`, true);
+		xhr.open("POST",`${host}/books/generatePDF`, true);
 		xhr.send();
 		// dispatch({
 		// 	type: actions.IS_FETCHING_MY_BOOKS,
