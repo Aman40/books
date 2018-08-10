@@ -5,6 +5,7 @@ import {
 	Modal,
 	TouchableWithoutFeedback,
 	TouchableOpacity,
+	Alert
 } from "react-native";
 import React, {Component} from "react";
 import {
@@ -16,7 +17,7 @@ import {
 	showAccountMenu, //Not really necessary
 	hideAccountMenu,
 	logout,
-
+	pdfGen
 } from "./ac_dispatchers";
 
 class _Menu extends Component {
@@ -30,6 +31,24 @@ class _Menu extends Component {
 	logout = ()=>{
 		this.props.hideAccountMenu();
 		this.props.logout();
+	}
+	_downloadList = ()=>{
+		this.props.hideAccountMenu();
+		this.props.downloadList((success, msg)=>{
+			if(success){
+				Alert.alert(
+					"Yatta",
+					"Your file was probably created "+msg,
+					[{text: "OK", onPress: ()=>{console.log("OK");}}],
+				);
+			} else {
+				Alert.alert(
+					"OOps",
+					"Your file wasn't created because "+msg,
+					[{text: "OK", onPress: ()=>{console.log("OK");}}]
+				);
+			}
+		});
 	}
 	render() {
 		return (
@@ -63,6 +82,16 @@ class _Menu extends Component {
 									</Text>
 								</View>
 							</TouchableOpacity>
+
+							<TouchableOpacity
+								onPress={this._downloadList}
+							>
+								<View style={styles.menuitem}>
+									<Text>
+									Download List
+									</Text>
+								</View>
+							</TouchableOpacity>
 						</View>
 					</View>
 					
@@ -88,6 +117,9 @@ function mapDispatchToProps(dispatch) {
 		},
 		logout: ()=>{
 			logout(dispatch);
+		},
+		downloadList: (callback)=>{
+			pdfGen(dispatch, callback);
 		}
 	};
 }

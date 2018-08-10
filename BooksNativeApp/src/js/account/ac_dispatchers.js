@@ -7,7 +7,7 @@ import {objectToString} from "../shared_components/shared_utilities";
 import RNRestart from "react-native-restart";
 import { isbn as ISBN } from "simple-isbn";
 import { getCurrDate, MyFormData } from "../shared_components/shared_utilities";
-import RNFS from "react-native-fs";
+// import RNFS from "react-native-fs";
 import RNFetchBlob from "react-native-fetch-blob";
 
 export /**/ function login(dispatch, payload, callback) {

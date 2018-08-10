@@ -8,7 +8,7 @@ import {
 	Image,
 	TouchableWithoutFeedback,
 	RefreshControl,
-	Alert,
+	// Alert,
 } from "react-native";
 import {connect, Provider} from "react-redux";
 import store from "../store";
@@ -16,8 +16,7 @@ import {
 	fetchMyBooks,
 	showAddMethodSelectorMenu,
 	showItemDetails,
-	pullDatabaseChanges,
-	pdfGen
+	pullDatabaseChanges
 } from "./ac_dispatchers";
 import univ_const from "../../../univ_const";
 import { langISO6391 } from "../shared_components/shared_utilities";
@@ -37,21 +36,6 @@ class _MyBooks /*to ac_tabnav.js*/ extends Component {
 		};
 	}
 	componentDidMount = ()=>{
-		pdfGen(null, (success, msg)=>{
-			if(success){
-				Alert.alert(
-					"Yatta",
-					"Your file was probably created "+msg,
-					[{text: "OK", onPress: ()=>{console.log("OK");}}],
-				);
-			} else {
-				Alert.alert(
-					"OOps",
-					"Your file wasn't created because "+msg,
-					[{text: "OK", onPress: ()=>{console.log("OK");}}]
-				);
-			}
-		});
 		console.log("Mounting my books");
 		this._refresh();
 	}
